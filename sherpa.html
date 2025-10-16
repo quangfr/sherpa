@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SHERPA – MVP v3 (compact)</title>
+<style>
+  :root{
+    --bg:#FAFAFA;--card:#FFF;--bd:#E0E0E0;--tx:#222;--mut:#666;
+    --primary:#1976d2;--ok:#2e7d32;--warn:#f9a825;--danger:#c62828;
+    --stb:#3b82f6;--note:#34d399;--verb:#facc15;--avis:#a855f7;--alert:#ef4444;
+    --h:38px;--r:12px;--pad:8px;--gap:10px;--fs:14px;
+  }
+  *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--tx);font:500 var(--fs)/1.35 system-ui,Segoe UI,Roboto,Helvetica,Arial}
+  header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--bd);display:flex;gap:6px;padding:8px}
+  header .tab{height:var(--h);padding:0 12px;border:1px solid var(--bd);background:#fff;border-radius:10px;cursor:pointer}
+  header .tab.active{border-color:var(--primary);outline:2px solid color-mix(in srgb,var(--primary) 20%,transparent)}
+  main{padding:12px;display:grid;gap:12px}
+  .view[hidden]{display:none}
+  .grid4{display:grid;gap:12px;grid-template-columns:repeat(4,1fr)}
+  @media(max-width:1200px){.grid4{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.grid4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:12px}
+  .kpi h3{margin:0 0 8px 0;font-size:13px;color:var(--mut)}
+  .kpi .list{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto}
+  .consultant-card{padding:8px;border:1px solid var(--bd);border-radius:10px;cursor:pointer}
+  .l1{font-weight:700}
+  .l2{font-size:12px;color:var(--mut)}
+  .two-col{display:grid;grid-template-columns:300px 1fr;gap:12px}
+  @media(max-width:900px){.two-col{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+  .panel .head{display:flex;gap:6px;align-items:center;padding:8px;border-bottom:1px solid var(--bd)}
+  .panel .body{padding:8px}
+  .left .row{display:grid;grid-template-columns:1fr 120px 70px;align-items:center;gap:8px;padding:6px;border-bottom:1px solid var(--bd);cursor:pointer}
+  .left .row:hover{background:#fafafa}
+  .chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid var(--bd);border-radius:999px;cursor:pointer;font-size:12px}
+  .chip.active{border-color:var(--primary);outline:2px solid color-mix(in srgb,var(--primary) 20%,transparent)}
+  .search{height:36px;padding:0 10px;border:1px solid var(--bd);border-radius:10px;width:240px}
+  .btn{height:36px;padding:0 12px;border:1px solid var(--bd);border-radius:10px;background:#fff;cursor:pointer}
+  .btn.primary{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,#fff)}
+  .list-acts{display:flex;flex-direction:column;gap:8px}
+  /* ⬇️ Colonne dédiée Nom/Titre à gauche */
+  .act{border:1px solid var(--bd);border-radius:10px;padding:8px;display:grid;grid-template-columns:220px 120px 1fr auto;gap:8px;align-items:start}
+  @media(max-width:900px){.act{grid-template-columns:1fr}} /* stack sur mobile */
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--bd)}
+  .b-stb{background:var(--stb);color:#fff;border-color:transparent}
+  .b-note{background:var(--note);color:#073b2a;border-color:transparent}
+  .b-verb{background:var(--verb);color:#3a2f00;border-color:transparent}
+  .b-avis{background:var(--avis);color:#fff;border-color:transparent}
+  .b-alert{background:var(--alert);color:#fff;border-color:transparent}
+  .mut{color:var(--mut);font-size:12px}
+  .icon-btn{background:none;border:none;cursor:pointer;height:28px;width:28px;border-radius:8px}
+  .icon-btn:hover{background:#f6f6f6}
+  .state-dot{width:10px;height:10px;border-radius:999px;display:inline-block;margin-right:6px}
+  .dot-ok{background:var(--ok)}.dot-warn{background:var(--warn)}.dot-bad{background:var(--danger)}
+  .th{display:grid;grid-template-columns:1fr 120px 70px;gap:8px;padding:6px;border-bottom:1px solid var(--bd);user-select:none}
+  .th .sortable{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .chev{font-size:12px;color:var(--mut)}
+  dialog{border:none;border-radius:14px;max-width:780px;width:clamp(320px,92vw,780px);padding:0;box-shadow:0 20px 60px rgba(0,0,0,.16)}
+  dialog .dlg{padding:12px}
+  .grid{display:grid;gap:10px}
+  .g2{grid-template-columns:1fr 1fr}
+  label{font-size:12px;color:var(--mut)}
+  input[type=text],input[type=date],input[type=url],input[type=number],select,textarea{
+    width:100%;height:36px;padding:6px 10px;border:1px solid var(--bd);border-radius:10px;background:#fff
+  }
+  /* ⬆️ inputs ; ⬇️ textareas */
+  textarea{min-height:160px;resize:vertical}
+  .row-actions{display:flex;gap:6px}
+  .toast{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.3s}
+  .toast.show{opacity:1}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .tag-suggest{position:absolute;background:#fff;border:1px solid var(--bd);border-radius:10px;box-shadow:0 6px 26px rgba(0,0,0,.08);padding:6px;display:none;z-index:9;max-height:180px;overflow:auto}
+  .tag-suggest div{padding:6px 8px;border-radius:8px;cursor:pointer}
+  .tag-suggest div:hover{background:#f2f2f2}
+  .notice{font-size:12px;color:var(--mut)}
+  .inline{display:inline-flex;gap:6px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header aria-label="Navigation des vues">
+  <button class="tab active" data-target="dashboard">📊 Dashboard</button>
+  <button class="tab" data-target="activite">🗂️ Activité</button>
+  <button class="tab" data-target="parametres">⚙️ Paramètres</button>
+  <span class="sr-only" id="live" aria-live="polite"></span>
+</header>
+
+<main>
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="view grid4">
+    <div class="card kpi" id="kpi-alertes"><h3 id="h-alertes">🚨 En alerte (≤ délai)</h3><div class="list"></div></div>
+    <div class="card kpi" id="kpi-fin"><h3 id="h-fin">⏳ Fin de mission &lt; X jours</h3><div class="list"></div></div>
+    <div class="card kpi" id="kpi-stb"><h3 id="h-stb">🧯 Action STB &lt; Y jours</h3><div class="list"></div></div>
+    <div class="card kpi" id="kpi-avis"><h3 id="h-avis">📝 Sans avis &gt; Z jours</h3><div class="list"></div></div>
+  </section>
+
+  <!-- ACTIVITÉ -->
+  <section id="activite" class="view two-col" hidden>
+    <div class="panel left" aria-label="Liste consultants">
+      <div class="head th">
+        <div class="sortable" data-sort="nom">Nom <span class="chev" id="chev-nom">▼</span></div>
+        <div class="sortable" data-sort="fin">Fin mission <span class="chev" id="chev-fin">–</span></div>
+        <div class="mut">Actions</div>
+      </div>
+      <div class="body" id="consultantsList"></div>
+    </div>
+    <div class="panel right" aria-label="Liste activités">
+      <div class="head">
+        <div class="inline" id="typeChips"></div>
+        <input class="search" id="search" placeholder="Recherche (#tendance ou texte)"/>
+        <button class="btn primary" id="btn-new-act">+ Nouvelle activité</button>
+      </div>
+      <div class="body">
+        <div class="list-acts" id="actsList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARAMÈTRES -->
+  <section id="parametres" class="view" hidden>
+    <div class="card" style="margin-bottom:12px">
+      <h3 style="margin:0 0 8px 0">🏷️ Tendances</h3>
+      <div id="trendsList" class="grid"></div>
+      <div class="inline" style="margin-top:8px">
+        <button class="btn" id="btn-add-trend">+ Ajouter</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:12px">
+      <h3 style="margin:0 0 8px 0">⚖️ Seuils Dashboard (jours)</h3>
+      <div class="grid g2">
+        <div><label>Délai alerte</label><input type="number" id="set-delai" min="0"/></div>
+        <div><label>Fin mission &lt; X</label><input type="number" id="set-fin" min="0"/></div>
+        <div><label>STB &lt; Y</label><input type="number" id="set-stb" min="0"/></div>
+        <div><label>Sans avis &gt; Z</label><input type="number" id="set-avis" min="0"/></div>
+      </div>
+      <div class="inline" style="margin-top:8px">
+        <button class="btn primary" id="btn-save-settings">Enregistrer</button>
+        <button class="btn" id="btn-reset-settings">Réinitialiser</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin:0 0 8px 0">🗂️ Import / Export JSON</h3>
+      <div class="inline">
+        <button class="btn" id="btn-export">Exporter</button>
+        <input type="file" id="file-import" accept="application/json"/>
+        <select id="import-mode" title="Mode import">
+          <option value="merge">merge</option>
+          <option value="replace">replace</option>
+        </select>
+        <button class="btn" id="btn-import">Importer</button>
+      </div>
+      <p class="notice">Export = dump complet. Import = merge/replace sur la clé locale.</p>
+    </div>
+  </section>
+</main>
+
+<!-- DIALOGS -->
+<dialog id="dlg-activity" aria-label="Éditer activité">
+  <form method="dialog" class="dlg">
+    <h3 style="margin:0 0 8px 0">✏️ Activité</h3>
+    <div class="grid g2">
+      <div><label>Consultant</label><select id="a-consultant"></select></div>
+      <div><label>Type</label>
+        <select id="a-type">
+          <option value="ACTION_ST_BERNARD">ACTION_ST_BERNARD</option>
+          <option value="NOTE">NOTE</option>
+          <option value="VERBATIM">VERBATIM</option>
+          <option value="AVIS">AVIS</option>
+          <option value="ALERTE">ALERTE</option>
+        </select>
+      </div>
+      <div><label>Date</label><input type="date" id="a-date"/></div>
+      <div id="wrap-heures" hidden><label>Heures (STB)</label><input type="number" id="a-heures" min="0" step="0.5"/></div>
+    </div>
+    <div style="margin-top:8px;position:relative">
+      <label>Description</label>
+      <textarea id="a-desc" placeholder="Texte... utilisez #slug pour les tendances"></textarea>
+      <div id="tagSuggest" class="tag-suggest" role="listbox" aria-label="Suggestions tendances"></div>
+    </div>
+    <div class="inline" style="margin-top:10px">
+      <button class="btn primary" id="a-save">Enregistrer</button>
+      <button class="btn" value="cancel">Annuler</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-consultant" aria-label="Éditer consultant">
+  <form method="dialog" class="dlg">
+    <h3 style="margin:0 0 8px 0">✏️ Consultant</h3>
+    <div class="grid g2">
+      <div><label>Nom *</label><input type="text" id="c-nom" required/></div>
+      <div><label>Titre mission</label><input type="text" id="c-titre"/></div>
+      <div><label>Date fin (ISO)</label><input type="date" id="c-fin"/></div>
+      <div><label>URL</label><input type="url" id="c-url" placeholder="https://..."/></div>
+    </div>
+    <!-- ⬇️ Description consultant en textarea large -->
+    <div style="margin-top:8px"><label>Description</label><textarea id="c-desc" placeholder="#tendances OK"></textarea></div>
+    <div class="inline" style="margin-top:10px">
+      <button class="btn primary" id="c-save">Enregistrer</button>
+      <button class="btn" value="cancel">Annuler</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/*** Utilities ***/
+const $ = s=>document.querySelector(s), $$ = s=>document.querySelectorAll(s);
+const today = ()=>new Date().toISOString().slice(0,10);
+const parseISO = d => d? new Date(d+"T00:00:00") : null;
+const diffDays=(a,b)=>Math.floor((a-b)/(1000*3600*24));
+const uuid=()=>crypto.randomUUID?crypto.randomUUID():('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&0x3|0x8);return v.toString(16)}));
+const esc=s=>s.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+const toast=(msg)=>{const t=$("#toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1400);$("#live").textContent=msg}
+const confirmDel=(msg)=>confirm(msg||"Supprimer ?");
+
+/*** Store ***/
+const KEY="SHERPA_STORE_V3";
+const DEF_TRENDS=[
+  {id:uuid(),slug:"le-cardinal",label:"Le Cardinal"},{id:uuid(),slug:"robert-jr",label:"Robert Jr"},
+  {id:uuid(),slug:"gutenberg",label:"Gutenberg"},{id:uuid(),slug:"indelebile",label:"Indélébile"},
+  {id:uuid(),slug:"protocop",label:"Protocop"},{id:uuid(),slug:"tarantino",label:"Tarantino"},
+  {id:uuid(),slug:"goal-digger",label:"Goal Digger"},{id:uuid(),slug:"promptzilla",label:"Promptzilla"},
+  {id:uuid(),slug:"soulgorithm",label:"Soulgorithm"},{id:uuid(),slug:"polene",label:"PÔLÈNE"}
+];
+const DEF_SETTINGS={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60};
+
+const seedConsultants=()=>[
+  {id:uuid(),nom:"Livier HASSLER",titre_mission:"CPO MAESTRO",date_fin:"2025-12-31",url:"",description:"#goal-digger"},
+  {id:uuid(),nom:"Samuel MERY",titre_mission:"PO SCORE",date_fin:"2025-11-30",url:"",description:"#gutenberg"},
+  {id:uuid(),nom:"Quentin DURAND",titre_mission:"UX Designer",date_fin:"2026-01-31",url:"",description:"#protocop"},
+  {id:uuid(),nom:"Léonard SAVANE",titre_mission:"Data Analyst",date_fin:"2025-10-31",url:"",description:"#soulgorithm"},
+  {id:uuid(),nom:"Grimaud SAVANE",titre_mission:"Chef de projet",date_fin:"2025-12-15",url:"",description:"#le-cardinal"},
+  {id:uuid(),nom:"Camille LEROY",titre_mission:"Coach Produit",date_fin:"2026-03-15",url:"",description:"#promptzilla"},
+  {id:uuid(),nom:"Théo MARTIN",titre_mission:"Dev Front",date_fin:"2025-12-01",url:"",description:"#indelebile"},
+  {id:uuid(),nom:"Anaïs ROBERT",titre_mission:"Test Lead",date_fin:"2025-11-15",url:"",description:"#tarantino"},
+];
+
+const randBetween=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=(arr)=>arr[randBetween(0,arr.length-1)];
+
+const seedActivities=(cons, trends)=>{
+  const types=["ACTION_ST_BERNARD","NOTE","VERBATIM","AVIS","ALERTE"];
+  const acts=[];
+  const daysBack=120;
+  cons.forEach(c=>{
+    types.forEach(tp=>{
+      for(let k=0;k<2;k++){
+        const d=new Date(); d.setDate(d.getDate()-randBetween(0,daysBack));
+        acts.push({
+          id:uuid(),consultant_id:c.id,type:tp,
+          date_publication:d.toISOString().slice(0,10),
+          description:`${tp==="VERBATIM"?"« " + ["Très bon retour","Point d’attention","Client hésitant","Roadmap claire"][randBetween(0,3)] + " »":"Note"} #${pick(trends).slug}`,
+          heures: tp==="ACTION_ST_BERNARD" ? (randBetween(1,6)*0.5) : undefined,
+          created_at:new Date().toISOString(),updated_at:new Date().toISOString()
+        })
+      }
+    });
+  });
+  return acts.sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
+}
+
+const Store={
+  state:{consultants:[],activities:[],trends:[],settings:{}},
+  load(){
+    const raw=localStorage.getItem(KEY);
+    if(raw){ try{ this.state=JSON.parse(raw);}catch{ localStorage.removeItem(KEY); this.seed(); } }
+    else this.seed();
+  },
+  seed(){
+    const consultants=seedConsultants();
+    const trends=structuredClone(DEF_TRENDS);
+    const activities=seedActivities(consultants,trends);
+    this.state={consultants,activities,trends,settings:structuredClone(DEF_SETTINGS)};
+    this.save();
+  },
+  save(){ localStorage.setItem(KEY,JSON.stringify(this.state)); },
+  export(){ return JSON.stringify(this.state,null,2) },
+  import(obj,mode="merge"){
+    if(mode==="replace"){ this.state=obj; }
+    else{
+      const byId=(arr)=>Object.fromEntries(arr.map(x=>[x.id,x]));
+      const cur=this.state;
+      const mergeArr=(curr,incoming)=>Object.values({...byId(curr),...byId(incoming||[])});
+      this.state={
+        consultants:mergeArr(cur.consultants,obj.consultants),
+        activities:mergeArr(cur.activities,obj.activities).sort((a,b)=>b.date_publication.localeCompare(a.date_publication)),
+        trends:mergeArr(cur.trends,obj.trends),
+        settings:{...cur.settings,...(obj.settings||{})}
+      }
+    }
+    this.save();
+  },
+  upsertConsultant(c){
+    if(!c.nom?.trim()) throw new Error("Nom requis");
+    const i=this.state.consultants.findIndex(x=>x.id===c.id);
+    if(i>=0)this.state.consultants[i]={...this.state.consultants[i],...c,updated_at:new Date().toISOString()};
+    else this.state.consultants.push({...c,id:c.id||uuid(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
+    this.save();
+  },
+  deleteConsultant(id){
+    this.state.consultants=this.state.consultants.filter(x=>x.id!==id);
+    this.state.activities=this.state.activities.filter(a=>a.consultant_id!==id);
+    this.save();
+  },
+  upsertActivity(a){
+    if(!a.consultant_id||!a.type||!a.date_publication||!a.description?.trim()) throw new Error("Champs requis manquants");
+    if(a.type==="ACTION_ST_BERNARD" && (a.heures===undefined || a.heures===null || a.heures==="")) throw new Error("Heures requis pour STB");
+    const i=this.state.activities.findIndex(x=>x.id===a.id);
+    if(i>=0)this.state.activities[i]={...this.state.activities[i],...a,updated_at:new Date().toISOString()};
+    else this.state.activities.unshift({...a,id:uuid(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
+    this.save();
+  },
+  deleteActivity(id){ this.state.activities=this.state.activities.filter(x=>x.id!==id); this.save(); },
+  upsertTrend(t){
+    const i=this.state.trends.findIndex(x=>x.id===t.id);
+    if(i>=0)this.state.trends[i]={...this.state.trends[i],...t};
+    else this.state.trends.push({...t,id:t.id||uuid()});
+    this.save();
+  },
+  deleteTrend(id){ this.state.trends=this.state.trends.filter(x=>x.id!==id); this.save(); }
+};
+
+/*** UI State ***/
+const UI={
+  currentView:"dashboard",
+  actFilters:{ types:new Set(["ACTION_ST_BERNARD","NOTE","VERBATIM","AVIS","ALERTE"]), text:"", consultantId:null },
+  sort:{ by:"nom", dir:1 },
+};
+
+/*** Navigation ***/
+$$("header .tab").forEach(b=>{
+  b.addEventListener("click",()=>{
+    $$("header .tab").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    const tgt=b.dataset.target;
+    UI.currentView=tgt;
+    $$(".view").forEach(v=>v.hidden=true);
+    $("#"+tgt).hidden=false;
+    if(tgt==="dashboard") renderDashboard();
+    if(tgt==="activite"){ renderConsultants(); renderActs(); }
+    if(tgt==="parametres") renderSettings();
+  })
+});
+
+/*** Dashboard logic + titres dynamiques X/Y/Z ***/
+function renderDashboard(){
+  const {consultants,activities,settings}=Store.state;
+  const t0=parseISO(today());
+  const X=settings.fin_mission_sous_jours||0;
+  const Y=settings.stb_recent_jours||0;
+  const Z=settings.avis_manquant_depuis_jours||0;
+  // Titres dynamiques
+  $("#h-fin").textContent = `⏳ Fin de mission < ${X} jours`;
+  $("#h-stb").textContent = `🧯 Action STB ≤ ${Y} jours`;
+  $("#h-avis").textContent = `📝 Sans avis > ${Z} jours`;
+  $("#h-alertes").textContent = `🚨 En alerte (≤ ${settings.delai_alerte_jours||0} jours)`;
+
+  // En alerte (date_fin ≤ today + delai)
+  const alertLimit=new Date(t0); alertLimit.setDate(alertLimit.getDate()+ (settings.delai_alerte_jours||0));
+  const alertes=consultants.filter(c=>c.date_fin && parseISO(c.date_fin)<=alertLimit);
+  // Fin < X
+  const fins=consultants.filter(c=>{
+    if(!c.date_fin) return false;
+    const d=parseISO(c.date_fin);
+    const dd=diffDays(d,t0);
+    return dd>0 && dd<=X;
+  });
+  // STB ≤ Y jours (dernière action)
+  const stbMap=new Map();
+  activities.filter(a=>a.type==="ACTION_ST_BERNARD").forEach(a=>{
+    const last=stbMap.get(a.consultant_id);
+    if(!last || a.date_publication>last) stbMap.set(a.consultant_id,a.date_publication);
+  });
+  const stbList=consultants.filter(c=>{
+    const last=stbMap.get(c.id);
+    if(!last) return false;
+    const dd=Math.abs(diffDays(parseISO(today()),parseISO(last)));
+    return dd<=Y;
+  });
+  // Sans avis > Z
+  const avisCut=new Date(t0); avisCut.setDate(avisCut.getDate()-Z);
+  const hadAvis=new Set(activities.filter(a=>a.type==="AVIS" && parseISO(a.date_publication)>=avisCut).map(a=>a.consultant_id));
+  const sansAvis=consultants.filter(c=>!hadAvis.has(c.id));
+
+  const fill=(id,list)=> {
+    const box=$(id+" .list"); box.innerHTML="";
+    list.slice(0,50).forEach(c=>{
+      const div=document.createElement("div");
+      div.className="consultant-card";
+      div.innerHTML=`<div class="l1">${esc(c.nom)}</div><div class="l2">${esc(c.titre_mission||"")}</div>`;
+      div.addEventListener("click",()=>{
+        $$("header .tab")[1].click();
+        UI.actFilters.consultantId=c.id;
+        renderConsultantFilterHighlight();
+        renderActs();
+      });
+      box.appendChild(div);
+    })
+  };
+  fill("#kpi-alertes",alertes);
+  fill("#kpi-fin",fins);
+  fill("#kpi-stb",stbList);
+  fill("#kpi-avis",sansAvis);
+}
+
+/*** Activité – Left (Consultants) ***/
+function renderConsultants(){
+  const {consultants}=Store.state;
+  const cont=$("#consultantsList");
+  const arr=[...consultants].sort((a,b)=>{
+    if(UI.sort.by==="nom") return UI.sort.dir * a.nom.localeCompare(b.nom);
+    if(UI.sort.by==="fin"){
+      const ad=a.date_fin||"", bd=b.date_fin||"";
+      return UI.sort.dir * ad.localeCompare(bd);
+    }
+    return 0;
+  });
+  cont.innerHTML="";
+  arr.forEach(c=>{
+    const dotClass = c.date_fin ? (diffDays(parseISO(c.date_fin),parseISO(today()))<0 ? "dot-bad" :
+                       (diffDays(parseISO(c.date_fin),parseISO(today()))<=7 ? "dot-warn" : "dot-ok"))
+                       : "dot-warn";
+    const row=document.createElement("div"); row.className="row"; row.tabIndex=0;
+    row.innerHTML=`
+      <div><span class="state-dot ${dotClass}"></span><div class="l1">${esc(c.nom)}</div><div class="l2">${esc(c.titre_mission||"")}</div></div>
+      <div>${esc(c.date_fin||"")}</div>
+      <div class="row-actions">
+        <button class="icon-btn" title="Ouvrir URL" aria-label="URL">${c.url? "🔗":"⛓️"}</button>
+        <button class="icon-btn" title="Éditer consultant" aria-label="Éditer">✏️</button>
+      </div>
+    `;
+    const [btnUrl,btnEdit]=row.querySelectorAll(".icon-btn");
+    btnUrl.addEventListener("click",(ev)=>{ev.stopPropagation(); if(c.url) window.open(c.url,"_blank")});
+    btnEdit.addEventListener("click",(ev)=>{ev.stopPropagation(); openConsultantModal(c)});
+    row.addEventListener("click",()=>{ UI.actFilters.consultantId=c.id; renderConsultantFilterHighlight(); renderActs(); });
+    row.addEventListener("keydown",(e)=>{ if(e.key==="Enter") row.click(); });
+    cont.appendChild(row);
+  });
+  $$(".left .head .sortable").forEach(el=>{
+    el.onclick=()=>{
+      const key=el.dataset.sort; 
+      if(UI.sort.by===key) UI.sort.dir*=-1; else{ UI.sort.by=key; UI.sort.dir= key==="nom"?1:-1; }
+      $("#chev-nom").textContent = UI.sort.by==="nom" ? (UI.sort.dir>0?"▲":"▼") : "–";
+      $("#chev-fin").textContent = UI.sort.by==="fin" ? (UI.sort.dir>0?"▲":"▼") : "–";
+      renderConsultants();
+    }
+  });
+  renderConsultantFilterHighlight();
+}
+function renderConsultantFilterHighlight(){
+  const id=UI.actFilters.consultantId;
+  [...$("#consultantsList").children].forEach((row,i)=>{
+    row.style.outline = row.innerText.includes(Store.state.consultants[i]?.nom) && Store.state.consultants[i].id===id
+      ? "2px solid color-mix(in srgb,var(--primary) 40%,transparent)" : "none";
+  });
+}
+
+/*** Activité – Right (filters + list) ***/
+const TYPE_META={
+  ACTION_ST_BERNARD:{label:"STB",cls:"b-stb",emoji:"🟦"},
+  NOTE:{label:"Note",cls:"b-note",emoji:"🟩"},
+  VERBATIM:{label:"Verbatim",cls:"b-verb",emoji:"🟨"},
+  AVIS:{label:"Avis",cls:"b-avis",emoji:"🟪"},
+  ALERTE:{label:"Alerte",cls:"b-alert",emoji:"🟥"},
+}
+function setupTypeChips(){
+  const box=$("#typeChips"); box.innerHTML="";
+  Object.keys(TYPE_META).forEach(tp=>{
+    const chip=document.createElement("button");
+    chip.className="chip active"; chip.setAttribute("aria-pressed","true");
+    chip.textContent=TYPE_META[tp].label; chip.dataset.type=tp;
+    chip.onclick=()=>{
+      const on=chip.classList.toggle("active");
+      chip.setAttribute("aria-pressed",on?"true":"false");
+      if(on) UI.actFilters.types.add(tp); else UI.actFilters.types.delete(tp);
+      renderActs();
+    };
+    box.appendChild(chip);
+  });
+}
+function renderActs(){
+  const {activities,consultants}=Store.state;
+  const list=$("#actsList");
+  const text=$("#search").value.trim().toLowerCase();
+  UI.actFilters.text=text;
+  let arr=activities.filter(a=>UI.actFilters.types.has(a.type));
+  if(UI.actFilters.consultantId) arr=arr.filter(a=>a.consultant_id===UI.actFilters.consultantId);
+  if(text){
+    if(text.startsWith("#")) arr=arr.filter(a=>a.description.toLowerCase().includes(text));
+    else arr=arr.filter(a=>a.description.toLowerCase().includes(text));
+  }
+  arr.sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
+  list.innerHTML="";
+  const nameById=Object.fromEntries(consultants.map(c=>[c.id,c.nom]));
+  const titleById=Object.fromEntries(consultants.map(c=>[c.id,c.titre_mission||""]));
+
+  const renderOne=(a)=>{
+    const meta=TYPE_META[a.type];
+    const nm=nameById[a.consultant_id]||"—";
+    const ti=titleById[a.consultant_id]||"";
+    const div=document.createElement("div"); div.className="act";
+    div.innerHTML=`
+      <!-- Col 0: Consultant -->
+      <div>
+        <div class="l1">${esc(nm)}</div>
+        <div class="l2">${esc(ti)}</div>
+      </div>
+      <!-- Col 1: Type + Date -->
+      <div>
+        <div class="badge ${meta.cls}">${meta.emoji} ${meta.label}</div>
+        <div class="mut" style="margin-top:4px">${esc(a.date_publication)}</div>
+      </div>
+      <!-- Col 2: Description (+ heures si STB) -->
+      <div>
+        <div>${esc(a.description)}</div>
+        ${a.type==="ACTION_ST_BERNARD" ? `<div class="mut" style="margin-top:6px">Heures: ${a.heures??0}</div>`:""}
+      </div>
+      <!-- Col 3: Actions -->
+      <div class="row-actions" style="justify-self:end">
+        <button class="icon-btn" title="Éditer">✏️</button>
+        <button class="icon-btn" title="Supprimer">🗑️</button>
+      </div>
+    `;
+    const [btnEdit,btnDel]=div.querySelectorAll(".icon-btn");
+    btnEdit.onclick=()=>openActivityModal(a);
+    btnDel.onclick=()=>{ if(confirmDel("Supprimer cette activité ?")){ Store.deleteActivity(a.id); toast("Supprimé ✅"); renderActs(); } };
+    list.appendChild(div);
+  };
+
+  const MAX=200;
+  if(arr.length>MAX){
+    arr.slice(0,MAX).forEach(renderOne);
+    const more=document.createElement("button"); more.className="btn"; more.textContent=`Charger plus (${arr.length-MAX} restants)`;
+    more.onclick=()=>{ arr.slice(MAX).forEach(renderOne); more.remove(); };
+    list.appendChild(more);
+  }else arr.forEach(renderOne);
+}
+
+/*** Activity modal ***/
+function openActivityModal(a){
+  const dlg=$("#dlg-activity");
+  const selC=$("#a-consultant"), selT=$("#a-type"), inpD=$("#a-date"), ta=$("#a-desc"), wrapH=$("#wrap-heures"), inpH=$("#a-heures");
+  selC.innerHTML=Store.state.consultants.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join("");
+  const editing=!!a;
+  const model = editing ? {...a} : {consultant_id:UI.actFilters.consultantId || Store.state.consultants[0]?.id, type:"NOTE", date_publication:today(), description:""};
+  selC.value=model.consultant_id; selT.value=model.type; inpD.value=model.date_publication; ta.value=model.description||"";
+  inpH.value= (model.heures??""); wrapH.hidden = selT.value!=="ACTION_ST_BERNARD";
+  selT.onchange=()=>{ wrapH.hidden = selT.value!=="ACTION_ST_BERNARD"; };
+  setupTagAutocomplete(ta);
+  dlg.showModal();
+  $("#a-save").onclick=(ev)=>{
+    ev.preventDefault();
+    try{
+      Store.upsertActivity({
+        id:model.id, consultant_id:selC.value, type:selT.value, date_publication:inpD.value, description:ta.value.trim(),
+        heures: selT.value==="ACTION_ST_BERNARD" ? Number(inpH.value) : undefined
+      });
+      toast(editing?"Activité mise à jour ✅":"Activité créée ✅");
+      dlg.close();
+      renderActs(); renderDashboard();
+    }catch(e){ alert(e.message); }
+  };
+}
+
+/*** Consultant modal ***/
+function openConsultantModal(c){
+  const dlg=$("#dlg-consultant");
+  const editing=!!c; const m= editing? {...c}: {id:uuid()};
+  $("#c-nom").value=m.nom||""; $("#c-titre").value=m.titre_mission||"";
+  $("#c-fin").value=m.date_fin||""; $("#c-url").value=m.url||""; $("#c-desc").value=m.description||"";
+  dlg.showModal();
+  $("#c-save").onclick=(ev)=>{
+    ev.preventDefault();
+    try{
+      Store.upsertConsultant({
+        id:m.id, nom:$("#c-nom").value.trim(), titre_mission:$("#c-titre").value.trim(),
+        date_fin:$("#c-fin").value||null, url:$("#c-url").value.trim(), description:$("#c-desc").value.trim()
+      });
+      toast(editing?"Consultant mis à jour ✅":"Consultant créé ✅");
+      dlg.close();
+      renderConsultants(); renderActs(); renderDashboard();
+    }catch(e){ alert(e.message); }
+  }
+}
+
+/*** Trends + Settings ***/
+function renderSettings(){
+  $("#set-delai").value=Store.state.settings.delai_alerte_jours||0;
+  $("#set-fin").value=Store.state.settings.fin_mission_sous_jours||0;
+  $("#set-stb").value=Store.state.settings.stb_recent_jours||0;
+  $("#set-avis").value=Store.state.settings.avis_manquant_depuis_jours||0;
+  const box=$("#trendsList"); box.innerHTML="";
+  Store.state.trends.forEach(t=>{
+    const row=document.createElement("div"); row.className="inline";
+    const slug=document.createElement("input"); slug.type="text"; slug.value=t.slug; slug.style.width="220px";
+    const lab=document.createElement("input"); lab.type="text"; lab.value=t.label; lab.style.width="280px";
+    const btnE=document.createElement("button"); btnE.className="btn"; btnE.textContent="✏️"; 
+    const btnD=document.createElement("button"); btnD.className="btn"; btnD.textContent="🗑️";
+    btnE.onclick=()=>{ Store.upsertTrend({id:t.id,slug:slug.value.trim(),label:lab.value.trim()}); toast("Tendance mise à jour ✅"); renderSettings(); };
+    btnD.onclick=()=>{ if(confirmDel("Supprimer la tendance ?")){ Store.deleteTrend(t.id); toast("Supprimé ✅"); renderSettings(); } };
+    row.append(slug,lab,btnE,btnD); box.appendChild(row);
+  });
+}
+$("#btn-add-trend").onclick=()=>{ Store.upsertTrend({slug:"nouvelle-tendance",label:"Nouvelle tendance"}); renderSettings(); }
+$("#btn-save-settings").onclick=()=>{
+  Store.state.settings={
+    delai_alerte_jours:Number($("#set-delai").value||0),
+    fin_mission_sous_jours:Number($("#set-fin").value||0),
+    stb_recent_jours:Number($("#set-stb").value||0),
+    avis_manquant_depuis_jours:Number($("#set-avis").value||0),
+  }; Store.save(); toast("Seuils enregistrés ✅"); renderDashboard();
+}
+$("#btn-reset-settings").onclick=()=>{ Store.state.settings=structuredClone(DEF_SETTINGS); Store.save(); renderSettings(); toast("Réinitialisé ✅"); renderDashboard(); }
+
+/*** Import / Export ***/
+$("#btn-export").onclick=()=>{
+  const blob=new Blob([Store.export()],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download="sherpa-export.json"; a.click(); URL.revokeObjectURL(a.href);
+  toast("Export généré ✅");
+};
+$("#btn-import").onclick=async()=>{
+  const f=$("#file-import").files[0]; if(!f) return alert("Choisir un fichier JSON");
+  const txt=await f.text();
+  try{
+    const obj=JSON.parse(txt);
+    Store.import(obj,$("#import-mode").value);
+    toast("Import OK ✅");
+    renderConsultants(); renderActs(); renderDashboard(); renderSettings();
+  }catch(e){ alert("JSON invalide"); }
+}
+
+/*** Search & chips setup ***/
+$("#search").addEventListener("input",()=>renderActs());
+setupTypeChips();
+
+/*** Tag autocomplete ***/
+function setupTagAutocomplete(textarea){
+  const sug=$("#tagSuggest");
+  const trends=()=>Store.state.trends;
+  let start=0;
+  function close(){sug.style.display="none";}
+  function open(items,rect){
+    sug.innerHTML=""; items.forEach(it=>{
+      const d=document.createElement("div"); d.textContent="#"+it.slug+" — "+it.label;
+      d.onclick=()=>{
+        const val=textarea.value;
+        textarea.value = val.slice(0,start) + "#"+it.slug + " " + val.slice(textarea.selectionStart);
+        close(); textarea.focus();
+      };
+      sug.appendChild(d);
+    });
+    sug.style.left=(rect.left)+"px"; sug.style.top=(rect.bottom+window.scrollY)+"px";
+    sug.style.display=items.length?"block":"none";
+  }
+  textarea.oninput=()=>{
+    const pos=textarea.selectionStart;
+    const val=textarea.value.slice(0,pos);
+    const m=val.match(/#([a-z0-9\-]{0,30})$/i);
+    if(m){
+      const q=m[1].toLowerCase();
+      start=pos-(q.length+1);
+      const items=trends().filter(t=>t.slug.toLowerCase().startsWith(q));
+      const r=textarea.getBoundingClientRect();
+      open(items,r);
+    }else close();
+  };
+  textarea.onblur=()=>setTimeout(close,120);
+}
+
+/*** Init ***/
+Store.load();
+renderDashboard();
+
+/*** New activity button ***/
+$("#btn-new-act").onclick=()=>openActivityModal();
+
+/*** Accessibility tweaks ***/
+document.addEventListener("keydown",(e)=>{ if(e.key==="Escape"){ $("#dlg-activity").close?.(); $("#dlg-consultant").close?.(); }});
+</script>
+</body>
+</html>
