@@ -1,0 +1,61 @@
+name: Sync data.json from [SYNC] issues
+
+on:
+  issues:
+    types: [opened, edited, reopened, labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sync:
+    if: |
+      contains(github.event.issue.title, '[SYNC]') ||
+      contains(join(github.event.issue.labels.*.name, ' '), 'sync')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract JSON from issue body
+        id: parse
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const m = body.match(/```json\s*([\s\S]*?)\s*```/i);
+            if (!m) { core.setFailed('No ```json block found in issue body'); return; }
+            try {
+              JSON.parse(m[1]); // validate
+            } catch(e) {
+              core.setFailed('Invalid JSON: ' + e.message); return;
+            }
+            core.setOutput('json', m[1]);
+
+      - name: Write data.json (replace)
+        run: |
+          printf '%s\n' '${{ steps.parse.outputs.json }}' > data.json
+          echo "Wrote $(wc -c < data.json) bytes to data.json"
+
+      - name: Commit & push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git diff --cached --quiet && echo "No changes" || git commit -m "sync: replace data.json from issue #${{ github.event.issue.number }}"
+          git push
+
+      - name: Close issue
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ok = '${{ job.status }}' === 'success';
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: ok ? "✅ data.json remplacé avec succès." : "❌ Échec de la synchro. Vérifie le JSON."
+            });
+            if (ok) {
+              await github.rest.issues.update({ ...context.repo, issue_number: context.issue.number, state: "closed" });
+            }
