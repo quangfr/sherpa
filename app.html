@@ -3,58 +3,82 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA — MVP v4.3</title>
+<title>SHERPA — MVP v4.8</title>
 <style>
   :root{
     --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
     --accent:#2563eb;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--pill:#f1f5f9;--pill-fg:#0f172a;
     --stb:#e6f4ea;--note:#eef2ff;--verb:#fff7ed;--avis:#e0f2fe;--alerte:#fee2e2;
     --stb-f:#166534;--note-f:#3730a3;--verb-f:#9a3412;--avis-f:#075985;--alerte-f:#991b1b;
+    --headH:44px; --hover:#f3f6ff;
   }
-  html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
+
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font:14px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
   *{box-sizing:border-box}
   a{color:var(--accent);text-decoration:none}
-  .wrap{width:100%;max-width:none;margin:0;padding:8px 12px 24px}
-  header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
-  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:8px 4px}
-  .tab{padding:8px 10px;border:1px solid var(--border);border-bottom-color:transparent;border-radius:10px 10px 0 0;background:var(--card);cursor:pointer;font-weight:600}
+
+  header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);height:var(--headH)}
+  .wrap{width:100%;max-width:none;margin:0;padding:6px 10px}
+  main{height:calc(100vh - var(--headH)); overflow:hidden}
+
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px}
+  .tab{padding:6px 8px;border:1px solid var(--border);border-bottom-color:transparent;border-radius:10px 10px 0 0;background:var(--card);cursor:pointer;font-weight:700;font-size:13px}
   .tab.active{background:var(--bg);border-color:var(--border);color:var(--accent)}
-  .view{display:none;padding:12px 4px}
+
+  .view{display:none;height:100%;overflow:auto;padding:8px 4px}
   .view.active{display:block}
+
   .grid{display:grid;gap:10px}
   .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
   @media (max-width:1300px){.g4{grid-template-columns:repeat(3,1fr)}}
   @media (max-width:980px){.g4{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:660px){.g4{grid-template-columns:repeat(1,1fr)}}
+
   .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;box-shadow:0 1px 0 #00000008}
   .title{font-weight:700}
-  .sub{color:var(--muted);font-size:12px}
-  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .sub{color:var(--muted);font-size:11px}
+
+  .row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .row.space{justify-content:space-between}
-  .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:12px}
+  .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:3px 8px;font-size:12px}
   .pill.stb{background:var(--stb);border-color:var(--stb);color:var(--stb-f)}
   .pill.note{background:var(--note);border-color:var(--note);color:var(--note-f)}
   .pill.verb{background:var(--verb);border-color:var(--verb);color:var(--verb-f)}
   .pill.avis{background:var(--avis);border-color:var(--avis);color:var(--avis-f)}
   .pill.alerte{background:var(--alerte);border-color:var(--alerte);color:var(--alerte-f)}
-  .btn{border:1px solid var(--border);background:var(--card);border-radius:8px;padding:6px 10px;cursor:pointer}
+  .btn{border:1px solid var(--border);background:var(--card);border-radius:8px;padding:5px 8px;cursor:pointer}
   .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
   .btn.ghost{background:transparent}
   .btn.danger{border-color:var(--red);color:var(--red)}
-  .btn.small{padding:4px 8px;font-size:12px}
+  .btn.small{padding:3px 7px;font-size:12px}
+
   input,select,textarea{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 8px;font:inherit}
-  textarea{width:100%;min-height:88px;resize:vertical}
-  .split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:10px}
-  @media (max-width:980px){.split{grid-template-columns:1fr}}
-  .table{width:100%;border-collapse:collapse}
-  .table th,.table td{border-top:1px solid var(--border);padding:8px;vertical-align:top}
-  .table th{font-size:12px;color:var(--muted);text-align:left}
+  textarea{width:100%;resize:vertical}
+  #fa-desc{min-height:44px;resize:none;overflow:hidden} /* autosize (déjà en place dans le JS) */
+
+  .split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:10px;height:100%}
+  @media (max-width:980px){.split{grid-template-columns:1fr;height:auto}}
+
+  .pane{display:flex;flex-direction:column;min-height:0;height:100%}
+  .pane-header{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--border);padding:6px 0}
+  .pane-body{min-height:0;overflow:auto}
+
+  .table{width:100%;border-collapse:collapse;table-layout:fixed}
+  .table th,.table td{border-top:1px solid var(--border);padding:6px 8px;vertical-align:top}
+  .table th{font-size:12px;color:var(--muted);text-align:left;background:var(--card);position:sticky;top:0;z-index:1}
+  .table tbody tr{transition:background-color .08s ease}
+  .table tbody tr:hover{background:var(--hover)}
+  .table tbody tr.clickable{cursor:pointer}
+
   .muted{color:var(--muted)}
   .dot{width:10px;height:10px;border-radius:50%}
   .dot.g{background:var(--green)} .dot.y{background:var(--yellow)} .dot.r{background:var(--red)}
   .green{color:var(--green);font-weight:700}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;white-space:pre-wrap}
   .hidden{display:none!important}
+  .linklike{cursor:pointer;text-decoration:underline}
+  .nowrap{white-space:nowrap}
+
   dialog{border:none;border-radius:14px;box-shadow:0 10px 30px #0000002a;padding:0;max-width:820px;width:calc(100% - 24px)}
   dialog::backdrop{background:#0006}
   .modal{padding:14px}
@@ -62,28 +86,34 @@
   .modal .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   @media (max-width:700px){.modal .grid2{grid-template-columns:1fr}}
   .actions{display:flex;gap:8px;justify-content:flex-end;padding:10px;border-top:1px solid var(--border);background:var(--bg);border-radius:0 0 14px 14px}
-  .linklike{cursor:pointer;text-decoration:underline}
-  .nowrap{white-space:nowrap}
 
-  /* ===== Largeurs fixes pour la liste des activités ===== */
-  .table.fixed{table-layout:fixed}
+  /* ===== Largeurs colonnes ACTIVITÉS (Type / Consultant / Date minimales, Main max) ===== */
   .col-consultant{width:200px}
-  .col-type{width:160px}
+  .col-type{width:140px}
+  .col-date{width:110px}
+  .col-main{width:auto}      /* occupe le reste */
   .col-actions{width:96px}
-  .col-desc{width:auto} /* occupe tout le reste */
-
-  /* Meilleur wrap dans la colonne description */
-  #activities-table td:nth-child(3){white-space:normal;word-break:break-word;overflow-wrap:anywhere}
-
-  /* Évite que les boutons cassent la ligne */
-  #activities-table td:last-child .btn.small{white-space:nowrap}
-
-  /* Option mobile : assouplir un peu les min-width */
-  @media (max-width:800px){
+  @media (max-width:900px){
     .col-consultant{width:160px}
-    .col-type{width:130px}
+    .col-type{width:120px}
+    .col-date{width:96px}
     .col-actions{width:88px}
   }
+
+  /* Clamp 1 ligne (objectif) + 3 lignes (description) */
+  .clamp-1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .clamp-3{
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+
+  /* Meilleur wrap dans la colonne principale */
+  #activities-table td.main{word-break:break-word;overflow-wrap:anywhere}
+  #activities-table td:last-child .btn.small{white-space:nowrap}
+
+  .type-pill{display:inline-flex;align-items:center;gap:6px}
 </style>
 </head>
 <body>
@@ -97,119 +127,110 @@
   <!-- DASHBOARD -->
   <section class="view" id="view-dashboard">
     <div class="grid g4">
-      <div class="card">
-        <div class="row space">
-          <div class="title">🚨 En alerte</div>
-          <div class="pill" id="db-alerte-title">0</div>
-        </div>
-        <div id="db-alerte-list" class="mono"></div>
-      </div>
-      <div class="card">
-        <div class="row space">
-          <div class="title">⏳ Fin de mission < <span id="db-fin-x"></span>j</div>
-          <div class="pill" id="db-fin-title">0</div>
-        </div>
-        <div id="db-fin-list" class="mono"></div>
-      </div>
-      <div class="card">
-        <div class="row space">
-          <div class="title">🐕‍🦺 Action STB > <span id="db-stb-y"></span>j</div>
-          <div class="pill" id="db-stb-title">0</div>
-        </div>
-        <div id="db-stb-list" class="mono"></div>
-      </div>
-      <div class="card">
-        <div class="row space">
-          <div class="title">🗣️ Avis > <span id="db-avis-z"></span>j</div>
-          <div class="pill" id="db-avis-title">0</div>
-        </div>
-        <div id="db-avis-list" class="mono"></div>
-      </div>
+      <div class="card"><div class="row space"><div class="title">🚨 En alerte</div><div class="pill" id="db-alerte-title">0</div></div><div id="db-alerte-list" class="mono"></div></div>
+      <div class="card"><div class="row space"><div class="title">⏳ Fin de mission &lt; <span id="db-fin-x"></span>j</div><div class="pill" id="db-fin-title">0</div></div><div id="db-fin-list" class="mono"></div></div>
+      <div class="card"><div class="row space"><div class="title">🐕‍🦺 Action STB &gt; <span id="db-stb-y"></span>j</div><div class="pill" id="db-stb-title">0</div></div><div id="db-stb-list" class="mono"></div></div>
+      <div class="card"><div class="row space"><div class="title">🗣️ Avis &gt; <span id="db-avis-z"></span>j</div><div class="pill" id="db-avis-title">0</div></div><div id="db-avis-list" class="mono"></div></div>
     </div>
   </section>
 
-  <!-- ACTIVITÉ -->
-  <section class="view" id="view-activite">
+  <!-- ACTIVITÉS -->
+  <section class="view" id="view-activite" style="overflow:hidden">
     <div class="split">
       <!-- Left: consultants -->
-      <div>
-        <div class="row space" style="margin-bottom:6px">
-          <div class="title">👤 Consultants</div>
-          <div class="row">
-            <button class="btn small" id="btn-new-consultant">+ Consultant</button>
-            <button class="btn small ghost" id="btn-reset-filters-left">Réinitialiser filtres</button>
+      <div class="pane">
+        <div class="pane-header">
+          <div class="row space" style="margin-bottom:6px">
+            <div class="title">👤 Consultants</div>
+            <div class="row">
+              <button class="btn small" id="btn-new-consultant">+ Consultant</button>
+              <button class="btn small ghost" id="btn-reset-filters-left">Réinitialiser</button>
+            </div>
+          </div>
+          <div class="row" style="gap:8px;margin-bottom:6px">
+            <input id="search-consultants" placeholder="🔎 Rechercher un consultant…" style="width:100%"/>
           </div>
         </div>
-        <table class="table" id="consultants-table">
-          <thead>
-            <tr>
-              <th class="linklike" data-sort="nom">Nom ▲/▼</th>
-              <th class="linklike nowrap" data-sort="date_fin">Fin mission</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="pane-body">
+          <table class="table" id="consultants-table">
+            <thead>
+              <tr>
+                <th class="linklike" data-sort="nom">Nom ▲/▼</th>
+                <th class="linklike nowrap" data-sort="date_fin">Fin mission</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Right: activities -->
-      <div>
-        <div class="row space">
-          <div class="row" style="gap:10px">
-            <div class="title">🗂️ Activités</div>
-            <!-- 🔢 Badge compteur -->
-            <div class="pill" id="activities-count">0</div>
-          </div>
-          <div class="row">
-            <input id="search-activities" placeholder="🔎 Recherche texte…" style="min-width:220px"/>
-            <select id="filter-type" title="Filtrer par type">
-              <option value="">🧰 Tous les types</option>
-              <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
-              <option value="NOTE">📝 Note</option>
-              <option value="VERBATIM">💬 Verbatim</option>
-              <option value="AVIS">🗣️ Avis</option>
-              <option value="ALERTE">🚨 Alerte</option>
-            </select>
-            <select id="filter-objectif" title="Filtrer par objectif">
-              <option value="">🎯 Tous les objectifs</option>
-            </select>
-            <label class="row" style="gap:6px">
-              ⏱️ Avant le
-              <input type="date" id="filter-before"/>
-            </label>
-            <button class="btn small primary" id="btn-new-activity">+ Nouvelle activité</button>
-            <button class="btn small ghost" id="btn-reset-filters">Réinitialiser filtres</button>
+      <div class="pane">
+        <div class="pane-header">
+          <div class="row space">
+            <div class="row" style="gap:10px">
+              <div class="title">🗂️ Activités</div>
+              <div class="pill" id="activities-count">0</div>
+            </div>
+            <div class="row">
+              <input id="search-activities" placeholder="🔎 Recherche texte…" style="min-width:220px"/>
+              <select id="filter-type" title="Filtrer par type">
+                <option value="">🗂️ Tous les types</option>
+                <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
+                <option value="NOTE">📝 Note</option>
+                <option value="VERBATIM">💬 Verbatim</option>
+                <option value="AVIS">🗣️ Avis</option>
+                <option value="ALERTE">🚨 Alerte</option>
+              </select>
+              <select id="filter-objectif" title="Filtrer par objectif">
+                <option value="">🎯 Tous les objectifs</option>
+              </select>
+              <label class="row" style="gap:6px">
+                ⏱️ Avant le
+                <input type="date" id="filter-before"/>
+              </label>
+              <button class="btn small primary" id="btn-new-activity">+ Nouvelle activité</button>
+              <button class="btn small ghost" id="btn-reset-filters">Réinitialiser</button>
+            </div>
           </div>
         </div>
 
-        <!-- Table activités avec colonnes fixes -->
-        <table class="table fixed" id="activities-table">
-          <colgroup>
-            <col class="col-consultant"/>
-            <col class="col-type"/>
-            <col class="col-desc"/>
-            <col class="col-actions"/>
-          </colgroup>
-          <thead>
-            <tr>
-              <th>Consultant</th>
-              <th>Type & Date</th>
-              <th>Objectif & Description</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <div class="pane-body">
+          <table class="table" id="activities-table">
+            <colgroup>
+              <col class="col-type"/>
+              <col class="col-consultant"/>
+              <col class="col-date"/>
+              <col class="col-main"/>
+              <col class="col-actions"/>
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Consultant</th>
+                <th>Date</th>
+                <th>Description + Objectif</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
 
       </div>
     </div>
   </section>
 
-  <!-- OBJECTIF -->
+  <!-- OBJECTIFS -->
   <section class="view" id="view-objectif">
     <div class="row space" style="margin-bottom:8px">
       <div class="title">🎯 Objectifs</div>
-      <div class="row">
+      <div class="row" style="gap:8px">
+        <input id="search-objectifs" placeholder="🔎 Rechercher (titre + description)…" style="min-width:260px"/>
+        <select id="filter-objectif-consultant" title="Filtrer par consultant">
+          <option value="">👤 Tous les consultants</option>
+        </select>
         <button class="btn small primary" id="btn-new-objectif">+ Nouvel objectif</button>
       </div>
     </div>
@@ -346,11 +367,11 @@ const parseDate=s=>s? new Date(s+'T00:00:00'):null;
 const daysDiff=(a,b)=>Math.round((a-b)/86400000);
 const addDays=(d,n)=>new Date(d.getTime()+n*86400000);
 
-/* Pastille progression (🟥 <30, 🟨 <70, 🟩 ≥70) */
-function progBadge(p){
-  const pct = Math.max(0, Math.min(100, Number(p)||0));
-  return pct < 30 ? '🟥' : (pct < 70 ? '🟨' : '🟩');
-}
+/* Pastille progression */
+function progBadge(p){ const pct=Math.max(0,Math.min(100,Number(p)||0)); return pct<30?'🟥':(pct<70?'🟨':'🟩'); }
+
+/* Auto-height textarea (no scroll) */
+function autoSize(el){ if(!el) return; el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
 
 /* ===== DATA ===== */
 let store=load();
@@ -373,17 +394,29 @@ function load(){
     {id:uid(),consultant_id:c1.id,type:'NOTE',date_publication:today,description:'Préparer démo',created_at:nowISO(),updated_at:nowISO()}
   ];
   const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/sherpa'};
-  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.3,updated_at:nowISO()}};
+  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.8,updated_at:nowISO()}};
   localStorage.setItem(LS_KEY,JSON.stringify(s));
   return s;
 }
 function save(){ store.meta=store.meta||{}; store.meta.updated_at=nowISO(); localStorage.setItem(LS_KEY,JSON.stringify(store)); refreshAll(); }
 
 /* ===== NAV ===== */
-const TABS=[{id:'dashboard',label:'Dashboard'},{id:'activite',label:'Activité'},{id:'objectif',label:'Objectif'},{id:'parametres',label:'Paramètres'},{id:'sync',label:'Sync'}];
+const TABS=[
+  {id:'dashboard',label:'👤Dashboard'},
+  {id:'activite',label:'🗂️Activités'},
+  {id:'objectif',label:'🎯Objectifs'},
+  {id:'parametres',label:'⚙️Paramètres'},
+  {id:'sync',label:'🔃Sync'}
+];
 const tabsEl=document.getElementById('tabs');
 TABS.forEach(t=>{ const b=document.createElement('button'); b.className='tab'; b.textContent=' '+t.label+' '; b.onclick=()=>openTab(t.id); b.id='tab-'+t.id; tabsEl.appendChild(b); });
-function openTab(id){ document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active')); document.querySelector('#tab-'+id).classList.add('active'); document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.querySelector('#view-'+id).classList.add('active'); if(id==='sync') updateSyncPreview(); }
+function openTab(id){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.querySelector('#tab-'+id).classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelector('#view-'+id).classList.add('active');
+  if(id==='sync') updateSyncPreview();
+}
 openTab('dashboard');
 
 /* ===== DASHBOARD ===== */
@@ -421,8 +454,17 @@ function dashboard(){
   fmt(avisList,'db-avis-list','db-avis-title');
 }
 
-/* ===== ACTIVITÉ ===== */
-let state={sortCol:'nom',sortDir:1,filters:{q:'',consultant_id:'',type:'',before:'',objectif_id:''}};
+/* ===== STATE ===== */
+let state={
+  sortCol:'nom',
+  sortDir:1,
+  filters:{q:'',consultant_id:'',type:'',before:'',objectif_id:''},
+  consultants_q:'',
+  objectifs_q:'',
+  objectifs_consultant_id:''
+};
+
+/* ===== ACTIVITÉS ===== */
 const consTBody=document.querySelector('#consultants-table tbody');
 const consHead=document.querySelectorAll('#consultants-table thead th[data-sort]');
 consHead.forEach(th=>th.onclick=()=>{state.sortCol=th.dataset.sort;state.sortDir*=-1;renderConsultants();});
@@ -438,28 +480,59 @@ function statusOf(c){
 }
 
 function renderConsultants(){
-  const rows=[...store.consultants];
-  rows.sort((a,b)=> state.sortCol==='nom' ? state.sortDir * a.nom.localeCompare(b.nom) : state.sortDir * (a.date_fin||'').localeCompare(b.date_fin||''));
+  const q=state.consultants_q.toLowerCase().trim();
+  const rows=[...store.consultants]
+    .filter(c=>!q || (c.nom+' '+(c.titre_mission||'')).toLowerCase().includes(q))
+    .sort((a,b)=> state.sortCol==='nom'
+      ? state.sortDir * a.nom.localeCompare(b.nom)
+      : state.sortDir * (a.date_fin||'').localeCompare(b.date_fin||'')
+    );
+
   consTBody.innerHTML='';
   rows.forEach(c=>{
-    const tr=document.createElement('tr'), dot=statusOf(c);
+    const tr=document.createElement('tr');
+    tr.classList.add('clickable');
     tr.innerHTML=`
       <td>
-        <div class="row"><span class="dot ${dot}"></span><b>${esc(c.nom)}</b></div>
+        <div class="row"><span class="dot ${statusOf(c)}"></span><b>${esc(c.nom)}</b></div>
         <div class="sub">${esc(c.titre_mission||'—')}</div>
       </td>
       <td>${esc(c.date_fin||'—')}</td>
       <td class="nowrap">
         ${c.url?`<a class="btn small" href="${esc(c.url)}" target="_blank">🔗</a>`:''}
-        <button class="btn small" data-edit="${c.id}">✏️</button>
-        <button class="btn small" data-filter="${c.id}">Filtrer</button>
+        <button class="btn small" data-edit="${c.id}" title="Éditer">✏️</button>
+        <button class="btn small" data-filter="${c.id}" title="Filtrer activités">🗂️</button>
+        <button class="btn small" data-goto-obj="${c.id}" title="Voir ses objectifs">🎯</button>
       </td>`;
-    tr.querySelector('[data-edit]').onclick=()=>openConsultantModal(c.id);
-    tr.querySelector('[data-filter]').onclick=()=>{ setConsultantFilter(c.id); };
+    tr.addEventListener('click',(e)=>{
+      if(e.target.closest('button, a')) return;
+      setConsultantFilter(c.id); openTab('activite');
+    });
+    tr.querySelector('[data-edit]').onclick=(e)=>{ e.stopPropagation(); openConsultantModal(c.id); };
+    tr.querySelector('[data-filter]').onclick=(e)=>{ e.stopPropagation(); setConsultantFilter(c.id); openTab('activite'); };
+    tr.querySelector('[data-goto-obj]').onclick=(e)=>{ 
+      e.stopPropagation(); 
+      state.objectifs_consultant_id=c.id; 
+      document.getElementById('filter-objectif-consultant').value=c.id;
+      openTab('objectif'); renderObjectifs(); 
+    };
     consTBody.appendChild(tr);
   });
 }
+
 function setConsultantFilter(cid){ state.filters.consultant_id=cid; renderActivities(); }
+
+/* Search bar consultants */
+const inputSearchConsultants=document.getElementById('search-consultants');
+inputSearchConsultants.addEventListener('input',e=>{ state.consultants_q=e.target.value; renderConsultants(); });
+
+/* Reset left */
+document.getElementById('btn-reset-filters-left').onclick=()=>{
+  state.filters.consultant_id='';
+  state.consultants_q='';
+  inputSearchConsultants.value='';
+  renderConsultants(); renderActivities();
+};
 
 const actTBody=document.querySelector('#activities-table tbody');
 const inputSearch=document.getElementById('search-activities');
@@ -472,15 +545,11 @@ inputSearch.addEventListener('input',e=>{state.filters.q=e.target.value.trim().t
 selectType.addEventListener('change',e=>{state.filters.type=e.target.value; renderActivities();});
 inputBefore.addEventListener('change',e=>{state.filters.before=e.target.value; renderActivities();});
 selectObjectif.addEventListener('change',e=>{state.filters.objectif_id=e.target.value; renderActivities();});
-
-document.getElementById('btn-reset-filters').onclick=()=>{ resetActivityFilters(); };
-document.getElementById('btn-reset-filters-left').onclick=()=>{ state.filters.consultant_id=''; renderActivities(); };
-
-function resetActivityFilters(){
+document.getElementById('btn-reset-filters').onclick=()=>{ 
   state.filters={q:'',consultant_id:'',type:'',before:'',objectif_id:''};
   inputSearch.value=''; selectType.value=''; inputBefore.value=''; selectObjectif.value='';
   renderActivities();
-}
+};
 
 const TYPE_META={
   ACTION_ST_BERNARD:{emoji:'🐕‍🦺', pill:'stb', label:'Action STB'},
@@ -503,27 +572,34 @@ function renderActivities(){
     .sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
 
   badgeCount.textContent=list.length;
-
   actTBody.innerHTML='';
+
   list.forEach(a=>{
     const c=store.consultants.find(x=>x.id===a.consultant_id);
     const o=a.objectif_id ? store.objectifs.find(x=>x.id===a.objectif_id):null;
     const meta=TYPE_META[a.type]||{emoji:'❓',pill:'',label:a.type};
-    const heuresTxt = a.type==='ACTION_ST_BERNARD' ? ` — <b>${a.heures??0}h</b>`:'';
+    const heuresTxt = a.type==='ACTION_ST_BERNARD' ? `<b>${a.heures??0}h</b>`:'';
+
     const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td><b>${esc(c?.nom||'—')}</b><div class="sub">${esc(c?.titre_mission||'—')}</div></td>
       <td>
-        <div class="pill ${meta.pill}">${meta.emoji} ${meta.label}</div>
-        <div class="sub">${esc(a.date_publication)}</div>
+        <span class="pill ${meta.pill} type-pill">${meta.emoji} ${meta.label}</span>
       </td>
       <td>
-        <div>${o?`🎯 <b>${esc(o.titre)}</b>`:'—'}</div>
-        <div>${esc(a.description)}${heuresTxt}</div>
+        <b>${esc(c?.nom||'—')}</b>
+        <div class="sub">${esc(c?.titre_mission||'—')}</div>
+      </td>
+      <td><div class="sub">${esc(a.date_publication)}</div></td>
+      <td class="main">
+        <div class="row space">
+          <div class="clamp-1" title="${o?esc(o.titre):''}">${o?`🎯 <b>${esc(o.titre)}</b>`:'—'}</div>
+          <div>${heuresTxt}</div>
+        </div>
+        <div class="clamp-3">${esc(a.description)}</div>
       </td>
       <td class="nowrap">
-        <button class="btn small" data-edit="${a.id}">✏️</button>
-        <button class="btn small danger" data-del="${a.id}">🗑️</button>
+        <button class="btn small" data-edit="${a.id}" title="Éditer">✏️</button>
+        <button class="btn small danger" data-del="${a.id}" title="Supprimer">🗑️</button>
       </td>`;
     tr.querySelector('[data-edit]').onclick=()=>openActivityModal(a.id);
     tr.querySelector('[data-del]').onclick=()=>{ if(confirm('Supprimer cette activité ?')){ store.activities=store.activities.filter(x=>x.id!==a.id); save(); } };
@@ -533,7 +609,6 @@ function renderActivities(){
 
 /* Options des filtres dépendants */
 function renderActivityFiltersOptions(){
-  // Objectifs
   const curr = selectObjectif.value;
   selectObjectif.innerHTML = '<option value="">🎯 Tous les objectifs</option>' +
     store.objectifs.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
@@ -541,6 +616,11 @@ function renderActivityFiltersOptions(){
 }
 
 /* ===== OBJECTIFS ===== */
+const inputSearchObj=document.getElementById('search-objectifs');
+const selectObjConsult=document.getElementById('filter-objectif-consultant');
+inputSearchObj.addEventListener('input',e=>{ state.objectifs_q=e.target.value.toLowerCase().trim(); renderObjectifs(); });
+selectObjConsult.addEventListener('change',e=>{ state.objectifs_consultant_id=e.target.value; renderObjectifs(); });
+
 function hoursForObjective(objId, byConsultantId=null, recentDays=null){
   const acts=store.activities.filter(a=>a.type==='ACTION_ST_BERNARD' && a.objectif_id===objId);
   const now=new Date();
@@ -551,39 +631,58 @@ function hoursForObjective(objId, byConsultantId=null, recentDays=null){
   }).reduce((s,a)=>s+(Number(a.heures)||0),0);
 }
 function renderObjectifs(){
+  const keep=selectObjConsult.value;
+  selectObjConsult.innerHTML = '<option value="">👤 Tous les consultants</option>' +
+    store.consultants.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join('');
+  if(keep) selectObjConsult.value=keep;
+
   const grid=document.getElementById('objectifs-grid'); grid.innerHTML='';
   const p=store.params;
-  store.objectifs.forEach(o=>{
-    const total=hoursForObjective(o.id,null,null);
-    const recent=hoursForObjective(o.id,null,p.objectif_recent_jours);
-    const card=document.createElement('div'); card.className='card';
-    const consList=o.consultants.map(link=>{
-      const c=store.consultants.find(x=>x.id===link.consultant_id);
-      const pct=Math.max(0,Math.min(100,link.progression_pct||0));
-      const t=hoursForObjective(o.id,c?.id,null);
-      const r=hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
-      return `
-        <div class="row space" style="margin:6px 0">
-          <div>
-            <span class="nowrap" title="${pct}%">${progBadge(pct)}</span>
-            <span class="linklike" data-goto="${c?.id||''}" style="margin-left:6px">${esc(c?.nom||'—')}</span>
-            <span class="sub">(${pct}%)</span>
-          </div>
-          <div class="nowrap"><b>${t}h</b> <span class="green">(+${r}h)</span></div>
-        </div>`;
-    }).join('');
-    card.innerHTML=`
-      <div class="row space">
-        <div class="title">${esc(o.titre)}</div>
-        <button class="btn small" data-edit="${o.id}">✏️</button>
-      </div>
-      <div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
-      <div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> <span class="green">(+${recent}h)</span></div>
-      <div>${consList||'<span class="muted">Aucun consultant associé</span>'}</div>`;
-    card.querySelectorAll('[data-goto]').forEach(a=>a.addEventListener('click',()=>{ openTab('activite'); state.filters.consultant_id=a.dataset.goto; renderActivities(); }));
-    card.querySelector('[data-edit]').onclick=()=>openObjectifModal(o.id);
-    grid.appendChild(card);
-  });
+  const q=state.objectifs_q;
+  const onlyCid=state.objectifs_consultant_id;
+
+  store.objectifs
+    .filter(o=>{
+      if(q){
+        const hay=(o.titre+' '+(o.description||'')).toLowerCase();
+        if(!hay.includes(q)) return false;
+      }
+      if(onlyCid){
+        return o.consultants.some(co=>co.consultant_id===onlyCid);
+      }
+      return true;
+    })
+    .forEach(o=>{
+      const total=hoursForObjective(o.id,null,null);
+      const recent=hoursForObjective(o.id,null,p.objectif_recent_jours);
+      const card=document.createElement('div'); card.className='card';
+      const consList=o.consultants.map(link=>{
+        const c=store.consultants.find(x=>x.id===link.consultant_id);
+        const pct=Math.max(0,Math.min(100,link.progression_pct||0));
+        const t=hoursForObjective(o.id,c?.id,null);
+        const r=hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
+        return `
+          <div class="row space" style="margin:6px 0">
+            <div>
+              <span class="nowrap" title="${pct}%">${progBadge(pct)}</span>
+              <span class="linklike" data-goto="${c?.id||''}" style="margin-left:6px">${esc(c?.nom||'—')}</span>
+              <span class="sub">(${pct}%)</span>
+            </div>
+            <div class="nowrap"><b>${t}h</b> <span class="green">(+${r}h)</span></div>
+          </div>`;
+      }).join('');
+      card.innerHTML=`
+        <div class="row space">
+          <div class="title">${esc(o.titre)}</div>
+          <button class="btn small" data-edit="${o.id}">✏️</button>
+        </div>
+        <div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
+        <div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> <span class="green">(+${recent}h)</span></div>
+        <div>${consList||'<span class="muted">Aucun consultant associé</span>'}</div>`;
+      card.querySelectorAll('[data-goto]').forEach(a=>a.addEventListener('click',()=>{ openTab('activite'); state.filters.consultant_id=a.dataset.goto; renderActivities(); }));
+      card.querySelector('[data-edit]').onclick=()=>openObjectifModal(o.id);
+      grid.appendChild(card);
+    });
 }
 
 /* ===== PARAMS ===== */
@@ -614,6 +713,8 @@ const faHeuresWrap=document.getElementById('fa-heures-wrap');
 const faHeures=document.getElementById('fa-heures');
 const faConsult=document.getElementById('fa-consultant');
 const faObj=document.getElementById('fa-objectif');
+const faDesc=document.getElementById('fa-desc');
+
 faType.onchange=()=>{const isSTB=faType.value==='ACTION_ST_BERNARD'; faHeuresWrap.classList.toggle('hidden',!isSTB); if(isSTB && !faHeures.value) faHeures.value=1; updateFaObjOptions();};
 faConsult.onchange=updateFaObjOptions;
 function updateFaObjOptions(){
@@ -629,18 +730,21 @@ function openActivityModal(id=null){
   currentActivityId=id;
   faConsult.innerHTML=store.consultants.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join('');
   document.getElementById('fa-date').value=todayStr();
-  document.getElementById('fa-desc').value='';
+  faDesc.value='';
   faType.value='ACTION_ST_BERNARD'; faHeuresWrap.classList.remove('hidden'); faHeures.value=1;
   faObj.innerHTML='<option value="">(aucun)</option>';
   if(id){
     const a=store.activities.find(x=>x.id===id); if(!a) return;
-    faConsult.value=a.consultant_id; faType.value=a.type; document.getElementById('fa-date').value=a.date_publication; document.getElementById('fa-desc').value=a.description||''; faHeures.value=a.heures||1; updateFaObjOptions(); faObj.value=a.objectif_id||''; faType.onchange();
+    faConsult.value=a.consultant_id; faType.value=a.type; document.getElementById('fa-date').value=a.date_publication; faDesc.value=a.description||''; faHeures.value=a.heures||1; updateFaObjOptions(); faObj.value=a.objectif_id||''; faType.onchange();
   }else{ updateFaObjOptions(); }
+  autoSize(faDesc); requestAnimationFrame(()=>autoSize(faDesc));
   dlgA.showModal();
 }
+faDesc.addEventListener('input',()=>autoSize(faDesc));
+
 document.getElementById('form-activity').onsubmit=(e)=>{
   e.preventDefault();
-  const data={ consultant_id:faConsult.value, type:faType.value, date_publication:document.getElementById('fa-date').value, description:document.getElementById('fa-desc').value.trim(), heures: faType.value==='ACTION_ST_BERNARD' ? Number(faHeures.value||1): undefined, objectif_id: document.getElementById('fa-objectif').value || undefined };
+  const data={ consultant_id:faConsult.value, type:faType.value, date_publication:document.getElementById('fa-date').value, description:faDesc.value.trim(), heures: faType.value==='ACTION_ST_BERNARD' ? Number(faHeures.value||1): undefined, objectif_id: faObj.value || undefined };
   if(!data.consultant_id || !data.type || !data.date_publication || !data.description){ alert('Champs requis manquants.'); return; }
   if(data.type==='ACTION_ST_BERNARD' && !(data.heures>0)){ alert('Heures requises pour STB.'); return; }
   if(currentActivityId){ Object.assign(store.activities.find(x=>x.id===currentActivityId),data,{updated_at:nowISO()}); }else{ store.activities.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
@@ -706,7 +810,7 @@ document.getElementById('btn-open-issue').onclick=()=>{
 };
 document.getElementById('btn-download-json').onclick=()=>{ const blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click(); URL.revokeObjectURL(a.href); };
 
-/* RESET FROM data.json (fallback import) */
+/* RESET FROM data.json */
 const fileInput=document.getElementById('file-import');
 document.getElementById('btn-reset-storage').onclick=resetFromDataJson;
 
@@ -743,7 +847,7 @@ function applyIncomingStore(incoming, sourceLabel){
   if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
   const required=['consultants','activities','objectifs','params'];
   for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
-  incoming.meta = Object.assign({version:store?.meta?.version??4.3}, incoming.meta||{});
+  incoming.meta = Object.assign({version:store?.meta?.version??4.8}, incoming.meta||{});
   incoming.meta.updated_at = nowISO();
   localStorage.setItem(LS_KEY, JSON.stringify(incoming));
   store = incoming;
