@@ -3,7 +3,7 @@
 ## 1) Objectif
 Mono-fichier **HTML/CSS/JS vanilla** pour suivre **Consultants**, **Activités**, **Objectifs**, **Dashboard**, **Sync GitHub** via 5 onglets :
 **Dashboard / Activité / Objectif / Paramètres / Sync**  
-Interface **pleine largeur** (full-width), compacte, accessible, données en **localStorage**, export/sync **data.json**.
+Interface **pleine largeur** (full-width), thème clair, compacte, accessible, données en **localStorage**, export/sync **data.json**.
 
 ---
 
@@ -94,6 +94,7 @@ Explications sur les couleurs des pastille état consultant
 - Bouton “Réinitialiser filtres” (supprime le filtre consultant)
 
 ### 6.2 Panneau droit — “Activités”
+- **Filtres** sur **Type** et **Objectif**
 - **Recherche texte** (plein-texte sur `description`)  
 - Boutons : “+ Nouvelle activité”, “Réinitialiser filtres”  
 - **Tri** par défaut : plus récent → plus ancien  
