@@ -1,14 +1,15 @@
-# 🔆 Spécification SHERPA – V2 MVP (compact, thème clair)
+# 🔆 Spécification SHERPA — MVP v3.3 (compact, thème clair, Sync GitHub)
 
 ## 1) Objectif
-Mono-fichier **HTML/CSS/JS vanilla** pour suivre **Consultants** & **Activités** avec **3 onglets** (Dashboard / Activité / Paramètres).  
-Interface compacte, accessible, stockée en **localStorage**.
+Mono-fichier **HTML/CSS/JS vanilla** pour suivre **Consultants** & **Activités** avec **4 onglets** :
+- **Dashboard** / **Activité** / **Paramètres** / **Sync**
+Interface compacte, accessible, persistance **localStorage** + **synchronisation GitHub** vers `data.json`.
 
 ---
 
 ## 2) Données (modèle & règles) 📦
 
-### Consultant
+### 2.1 Consultant
 - `id` (uuid)  
 - `nom`*  
 - `titre_mission`?  
@@ -16,9 +17,10 @@ Interface compacte, accessible, stockée en **localStorage**.
 - `url`?  
 - `description`? *(#tendances OK)*  
 - `created_at`, `updated_at`  
-- ❌ **TJM absent**
 
-### Activité
+> ❌ **TJM absent**
+
+### 2.2 Activité
 - `id` (uuid)  
 - `consultant_id`*  
 - `type`* ∈ `ACTION_ST_BERNARD` | `NOTE` | `VERBATIM` | `AVIS` | `ALERTE`  
@@ -27,143 +29,153 @@ Interface compacte, accessible, stockée en **localStorage**.
 - `heures`? *(visible & requis **uniquement** si `type = ACTION_ST_BERNARD`)*  
 - `created_at`, `updated_at`
 
-### Tendances
+### 2.3 Tendances
 - `id`, `slug`, `label`, `color`?  
-- **Défaut (sans emojis)** :  
-  Le Cardinal, Robert Jr, Gutenberg, Indélébile, Protocop, Tarantino, Goal Digger, Promptzilla, Soulgorithm, PÔLÈNE
+- **Défaut (sans emojis)** : Le Cardinal, Robert Jr, Gutenberg, Indélébile, Protocop, Tarantino, Goal Digger, Promptzilla, Soulgorithm, PÔLÈNE
 
-### Paramètres (éditables)
+### 2.4 Paramètres (éditables)
 - `delai_alerte_jours = 7`  
 - `fin_mission_sous_jours = 60`  
 - `stb_recent_jours = 30`  
 - `avis_manquant_depuis_jours = 60`
 
-### Seed initial
+### 2.5 Seed initial
 - **8 consultants** (exemple)  
-- **10 activités / consultant** *(2 par type)*  
+- **10 activités/consultant** *(2 par type)*  
 - **10 tendances** par défaut
 
-### Validation & sécurité
+### 2.6 Validation & sécurité
 - **Consultant** : `nom` requis  
 - **Activité** : `type`, `date_publication`, `description` requis ; `heures` requis si `type = ACTION_ST_BERNARD`  
 - Échappement HTML à l’affichage des descriptions (XSS)
 
 ---
 
-## 3) Interface (UX compacte) 🎛️
+## 3) Stockage & clés 🔑
+- **localStorage** : clé **`SHERPA_STORE_V3`**
+- **Fichier GitHub** : `data.json` à la racine du dépôt `quangfr/sherpa`
+- **Export/Import** : dump JSON complet (merge/replace)
 
-### Navigation & vues
-- **Header** : 3 boutons → `Dashboard`, `Activité`, `Paramètres`  
-- Commutation via `.view/.active` + `hidden` → **1 seule vue à la fois**  
-- **Routing UI** : hash/state interne (pas d’URL externe)
+---
 
-### A) DASHBOARD 📊
-- Grille **4 colonnes** responsive (4/3/2/1) avec **4 blocs** :
-  1) **En alerte** *(date_fin ≤ aujourd’hui + `delai_alerte_jours`)*  
-  2) **Fin de mission < Xj** *(X = `fin_mission_sous_jours`)*  
-  3) **Action STB ≤ Yj** *(Y = `stb_recent_jours`)*  
-  4) **Sans avis > Zj** *(Z = `avis_manquant_depuis_jours`)*  
-- **Titres dynamiques** (X/Y/Z et délai)  
-- **Carte consultant (2 lignes)** :  
-  - L1 : **Nom**  
-  - L2 : **Titre de mission**  
-- **Clic carte** ⇒ ouvre **ACTIVITÉ** + filtre **consultant**  
-- ❌ **Pas de `date_fin`** affichée ici
+## 4) Navigation & vues 🎛️
+- **Header** : 4 boutons onglets → `Dashboard`, `Activité`, `Paramètres`, `Sync`
+- Commutation via `.view/.active` + `hidden` → **1 seule vue à la fois**
+- **Routing UI** : state interne (pas d’URL externe)
 
-### B) ACTIVITÉ 🗂️
-- **Deux panneaux** :
-  - **Gauche “Consultants”**  
-    - En-tête cliquable : *Nom | Fin mission* → tri ↑/↓ (chevrons)  
-    - **Ligne (3 colonnes)** :  
-      - Col 1 : **Nom (L1) + Titre (L2)** + pastille état (vert/jaune/rouge selon `date_fin`)  
-      - Col 2 : **Date fin** (ISO ou vide)  
-      - Col 3 : **Actions** → 🔗 (ouvre `url` si présent), ✏️ (modal **Infos consultant**)  
-    - **Clic ligne** ⇒ filtre les activités par consultant
-  - **Droite “Activités”**  
-    - **Filtres** : 5 toggles **type** (tous actifs), **recherche** (#tendance ou texte), bouton **+ Nouvelle activité**  
-    - **Tri** du plus récent → plus ancien  
-    - **Colonnes** :  
-      - **Col 0 : Consultant** → Nom (L1) + Titre (L2)  
-      - **Col 1 : Badge Type + Date**  
-      - **Col 2 : Description** (échappée) + *Heures* (si STB)  
-      - **Col 3 : Actions** → ✏️ éditer, 🗑️ supprimer  
-    - **Popup activité** :  
-      - Select **Consultant**, Select **Type**, **Date**  
-      - **Description** pleine largeur, multi-lignes (≥160px), **autocomplete `#`** sur tendances  
-      - **Heures** visible **uniquement** si Type = STB  
-      - **Enregistrer / Annuler**
-- **Modal “Infos consultant”** :  
-  - Nom*, Titre mission, Date fin, URL  
-  - **Description = textarea large** *(#tendances OK)*  
+---
+
+## 5) Dashboard 📊
+- Grille **4 colonnes** (responsive 4/3/2/1) avec 4 blocs :
+  1) **En alerte** : `date_fin ≤ today + delai_alerte_jours`
+  2) **Fin de mission < Xj** : `0 < (date_fin − today) ≤ X` *(X = `fin_mission_sous_jours`)*
+  3) **Action STB ≤ Yj** : dernière `ACTION_ST_BERNARD` ≤ Y jours *(Y = `stb_recent_jours`)*
+  4) **Sans avis > Zj** : aucun `AVIS` dans Z derniers jours *(Z = `avis_manquant_depuis_jours`)*
+- **Titres dynamiques** affichant X/Y/Z et délai actuel
+- **Carte consultant** (2 lignes) : L1 **Nom**, L2 **Titre mission**
+- **Clic carte** ⇒ ouvre **Activité** + filtre **consultant**
+- ❌ Pas de `date_fin` affichée ici
+
+---
+
+## 6) Activité 🗂️
+### 6.1 Panneau gauche — “Consultants”
+- En-tête cliquable : **Nom** | **Fin mission** → tri ↑/↓ (chevrons)  
+- Ligne (3 colonnes) :
+  - Col 1 : **Nom (L1) + Titre (L2)** + pastille état (vert/jaune/rouge selon `date_fin`)
+  - Col 2 : **Date fin** (ISO ou vide)
+  - Col 3 : **Actions** → 🔗 (ouvre `url` si présent), ✏️ (modal **Infos consultant**)
+- **Clic ligne** ⇒ filtre le panneau **Activités** par consultant
+
+### 6.2 Panneau droit — “Activités”
+- **Filtres** : 5 toggles type (tous actifs), **recherche** (#tendance ou texte), bouton **+ Nouvelle activité**
+- **Tri** : plus récent → plus ancien
+- **Colonnes** :
+  - **Col 0 : Consultant** → **Nom (L1) + Titre (L2)**
+  - **Col 1 : Badge Type + Date**
+  - **Col 2 : Description** (échappée) + **Heures** (si STB)
+  - **Col 3 : Actions** → ✏️ éditer, 🗑️ supprimer
+- **Modal activité** :
+  - Select **Consultant**, Select **Type**, **Date**
+  - **Description** pleine largeur, multi-lignes (≥160px), **autocomplete `#`** tendances
+  - **Heures** visible **uniquement** si Type = STB
   - **Enregistrer / Annuler**
 
-### C) PARAMÈTRES ⚙️
-- **Tendances** : liste (`#slug`, `label`) + **Ajouter / ✏️ / 🗑️**  
-- **Seuils Dashboard** : 4 champs (jours) + **Enregistrer / Réinitialiser**  
-- **Import / Export JSON** :  
-  - Export = **dump complet**  
-  - Import = **merge** ou **replace**
+### 6.3 Modal “Infos consultant”
+- Nom*, Titre mission, Date fin, URL  
+- **Description = textarea large** *(#tendances OK)*
+- **Enregistrer / Annuler**
 
-### Micro-interactions & a11y
-- Toasters (succès), **confirm** à la suppression  
-- Navigation clavier (Enter/Échap), contraste **AA**  
+---
+
+## 7) Paramètres ⚙️
+- **Tendances** : liste (`#slug`, `label`) + **Ajouter / ✏️ / 🗑️**
+- **Seuils Dashboard** : 4 champs (jours) + **Enregistrer / Réinitialiser**
+- **Import / Export JSON** : Export dump complet ; Import **merge** ou **replace**
+
+---
+
+## 8) Sync GitHub 🔁
+### 8.1 Principe (sans jeton côté front)
+- Onglet **Sync** avec 3 boutons :  
+  1) **📋 Copier JSON** (état complet : consultants/activités/tendances/paramètres)  
+  2) **🐙 Ouvrir l’issue `[SYNC]`** dans `quangfr/sherpa` (page New Issue pré-remplie)  
+  3) **⬇️ Télécharger `data.json`** (fichier local)
+- L’utilisateur **colle** le JSON dans un bloc ```json de l’issue `[SYNC]`.  
+- Une **GitHub Action** valide et **remplace** `data.json` à la racine.
+
+### 8.2 Workflow Actions (repo `quangfr/sherpa`)
+- Fichier : `.github/workflows/sync-data-from-issue.yml`
+- Déclencheur : `issues` (opened/edited/reopened/labeled)
+- Condition : titre contient `[SYNC]` ou label `sync`
+- Étapes : checkout → extraction du bloc ```json → **validation JSON** → `data.json` (replace) → commit/push → commentaire + **fermeture** de l’issue si succès
+- Permissions : **contents: write**, **issues: write**
+- Paramétrage **Actions → General → Workflow permissions → Read and write**
+
+---
+
+## 9) Accessibilité & micro-interactions ♿
+- **Toasts** (`aria-live`) pour succès
+- **Confirm** à la suppression
+- **Navigation clavier** (Enter/Échap)
+- Contraste **AA**, focus visible
 - Densité : **13–14px**, hauteurs **36–40px**, paddings réduits
 
 ---
 
-## 4) Style 🎨
-- Thème clair : fond **#FAFAFA**, cartes **#FFF**, bordures **#E0E0E0**, texte **#222**  
-- Badges **type** : STB 🟦, Note 🟩, Verbatim 🟨, Avis 🟪, Alerte 🟥  
-- Pastilles état (liste consultants) :  
-  - **Vert** : `date_fin` > 7j  
-  - **Jaune** : 0–7j  
+## 10) Style 🎨
+- Thème clair : fond **#FAFAFA**, cartes **#FFF**, bordures **#E0E0E0**, texte **#222**
+- Badges **type** : STB 🟦, Note 🟩, Verbatim 🟨, Avis 🟪, Alerte 🟥
+- Pastilles état (liste consultants) :
+  - **Vert** : `date_fin` > 7j
+  - **Jaune** : 0–7j
   - **Rouge** : dépassée
 
 ---
 
-## 5) Technique 🧩
-- **Mono-fichier** : HTML + CSS + JS (vanilla)  
-- **Stockage** : `localStorage` clé **`SHERPA_STORE_V3`**  
-- **Composants** :  
-  - **Store** (CRUD, seed, import/export)  
-  - **Dashboard** (sélections live)  
-  - **ConsultantsList** (tri Nom/Fin)  
-  - **ActivitiesList** (filtres, recherche, modals)  
-  - **TrendsManager**, **SettingsForm**, **JsonIO**  
-- **Perf** : tri/filtre **en mémoire** ; **pagination virtuelle** si > 200 activités  
-- **Accessibilité** : `aria-live` pour toasts, focus visibles, `dialog` natif
+## 11) Performance 🚀
+- Tri/filtre **en mémoire**
+- **Pagination virtuelle** si > 200 activités (bouton “Charger plus”)
+- DOM léger, pas de framework
 
 ---
 
-## 6) Logique Dashboard (sélections) 🧮
-- **En alerte** : `date_fin ≤ today + delai_alerte_jours`  
-- **Fin < Xj** : `0 < (date_fin − today) ≤ X`  
-- **STB ≤ Yj** : dernière `ACTION_ST_BERNARD` dans les **Y** derniers jours  
-- **Sans avis > Zj** : aucun `AVIS` dans les **Z** derniers jours *(ou jamais)*  
-- **Titres dynamiques** : affichent **X**, **Y**, **Z** et le **délai** actuels
-
----
-
-## 7) Critères d’acceptation ✅
-- **1 seule vue** visible à la fois (Dashboard/Activité/Paramètres)  
-- **Dashboard** : 4 blocs/4 colonnes ; carte = **Nom + Titre** ; **clic** ⇒ Activité + filtre consultant ; **titres dynamiques** (X/Y/Z/délai)  
-- **Activité / gauche** : Nom/Titre + Date fin + 🔗/✏️ ; **tri** Nom/Fin (↑/↓) ; pastille état  
-- **Activité / droite** : colonnes **Consultant / Type+Date / Description(+Heures si STB) / Actions** ; filtres types actifs par défaut ; **recherche** texte & `#tendance` ; **popup** conforme  
-- **CRUD complet** (Consultant / Activité / Tendance)  
-- **Import/Export JSON** : **merge/replace** OK  
-- **A11y** : clavier OK, toasts lisibles (`aria-live`), confirm suppression
-
----
-
-## 8) Changements vs v3 🔁
-- **X/Y/Z dynamiques** sur les titres Dashboard  
-- **Description Consultant** en **textarea large**  
-- **Liste Activités** : **colonne dédiée** à gauche pour **Nom/Titre** du consultant  
-- Système d’onglets : **une seule vue** via `hidden`
-
----
-
-## 9) Defaults 🔑
-- localStorage : **`SHERPA_STORE_V3`**  
-- Paramètres : `7 / 60 / 30 / 60`  
-- Seed : **8 consultants**, **10 activités/consultant** (2/type), **10 tendances**
+## 12) Critères d’acceptation ✅
+- **Une seule vue** visible (Dashboard/Activité/Paramètres/Sync)
+- **Dashboard** :
+  - 4 blocs/4 colonnes, **titres dynamiques** X/Y/Z/délai
+  - Carte **Nom + Titre**, clic ⇒ Activité + filtre consultant
+- **Activité / gauche** :
+  - Tri **Nom/Fin** (↑/↓), pastille état
+  - Actions 🔗/✏️, clic ligne ⇒ filtre
+- **Activité / droite** :
+  - Colonnes **Consultant / Type+Date / Description(+Heures si STB) / Actions**
+  - Filtres types actifs par défaut, **recherche** texte & `#tendance`
+  - **Modal** activité conforme (heures seulement si STB)
+- **Paramètres** : CRUD tendances + seuils + import/export (merge/replace)
+- **Sync** :
+  - Boutons **Copier JSON / Ouvrir issue `[SYNC]` / Télécharger**
+  - Workflow **remplace** `data.json` au merge
+- **CRUD complet** (Consultant / Activité / Tendance)
+- **A11y** : clavier OK, toasts lisibles, confirm suppression
+- **Sécurité** : descriptions échappées
