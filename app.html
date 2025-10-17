@@ -322,7 +322,7 @@ function load(){
     {id:uid(),consultant_id:c2.id,type:'ACTION_ST_BERNARD',date_publication:today,description:'Correction règles SCORE',heures:1,objectif_id:obj1.id,created_at:nowISO(),updated_at:nowISO()},
     {id:uid(),consultant_id:c1.id,type:'NOTE',date_publication:today,description:'Préparer démo',created_at:nowISO(),updated_at:nowISO()}
   ];
-  const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/bdd-demo'};
+  const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/sherpa'};
   const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.1,updated_at:nowISO()}};
   localStorage.setItem(LS_KEY,JSON.stringify(s));
   return s;
