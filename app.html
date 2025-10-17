@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA — MVP v4.1</title>
+<title>SHERPA — MVP v4.3</title>
 <style>
   :root{
     --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
@@ -14,7 +14,6 @@
   html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
   *{box-sizing:border-box}
   a{color:var(--accent);text-decoration:none}
-  /* FULL WIDTH */
   .wrap{width:100%;max-width:none;margin:0;padding:8px 12px 24px}
   header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
   .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:8px 4px}
@@ -53,7 +52,6 @@
   .muted{color:var(--muted)}
   .dot{width:10px;height:10px;border-radius:50%}
   .dot.g{background:var(--green)} .dot.y{background:var(--yellow)} .dot.r{background:var(--red)}
-  .kpi{font-weight:800}
   .green{color:var(--green);font-weight:700}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;white-space:pre-wrap}
   .hidden{display:none!important}
@@ -66,6 +64,26 @@
   .actions{display:flex;gap:8px;justify-content:flex-end;padding:10px;border-top:1px solid var(--border);background:var(--bg);border-radius:0 0 14px 14px}
   .linklike{cursor:pointer;text-decoration:underline}
   .nowrap{white-space:nowrap}
+
+  /* ===== Largeurs fixes pour la liste des activités ===== */
+  .table.fixed{table-layout:fixed}
+  .col-consultant{width:200px}
+  .col-type{width:160px}
+  .col-actions{width:96px}
+  .col-desc{width:auto} /* occupe tout le reste */
+
+  /* Meilleur wrap dans la colonne description */
+  #activities-table td:nth-child(3){white-space:normal;word-break:break-word;overflow-wrap:anywhere}
+
+  /* Évite que les boutons cassent la ligne */
+  #activities-table td:last-child .btn.small{white-space:nowrap}
+
+  /* Option mobile : assouplir un peu les min-width */
+  @media (max-width:800px){
+    .col-consultant{width:160px}
+    .col-type{width:130px}
+    .col-actions{width:88px}
+  }
 </style>
 </head>
 <body>
@@ -110,7 +128,7 @@
     </div>
   </section>
 
-  <!-- ACTIVITE -->
+  <!-- ACTIVITÉ -->
   <section class="view" id="view-activite">
     <div class="split">
       <!-- Left: consultants -->
@@ -137,16 +155,41 @@
       <!-- Right: activities -->
       <div>
         <div class="row space">
-          <div class="title">🗂️ Activités</div>
+          <div class="row" style="gap:10px">
+            <div class="title">🗂️ Activités</div>
+            <!-- 🔢 Badge compteur -->
+            <div class="pill" id="activities-count">0</div>
+          </div>
           <div class="row">
             <input id="search-activities" placeholder="🔎 Recherche texte…" style="min-width:220px"/>
+            <select id="filter-type" title="Filtrer par type">
+              <option value="">🧰 Tous les types</option>
+              <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
+              <option value="NOTE">📝 Note</option>
+              <option value="VERBATIM">💬 Verbatim</option>
+              <option value="AVIS">🗣️ Avis</option>
+              <option value="ALERTE">🚨 Alerte</option>
+            </select>
+            <select id="filter-objectif" title="Filtrer par objectif">
+              <option value="">🎯 Tous les objectifs</option>
+            </select>
+            <label class="row" style="gap:6px">
+              ⏱️ Avant le
+              <input type="date" id="filter-before"/>
+            </label>
             <button class="btn small primary" id="btn-new-activity">+ Nouvelle activité</button>
             <button class="btn small ghost" id="btn-reset-filters">Réinitialiser filtres</button>
           </div>
         </div>
 
-        <!-- Colonnes demandées -->
-        <table class="table" id="activities-table">
+        <!-- Table activités avec colonnes fixes -->
+        <table class="table fixed" id="activities-table">
+          <colgroup>
+            <col class="col-consultant"/>
+            <col class="col-type"/>
+            <col class="col-desc"/>
+            <col class="col-actions"/>
+          </colgroup>
           <thead>
             <tr>
               <th>Consultant</th>
@@ -173,7 +216,7 @@
     <div class="grid g4" id="objectifs-grid"></div>
   </section>
 
-  <!-- PARAMETRES -->
+  <!-- PARAMÈTRES -->
   <section class="view" id="view-parametres">
     <div class="grid g4">
       <div class="card">
@@ -309,7 +352,7 @@ function progBadge(p){
   return pct < 30 ? '🟥' : (pct < 70 ? '🟨' : '🟩');
 }
 
-/* ===== DATA (sans tendances) ===== */
+/* ===== DATA ===== */
 let store=load();
 function load(){
   const raw=localStorage.getItem(LS_KEY);
@@ -330,7 +373,7 @@ function load(){
     {id:uid(),consultant_id:c1.id,type:'NOTE',date_publication:today,description:'Préparer démo',created_at:nowISO(),updated_at:nowISO()}
   ];
   const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/sherpa'};
-  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.1,updated_at:nowISO()}};
+  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.3,updated_at:nowISO()}};
   localStorage.setItem(LS_KEY,JSON.stringify(s));
   return s;
 }
@@ -356,7 +399,6 @@ function dashboard(){
   document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
   document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
 
-  // Pastilles d'état par consultant (dot r/y/g)
   const fmt=(arr,box,title)=>{
     const out=document.getElementById(box);
     out.innerHTML='';
@@ -379,8 +421,8 @@ function dashboard(){
   fmt(avisList,'db-avis-list','db-avis-title');
 }
 
-/* ===== ACTIVITE ===== */
-let state={sortCol:'nom',sortDir:1,filters:{q:'',consultant_id:''}};
+/* ===== ACTIVITÉ ===== */
+let state={sortCol:'nom',sortDir:1,filters:{q:'',consultant_id:'',type:'',before:'',objectif_id:''}};
 const consTBody=document.querySelector('#consultants-table tbody');
 const consHead=document.querySelectorAll('#consultants-table thead th[data-sort]');
 consHead.forEach(th=>th.onclick=()=>{state.sortCol=th.dataset.sort;state.sortDir*=-1;renderConsultants();});
@@ -391,11 +433,7 @@ function statusOf(c){
   const hasAvisRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='AVIS' && parseDate(a.date_publication)>=addDays(today,-p.avis_manquant_depuis_jours));
   const hasAlerteRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='ALERTE' && parseDate(a.date_publication)>=addDays(today,-p.delai_alerte_jours));
   const past = c.date_fin? (daysDiff(parseDate(c.date_fin),today)<0):false;
-
-  // 🔴 prioritaire si mission passée ou alerte récente
   if(past || hasAlerteRecent) return 'r';
-
-  // 🟢 si au moins l'un des deux récents (STB OU AVIS), sinon 🟡
   return (hasSTBRecent || hasAvisRecent) ? 'g' : 'y';
 }
 
@@ -424,9 +462,25 @@ function renderConsultants(){
 function setConsultantFilter(cid){ state.filters.consultant_id=cid; renderActivities(); }
 
 const actTBody=document.querySelector('#activities-table tbody');
-document.getElementById('search-activities').addEventListener('input',e=>{state.filters.q=e.target.value.trim().toLowerCase(); renderActivities();});
-document.getElementById('btn-reset-filters').onclick=()=>{state.filters.q='';state.filters.consultant_id='';document.getElementById('search-activities').value=''; renderActivities();};
-document.getElementById('btn-reset-filters-left').onclick=()=>{state.filters.consultant_id=''; renderActivities();};
+const inputSearch=document.getElementById('search-activities');
+const selectType=document.getElementById('filter-type');
+const inputBefore=document.getElementById('filter-before');
+const selectObjectif=document.getElementById('filter-objectif');
+const badgeCount=document.getElementById('activities-count');
+
+inputSearch.addEventListener('input',e=>{state.filters.q=e.target.value.trim().toLowerCase(); renderActivities();});
+selectType.addEventListener('change',e=>{state.filters.type=e.target.value; renderActivities();});
+inputBefore.addEventListener('change',e=>{state.filters.before=e.target.value; renderActivities();});
+selectObjectif.addEventListener('change',e=>{state.filters.objectif_id=e.target.value; renderActivities();});
+
+document.getElementById('btn-reset-filters').onclick=()=>{ resetActivityFilters(); };
+document.getElementById('btn-reset-filters-left').onclick=()=>{ state.filters.consultant_id=''; renderActivities(); };
+
+function resetActivityFilters(){
+  state.filters={q:'',consultant_id:'',type:'',before:'',objectif_id:''};
+  inputSearch.value=''; selectType.value=''; inputBefore.value=''; selectObjectif.value='';
+  renderActivities();
+}
 
 const TYPE_META={
   ACTION_ST_BERNARD:{emoji:'🐕‍🦺', pill:'stb', label:'Action STB'},
@@ -437,11 +491,19 @@ const TYPE_META={
 };
 
 function renderActivities(){
-  const q=state.filters.q;
+  const {q,consultant_id,type,before,objectif_id}=state.filters;
+  const beforeDate = before ? parseDate(before) : null;
+
   const list= store.activities
-    .filter(a=>!state.filters.consultant_id || a.consultant_id===state.filters.consultant_id)
+    .filter(a=>!consultant_id || a.consultant_id===consultant_id)
     .filter(a=>!q || (a.description||'').toLowerCase().includes(q))
+    .filter(a=>!type || a.type===type)
+    .filter(a=>!objectif_id || (a.objectif_id||'')===objectif_id)
+    .filter(a=>!beforeDate || (parseDate(a.date_publication) && parseDate(a.date_publication) <= beforeDate))
     .sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
+
+  badgeCount.textContent=list.length;
+
   actTBody.innerHTML='';
   list.forEach(a=>{
     const c=store.consultants.find(x=>x.id===a.consultant_id);
@@ -467,6 +529,15 @@ function renderActivities(){
     tr.querySelector('[data-del]').onclick=()=>{ if(confirm('Supprimer cette activité ?')){ store.activities=store.activities.filter(x=>x.id!==a.id); save(); } };
     actTBody.appendChild(tr);
   });
+}
+
+/* Options des filtres dépendants */
+function renderActivityFiltersOptions(){
+  // Objectifs
+  const curr = selectObjectif.value;
+  selectObjectif.innerHTML = '<option value="">🎯 Tous les objectifs</option>' +
+    store.objectifs.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
+  if([...selectObjectif.options].some(o=>o.value===curr)) selectObjectif.value=curr;
 }
 
 /* ===== OBJECTIFS ===== */
@@ -536,7 +607,7 @@ document.getElementById('btn-save-params').onclick=()=>{
   save(); alert('Paramètres enregistrés.');
 }
 
-/* ===== MODALS (ACTIVITE) ===== */
+/* ===== MODALS (ACTIVITÉ) ===== */
 const dlgA=document.getElementById('dlg-activity');
 const faType=document.getElementById('fa-type');
 const faHeuresWrap=document.getElementById('fa-heures-wrap');
@@ -672,7 +743,7 @@ function applyIncomingStore(incoming, sourceLabel){
   if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
   const required=['consultants','activities','objectifs','params'];
   for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
-  incoming.meta = Object.assign({version:store?.meta?.version??4.1}, incoming.meta||{});
+  incoming.meta = Object.assign({version:store?.meta?.version??4.3}, incoming.meta||{});
   incoming.meta.updated_at = nowISO();
   localStorage.setItem(LS_KEY, JSON.stringify(incoming));
   store = incoming;
@@ -682,7 +753,7 @@ function applyIncomingStore(incoming, sourceLabel){
 
 /* ===== RENDER ALL ===== */
 function refreshAll(){
-  renderConsultants(); renderActivities(); renderObjectifs(); renderParams(); dashboard(); updateSyncPreview();
+  renderConsultants(); renderActivityFiltersOptions(); renderActivities(); renderObjectifs(); renderParams(); dashboard(); updateSyncPreview();
 }
 refreshAll();
 </script>
