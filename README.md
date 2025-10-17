@@ -42,7 +42,7 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 - `stb_recent_jours = 30`  
 - `avis_manquant_depuis_jours = 60`  
 - `objectif_recent_jours = 15` *(fenêtre pour “(+Yh)”)*  
-- `github_repo_fullname` (ex. `owner/repo`)
+- `github_repo_fullname` (ex. `quangfr/sherpa`)
 
 ### 2.5 Règles / validation / sécurité
 - **Consultant** : `nom` requis  
