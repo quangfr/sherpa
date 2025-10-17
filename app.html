@@ -3,523 +3,605 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA – MVP v3.2 (Sync)</title>
+<title>SHERPA — MVP v4.1</title>
 <style>
   :root{
-    --bg:#FAFAFA;--card:#FFF;--bd:#E0E0E0;--tx:#222;--mut:#666;
-    --primary:#1976d2;--ok:#2e7d32;--warn:#f9a825;--danger:#c62828;
-    --stb:#3b82f6;--note:#34d399;--verb:#facc15;--avis:#a855f7;--alert:#ef4444;
-    --h:38px;--r:12px;--fs:14px;
+    --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
+    --accent:#2563eb;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--pill:#f1f5f9;--pill-fg:#0f172a;
+    --stb:#e6f4ea;--note:#eef2ff;--verb:#fff7ed;--avis:#e0f2fe;--alerte:#fee2e2;
+    --stb-f:#166534;--note-f:#3730a3;--verb-f:#9a3412;--avis-f:#075985;--alerte-f:#991b1b;
   }
-  *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--tx);font:500 var(--fs)/1.35 system-ui,Segoe UI,Roboto,Helvetica,Arial}
-  header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--bd);display:flex;gap:6px;padding:8px}
-  header .tab{height:var(--h);padding:0 12px;border:1px solid var(--bd);background:#fff;border-radius:10px;cursor:pointer}
-  header .tab.active{border-color:var(--primary);outline:2px solid color-mix(in srgb,var(--primary) 20%,transparent)}
-  main{padding:12px;display:grid;gap:12px}
-  .view[hidden]{display:none}
-  .grid4{display:grid;gap:12px;grid-template-columns:repeat(4,1fr)}
-  @media(max-width:1200px){.grid4{grid-template-columns:repeat(3,1fr)}}
-  @media(max-width:900px){.grid4{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:640px){.grid4{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:12px}
-  .kpi h3{margin:0 0 8px 0;font-size:13px;color:var(--mut)}
-  .kpi .list{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto}
-  .consultant-card{padding:8px;border:1px solid var(--bd);border-radius:10px;cursor:pointer}
-  .l1{font-weight:700}.l2{font-size:12px;color:var(--mut)}
-  .two-col{display:grid;grid-template-columns:300px 1fr;gap:12px}
-  @media(max-width:900px){.two-col{grid-template-columns:1fr}}
-  .panel{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
-  .panel .head{display:flex;gap:6px;align-items:center;padding:8px;border-bottom:1px solid var(--bd)}
-  .panel .body{padding:8px}
-  .left .row{display:grid;grid-template-columns:1fr 120px 70px;align-items:center;gap:8px;padding:6px;border-bottom:1px solid var(--bd);cursor:pointer}
-  .left .row:hover{background:#fafafa}
-  .chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid var(--bd);border-radius:999px;cursor:pointer;font-size:12px}
-  .chip.active{border-color:var(--primary);outline:2px solid color-mix(in srgb,var(--primary) 20%,transparent)}
-  .search{height:36px;padding:0 10px;border:1px solid var(--bd);border-radius:10px;width:240px}
-  .btn{height:36px;padding:0 12px;border:1px solid var(--bd);border-radius:10px;background:#fff;cursor:pointer}
-  .btn.primary{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,#fff)}
-  .list-acts{display:flex;flex-direction:column;gap:8px}
-  /* Activité: colonne consultant dédiée à gauche */
-  .act{border:1px solid var(--bd);border-radius:10px;padding:8px;display:grid;grid-template-columns:220px 120px 1fr auto;gap:8px;align-items:start}
-  @media(max-width:900px){.act{grid-template-columns:1fr}}
-  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--bd)}
-  .b-stb{background:var(--stb);color:#fff;border-color:transparent}
-  .b-note{background:var(--note);color:#073b2a;border-color:transparent}
-  .b-verb{background:var(--verb);color:#3a2f00;border-color:transparent}
-  .b-avis{background:var(--avis);color:#fff;border-color:transparent}
-  .b-alert{background:var(--alert);color:#fff;border-color:transparent}
-  .mut{color:var(--mut);font-size:12px}
-  .icon-btn{background:none;border:none;cursor:pointer;height:28px;width:28px;border-radius:8px}
-  .icon-btn:hover{background:#f6f6f6}
-  .state-dot{width:10px;height:10px;border-radius:999px;display:inline-block;margin-right:6px}
-  .dot-ok{background:var(--ok)}.dot-warn{background:var(--warn)}.dot-bad{background:var(--danger)}
-  .th{display:grid;grid-template-columns:1fr 120px 70px;gap:8px;padding:6px;border-bottom:1px solid var(--bd);user-select:none}
-  .th .sortable{cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-  .chev{font-size:12px;color:var(--mut)}
-  dialog{border:none;border-radius:14px;max-width:780px;width:clamp(320px,92vw,780px);padding:0;box-shadow:0 20px 60px rgba(0,0,0,.16)}
-  dialog .dlg{padding:12px}
-  .grid{display:grid;gap:10px}.g2{grid-template-columns:1fr 1fr}
-  label{font-size:12px;color:var(--mut)}
-  input[type=text],input[type=date],input[type=url],input[type=number],select,textarea{width:100%;height:36px;padding:6px 10px;border:1px solid var(--bd);border-radius:10px;background:#fff}
-  textarea{min-height:160px;resize:vertical}
-  .toast{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.3s}
-  .toast.show{opacity:1}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-  .inline{display:inline-flex;gap:6px;flex-wrap:wrap}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
+  *{box-sizing:border-box}
+  a{color:var(--accent);text-decoration:none}
+  /* FULL WIDTH */
+  .wrap{width:100%;max-width:none;margin:0;padding:8px 12px 24px}
+  header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:8px 4px}
+  .tab{padding:8px 10px;border:1px solid var(--border);border-bottom-color:transparent;border-radius:10px 10px 0 0;background:var(--card);cursor:pointer;font-weight:600}
+  .tab.active{background:var(--bg);border-color:var(--border);color:var(--accent)}
+  .view{display:none;padding:12px 4px}
+  .view.active{display:block}
+  .grid{display:grid;gap:10px}
+  .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  @media (max-width:1300px){.g4{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:980px){.g4{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:660px){.g4{grid-template-columns:repeat(1,1fr)}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;box-shadow:0 1px 0 #00000008}
+  .title{font-weight:700}
+  .sub{color:var(--muted);font-size:12px}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .row.space{justify-content:space-between}
+  .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:4px 8px;font-size:12px}
+  .pill.stb{background:var(--stb);border-color:var(--stb);color:var(--stb-f)}
+  .pill.note{background:var(--note);border-color:var(--note);color:var(--note-f)}
+  .pill.verb{background:var(--verb);border-color:var(--verb);color:var(--verb-f)}
+  .pill.avis{background:var(--avis);border-color:var(--avis);color:var(--avis-f)}
+  .pill.alerte{background:var(--alerte);border-color:var(--alerte);color:var(--alerte-f)}
+  .btn{border:1px solid var(--border);background:var(--card);border-radius:8px;padding:6px 10px;cursor:pointer}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.ghost{background:transparent}
+  .btn.danger{border-color:var(--red);color:var(--red)}
+  .btn.small{padding:4px 8px;font-size:12px}
+  input,select,textarea{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 8px;font:inherit}
+  textarea{width:100%;min-height:88px;resize:vertical}
+  .split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:10px} /* un peu plus large à gauche en full width */
+  @media (max-width:980px){.split{grid-template-columns:1fr}}
+  .table{width:100%;border-collapse:collapse}
+  .table th,.table td{border-top:1px solid var(--border);padding:8px;vertical-align:top}
+  .table th{font-size:12px;color:var(--muted);text-align:left}
+  .muted{color:var(--muted)}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .dot.g{background:var(--green)} .dot.y{background:var(--yellow)} .dot.r{background:var(--red)}
+  .kpi{font-weight:800}
+  .green{color:var(--green);font-weight:700}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;white-space:pre-wrap}
+  .hidden{display:none!important}
+  dialog{border:none;border-radius:14px;box-shadow:0 10px 30px #0000002a;padding:0;max-width:820px;width:calc(100% - 24px)}
+  dialog::backdrop{background:#0006}
+  .modal{padding:14px}
+  .modal h3{margin:0 0 6px}
+  .modal .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media (max-width:700px){.modal .grid2{grid-template-columns:1fr}}
+  .actions{display:flex;gap:8px;justify-content:flex-end;padding:10px;border-top:1px solid var(--border);background:var(--bg);border-radius:0 0 14px 14px}
+  .linklike{cursor:pointer;text-decoration:underline}
+  .nowrap{white-space:nowrap}
 </style>
 </head>
 <body>
-<header aria-label="Navigation des vues">
-  <button class="tab active" data-target="dashboard">📊 Dashboard</button>
-  <button class="tab" data-target="activite">🗂️ Activité</button>
-  <button class="tab" data-target="parametres">⚙️ Paramètres</button>
-  <button class="tab" data-target="sync">🔁 Sync</button>
-  <span class="sr-only" id="live" aria-live="polite"></span>
+<header>
+  <div class="wrap">
+    <nav class="tabs" id="tabs"></nav>
+  </div>
 </header>
 
-<main>
+<main class="wrap">
   <!-- DASHBOARD -->
-  <section id="dashboard" class="view grid4">
-    <div class="card kpi" id="kpi-alertes"><h3 id="h-alertes">🚨 En alerte (≤ délai)</h3><div class="list"></div></div>
-    <div class="card kpi" id="kpi-fin"><h3 id="h-fin">⏳ Fin de mission &lt; X jours</h3><div class="list"></div></div>
-    <div class="card kpi" id="kpi-stb"><h3 id="h-stb">🧯 Action STB ≤ Y jours</h3><div class="list"></div></div>
-    <div class="card kpi" id="kpi-avis"><h3 id="h-avis">📝 Sans avis &gt; Z jours</h3><div class="list"></div></div>
+  <section class="view" id="view-dashboard">
+    <div class="grid g4">
+      <div class="card">
+        <div class="row space">
+          <div class="title">🚨 En alerte</div>
+          <div class="pill" id="db-alerte-title">0</div>
+        </div>
+        <div id="db-alerte-list" class="mono"></div>
+      </div>
+      <div class="card">
+        <div class="row space">
+          <div class="title">⏳ Fin de mission < <span id="db-fin-x"></span>j</div>
+          <div class="pill" id="db-fin-title">0</div>
+        </div>
+        <div id="db-fin-list" class="mono"></div>
+      </div>
+      <div class="card">
+        <div class="row space">
+          <div class="title">🧰 Action STB ≤ <span id="db-stb-y"></span>j</div>
+          <div class="pill" id="db-stb-title">0</div>
+        </div>
+        <div id="db-stb-list" class="mono"></div>
+      </div>
+      <div class="card">
+        <div class="row space">
+          <div class="title">🗣️ Sans avis > <span id="db-avis-z"></span>j</div>
+          <div class="pill" id="db-avis-title">0</div>
+        </div>
+        <div id="db-avis-list" class="mono"></div>
+      </div>
+    </div>
   </section>
 
-  <!-- ACTIVITÉ -->
-  <section id="activite" class="view two-col" hidden>
-    <div class="panel left" aria-label="Liste consultants">
-      <div class="head th">
-        <div class="sortable" data-sort="nom">Nom <span class="chev" id="chev-nom">▼</span></div>
-        <div class="sortable" data-sort="fin">Fin mission <span class="chev" id="chev-fin">–</span></div>
-        <div class="mut">Actions</div>
+  <!-- ACTIVITE -->
+  <section class="view" id="view-activite">
+    <div class="split">
+      <!-- Left: consultants -->
+      <div>
+        <div class="row space" style="margin-bottom:6px">
+          <div class="title">👤 Consultants</div>
+          <div class="row">
+            <button class="btn small" id="btn-new-consultant">+ Consultant</button>
+            <button class="btn small ghost" id="btn-reset-filters-left">Réinitialiser filtres</button>
+          </div>
+        </div>
+        <table class="table" id="consultants-table">
+          <thead>
+            <tr>
+              <th class="linklike" data-sort="nom">Nom ▲/▼</th>
+              <th class="linklike nowrap" data-sort="date_fin">Fin mission</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <div class="body" id="consultantsList"></div>
-    </div>
-    <div class="panel right" aria-label="Liste activités">
-      <div class="head">
-        <div class="inline" id="typeChips"></div>
-        <input class="search" id="search" placeholder="Recherche (#tendance ou texte)"/>
-        <button class="btn primary" id="btn-new-act">+ Nouvelle activité</button>
-      </div>
-      <div class="body">
-        <div class="list-acts" id="actsList"></div>
+
+      <!-- Right: activities -->
+      <div>
+        <div class="row space">
+          <div class="title">🗂️ Activités</div>
+          <div class="row">
+            <input id="search-activities" placeholder="🔎 Recherche texte…" style="min-width:220px"/>
+            <button class="btn small primary" id="btn-new-activity">+ Nouvelle activité</button>
+            <button class="btn small ghost" id="btn-reset-filters">Réinitialiser filtres</button>
+          </div>
+        </div>
+
+        <!-- Colonnes demandées: Consultant | (Type+Date 2 lignes) | (Objectif+Description 2 lignes) | Actions -->
+        <table class="table" id="activities-table">
+          <thead>
+            <tr>
+              <th>Consultant</th>
+              <th>Type & Date</th>
+              <th>Objectif & Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
       </div>
     </div>
   </section>
 
-  <!-- PARAMÈTRES -->
-  <section id="parametres" class="view" hidden>
-    <div class="card" style="margin-bottom:12px">
-      <h3 style="margin:0 0 8px 0">🏷️ Tendances</h3>
-      <div id="trendsList" class="grid"></div>
-      <div class="inline" style="margin-top:8px">
-        <button class="btn" id="btn-add-trend">+ Ajouter</button>
+  <!-- OBJECTIF -->
+  <section class="view" id="view-objectif">
+    <div class="row space" style="margin-bottom:8px">
+      <div class="title">🎯 Objectifs</div>
+      <div class="row">
+        <button class="btn small primary" id="btn-new-objectif">+ Nouvel objectif</button>
       </div>
     </div>
-    <div class="card" style="margin-bottom:12px">
-      <h3 style="margin:0 0 8px 0">⚖️ Seuils Dashboard (jours)</h3>
-      <div class="grid g2">
-        <div><label>Délai alerte</label><input type="number" id="set-delai" min="0"/></div>
-        <div><label>Fin mission &lt; X</label><input type="number" id="set-fin" min="0"/></div>
-        <div><label>STB ≤ Y</label><input type="number" id="set-stb" min="0"/></div>
-        <div><label>Sans avis &gt; Z</label><input type="number" id="set-avis" min="0"/></div>
+    <div class="grid g4" id="objectifs-grid"></div>
+  </section>
+
+  <!-- PARAMETRES -->
+  <section class="view" id="view-parametres">
+    <div class="grid g4">
+      <div class="card">
+        <div class="title">⚙️ Délais (jours)</div>
+        <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px">
+          <label>delai_alerte_jours <input type="number" id="p-delai_alerte" min="1"/></label>
+          <label>fin_mission_sous_jours <input type="number" id="p-fin_mission_sous" min="1"/></label>
+          <label>stb_recent_jours <input type="number" id="p-stb_recent" min="1"/></label>
+          <label>avis_manquant_depuis_jours <input type="number" id="p-avis_manquant" min="1"/></label>
+          <label>objectif_recent_jours <input type="number" id="p-objectif_recent" min="1"/></label>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <button class="btn primary small" id="btn-save-params">Enregistrer</button>
+        </div>
+        <div class="sub" style="margin-top:6px">Les titres du Dashboard se mettent à jour automatiquement.</div>
       </div>
-      <div class="inline" style="margin-top:8px">
-        <button class="btn primary" id="btn-save-settings">Enregistrer</button>
-        <button class="btn" id="btn-reset-settings">Réinitialiser</button>
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="margin:0 0 8px 0">🗂️ Import / Export JSON</h3>
-      <div class="inline">
-        <button class="btn" id="btn-export">Exporter</button>
-        <input type="file" id="file-import" accept="application/json"/>
-        <select id="import-mode" title="Mode import">
-          <option value="merge">merge</option>
-          <option value="replace">replace</option>
-        </select>
-        <button class="btn" id="btn-import">Importer</button>
-      </div>
-      <p class="mut">Export = dump complet. Import = merge/replace sur la clé locale.</p>
+      <!-- plus de Tendances -->
     </div>
   </section>
 
   <!-- SYNC -->
-  <section id="sync" class="view" hidden>
+  <section class="view" id="view-sync">
     <div class="card">
-      <h3 style="margin:0 0 8px 0">🔁 Synchroniser toutes les données vers <code>quangfr/sherpa/data.json</code></h3>
-      <p class="mut">1) <b>Copier</b> le JSON ▶ 2) <b>Ouvrir l’issue [SYNC]</b> ▶ 3) <b>Coller</b> dans le bloc <code>```json</code> ▶ 4) <b>Submit</b>. L’Action remplace <code>data.json</code>.</p>
-      <div class="inline" style="margin-top:6px">
-        <button class="btn primary" id="btn-copy-json">📋 Copier JSON</button>
-        <button class="btn" id="btn-open-issue">🐙 Ouvrir l’issue [SYNC]</button>
-        <button class="btn" id="btn-download-json">⬇️ Télécharger data.json</button>
+      <div class="row space">
+        <div class="title">🔁 Sync GitHub</div>
+        <div class="row">
+          <button class="btn small" id="btn-copy-json">📋 Copier JSON</button>
+          <button class="btn small" id="btn-open-issue">🐙 Ouvrir Issue [SYNC]</button>
+          <button class="btn small" id="btn-download-json">⬇️ Télécharger data.json</button>
+        </div>
       </div>
-      <pre id="sync-preview" style="margin-top:8px;max-height:280px;overflow:auto;border:1px solid var(--bd);padding:8px;border-radius:10px;background:#fff"></pre>
+      <div class="sub" style="margin:6px 0">Copiez-collez ce JSON dans l’issue <b>[SYNC]</b> pour synchroniser le fichier du dépôt via GitHub Actions.</div>
+      <pre id="json-preview" class="mono" style="max-height:400px;overflow:auto;border:1px solid var(--border);padding:10px;border-radius:10px"></pre>
+      <div class="row" style="margin-top:8px;gap:10px">
+        <label class="pill">Repo <input id="repo-fullname" placeholder="owner/repo" style="margin-left:6px;width:220px"/></label>
+        <span class="sub">Ex: <code>quangfr/bdd-demo</code></span>
+      </div>
     </div>
   </section>
 </main>
 
-<!-- DIALOGS -->
-<dialog id="dlg-activity"><form method="dialog" class="dlg">
-  <h3 style="margin:0 0 8px 0">✏️ Activité</h3>
-  <div class="grid g2">
-    <div><label>Consultant</label><select id="a-consultant"></select></div>
-    <div><label>Type</label><select id="a-type">
-      <option value="ACTION_ST_BERNARD">ACTION_ST_BERNARD</option>
-      <option value="NOTE">NOTE</option>
-      <option value="VERBATIM">VERBATIM</option>
-      <option value="AVIS">AVIS</option>
-      <option value="ALERTE">ALERTE</option>
-    </select></div>
-    <div><label>Date</label><input type="date" id="a-date"/></div>
-    <div id="wrap-heures" hidden><label>Heures (STB)</label><input type="number" id="a-heures" min="0" step="0.5"/></div>
-  </div>
-  <div style="margin-top:8px;position:relative">
-    <label>Description</label>
-    <textarea id="a-desc" placeholder="Texte... utilisez #slug pour les tendances"></textarea>
-  </div>
-  <div class="inline" style="margin-top:10px">
-    <button class="btn primary" id="a-save">Enregistrer</button>
-    <button class="btn" value="cancel">Annuler</button>
-  </div>
-</form></dialog>
+<!-- MODALS -->
+<dialog id="dlg-activity">
+  <form method="dialog" class="modal" id="form-activity">
+    <h3>✏️ Activité</h3>
+    <div class="grid2">
+      <label>Consultant
+        <select name="consultant_id" required id="fa-consultant"></select>
+      </label>
+      <label>Type
+        <select name="type" required id="fa-type">
+          <option value="ACTION_ST_BERNARD">ACTION_ST_BERNARD</option>
+          <option value="NOTE">NOTE</option>
+          <option value="VERBATIM">VERBATIM</option>
+          <option value="AVIS">AVIS</option>
+          <option value="ALERTE">ALERTE</option>
+        </select>
+      </label>
+      <label>Date de publication
+        <input type="date" name="date_publication" required id="fa-date"/>
+      </label>
+      <label>Objectif (optionnel)
+        <select name="objectif_id" id="fa-objectif"></select>
+      </label>
+      <label id="fa-heures-wrap" class="hidden">Heures (STB)
+        <input type="number" min="0.25" step="0.25" name="heures" id="fa-heures"/>
+      </label>
+      <label style="grid-column:1/-1">Description
+        <textarea name="description" required id="fa-desc" placeholder="Description…"></textarea>
+      </label>
+    </div>
+    <div class="actions">
+      <button value="cancel" class="btn">Annuler</button>
+      <button value="ok" class="btn primary">Enregistrer</button>
+    </div>
+  </form>
+</dialog>
 
-<dialog id="dlg-consultant"><form method="dialog" class="dlg">
-  <h3 style="margin:0 0 8px 0">✏️ Consultant</h3>
-  <div class="grid g2">
-    <div><label>Nom *</label><input type="text" id="c-nom" required/></div>
-    <div><label>Titre mission</label><input type="text" id="c-titre"/></div>
-    <div><label>Date fin (ISO)</label><input type="date" id="c-fin"/></div>
-    <div><label>URL</label><input type="url" id="c-url" placeholder="https://..."/></div>
-  </div>
-  <div style="margin-top:8px"><label>Description</label><textarea id="c-desc" placeholder="#tendances OK"></textarea></div>
-  <div class="inline" style="margin-top:10px">
-    <button class="btn primary" id="c-save">Enregistrer</button>
-    <button class="btn" value="cancel">Annuler</button>
-  </div>
-</form></dialog>
+<dialog id="dlg-consultant">
+  <form method="dialog" class="modal" id="form-consultant">
+    <h3>✏️ Consultant</h3>
+    <div class="grid2">
+      <label>Nom* <input name="nom" required id="fc-nom"/></label>
+      <label>Titre mission <input name="titre_mission" id="fc-titre"/></label>
+      <label>Date fin (dispo) <input type="date" name="date_fin" id="fc-fin"/></label>
+      <label>URL (fiche) <input name="url" id="fc-url" placeholder="https://…"/></label>
+      <label style="grid-column:1/-1">Description
+        <textarea name="description" id="fc-desc" placeholder="Notes libres…"></textarea>
+      </label>
+    </div>
+    <div class="actions">
+      <button value="del" class="btn danger">Supprimer</button>
+      <button value="cancel" class="btn">Annuler</button>
+      <button value="ok" class="btn primary">Enregistrer</button>
+    </div>
+  </form>
+</dialog>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg-objectif">
+  <form method="dialog" class="modal" id="form-objectif">
+    <h3>✏️ Objectif</h3>
+    <div class="grid2">
+      <label>Titre* <input name="titre" required id="fo-titre"/></label>
+      <label>Description <input name="description" id="fo-desc"/></label>
+      <div style="grid-column:1/-1">
+        <div class="sub">Associer des consultants & progression (%)</div>
+        <div id="fo-consultants"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button value="del" class="btn danger">Supprimer</button>
+      <button value="cancel" class="btn">Annuler</button>
+      <button value="ok" class="btn primary">Enregistrer</button>
+    </div>
+  </form>
+</dialog>
 
 <script>
-/*** Utilities ***/
-const $ = s=>document.querySelector(s), $$ = s=>document.querySelectorAll(s);
-const today = ()=>new Date().toISOString().slice(0,10);
-const parseISO = d => d? new Date(d+"T00:00:00") : null;
-const diffDays=(a,b)=>Math.floor((a-b)/(1000*3600*24));
-const uuid=()=>crypto.randomUUID?crypto.randomUUID():('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&0x3|0x8);return v.toString(16)}));
-const toast=(m)=>{const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1200);$("#live").textContent=m}
-const esc=s=>String(s).replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+/* ===== UTIL ===== */
+const LS_KEY='SHERPA_STORE_V4';
+const nowISO=()=>new Date().toISOString();
+const todayStr=()=>new Date().toISOString().slice(0,10);
+const uid=()=>crypto.randomUUID?crypto.randomUUID():'id-'+Math.random().toString(36).slice(2);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+const parseDate=s=>s? new Date(s+'T00:00:00'):null;
+const daysDiff=(a,b)=>Math.round((a-b)/86400000);
+const addDays=(d,n)=>new Date(d.getTime()+n*86400000);
 
-/*** Store ***/
-const KEY="SHERPA_STORE_V3";
-const DEF_TRENDS=[
-  {id:uuid(),slug:"le-cardinal",label:"Le Cardinal"},{id:uuid(),slug:"robert-jr",label:"Robert Jr"},
-  {id:uuid(),slug:"gutenberg",label:"Gutenberg"},{id:uuid(),slug:"indelebile",label:"Indélébile"},
-  {id:uuid(),slug:"protocop",label:"Protocop"},{id:uuid(),slug:"tarantino",label:"Tarantino"},
-  {id:uuid(),slug:"goal-digger",label:"Goal Digger"},{id:uuid(),slug:"promptzilla",label:"Promptzilla"},
-  {id:uuid(),slug:"soulgorithm",label:"Soulgorithm"},{id:uuid(),slug:"polene",label:"PÔLÈNE"}
-];
-const DEF_SETTINGS={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60};
+/* ===== DATA (sans tendances) ===== */
+let store=load();
+function load(){
+  const raw=localStorage.getItem(LS_KEY);
+  if(raw){ try{return JSON.parse(raw);}catch{} }
+  // seed
+  const c1={id:uid(),nom:'Livier HASSLER',titre_mission:'CPO MAESTRO',date_fin:'2025-12-31',created_at:nowISO(),updated_at:nowISO()};
+  const c2={id:uid(),nom:'Samuel MERY',titre_mission:'PO SCORE',date_fin:'2025-11-30',created_at:nowISO(),updated_at:nowISO()};
+  const c3={id:uid(),nom:'Léonard SAVANE',titre_mission:'Data Eng.',date_fin:'2025-10-31',created_at:nowISO(),updated_at:nowISO()};
+  const obj1={id:uid(),titre:'Lancer sprints MAESTRO',description:'MVP cockpit demandes',consultants:[
+    {consultant_id:c1.id,progression_pct:70},{consultant_id:c2.id,progression_pct:40}
+  ],created_at:nowISO(),updated_at:nowISO()};
+  const today=todayStr();
+  const acts=[
+    {id:uid(),consultant_id:c1.id,type:'ACTION_ST_BERNARD',date_publication:today,description:'Atelier backlog',heures:2,objectif_id:obj1.id,created_at:nowISO(),updated_at:nowISO()},
+    {id:uid(),consultant_id:c2.id,type:'AVIS',date_publication:today,description:'Feedback client positif',created_at:nowISO(),updated_at:nowISO()},
+    {id:uid(),consultant_id:c3.id,type:'ALERTE',date_publication:today,description:'Glissement planning import',created_at:nowISO(),updated_at:nowISO()},
+    {id:uid(),consultant_id:c2.id,type:'ACTION_ST_BERNARD',date_publication:today,description:'Correction règles SCORE',heures:1,objectif_id:obj1.id,created_at:nowISO(),updated_at:nowISO()},
+    {id:uid(),consultant_id:c1.id,type:'NOTE',date_publication:today,description:'Préparer démo',created_at:nowISO(),updated_at:nowISO()}
+  ];
+  const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/bdd-demo'};
+  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.1,updated_at:nowISO()}};
+  localStorage.setItem(LS_KEY,JSON.stringify(s));
+  return s;
+}
+function save(){ store.meta.updated_at=nowISO(); localStorage.setItem(LS_KEY,JSON.stringify(store)); refreshAll(); }
 
-const seedConsultants=()=>[
-  {id:uuid(),nom:"Livier HASSLER",titre_mission:"CPO MAESTRO",date_fin:"2025-12-31",url:"",description:"#goal-digger"},
-  {id:uuid(),nom:"Samuel MERY",titre_mission:"PO SCORE",date_fin:"2025-11-30",url:"",description:"#gutenberg"},
-  {id:uuid(),nom:"Quentin DURAND",titre_mission:"UX Designer",date_fin:"2026-01-31",url:"",description:"#protocop"},
-  {id:uuid(),nom:"Léonard SAVANE",titre_mission:"Data Analyst",date_fin:"2025-10-31",url:"",description:"#soulgorithm"},
-  {id:uuid(),nom:"Grimaud SAVANE",titre_mission:"Chef de projet",date_fin:"2025-12-15",url:"",description:"#le-cardinal"},
-  {id:uuid(),nom:"Camille LEROY",titre_mission:"Coach Produit",date_fin:"2026-03-15",url:"",description:"#promptzilla"},
-  {id:uuid(),nom:"Théo MARTIN",titre_mission:"Dev Front",date_fin:"2025-12-01",url:"",description:"#indelebile"},
-  {id:uuid(),nom:"Anaïs ROBERT",titre_mission:"Test Lead",date_fin:"2025-11-15",url:"",description:"#tarantino"},
-];
+/* ===== NAV ===== */
+const TABS=[{id:'dashboard',label:'Dashboard'},{id:'activite',label:'Activité'},{id:'objectif',label:'Objectif'},{id:'parametres',label:'Paramètres'},{id:'sync',label:'Sync'}];
+const tabsEl=document.getElementById('tabs');
+TABS.forEach(t=>{ const b=document.createElement('button'); b.className='tab'; b.textContent=' '+t.label+' '; b.onclick=()=>openTab(t.id); b.id='tab-'+t.id; tabsEl.appendChild(b); });
+function openTab(id){ document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active')); document.querySelector('#tab-'+id).classList.add('active'); document.querySelectorAll('.view').forEach(v=>v.classList.remove('active')); document.querySelector('#view-'+id).classList.add('active'); if(id==='sync') updateSyncPreview(); }
+openTab('dashboard');
 
-const randBetween=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const pick=(arr)=>arr[randBetween(0,arr.length-1)];
-
-const seedActivities=(cons, trends)=>{
-  const types=["ACTION_ST_BERNARD","NOTE","VERBATIM","AVIS","ALERTE"];
-  const acts=[]; const daysBack=120;
-  cons.forEach(c=>{
-    types.forEach(tp=>{ for(let k=0;k<2;k++){
-      const d=new Date(); d.setDate(d.getDate()-randBetween(0,daysBack));
-      acts.push({
-        id:uuid(),consultant_id:c.id,type:tp,
-        date_publication:d.toISOString().slice(0,10),
-        description:`${tp==="VERBATIM"?"« " + ["Très bon retour","Point d’attention","Client hésitant","Roadmap claire"][randBetween(0,3)] + " »":"Note"} #${pick(trends).slug}`,
-        heures: tp==="ACTION_ST_BERNARD" ? (randBetween(1,6)*0.5) : undefined,
-        created_at:new Date().toISOString(),updated_at:new Date().toISOString()
-      })
-    }});
-  });
-  return acts.sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
+/* ===== DASHBOARD ===== */
+function dashboard(){
+  const p=store.params, today=new Date();
+  const hasRecent=(cid,type,days)=>store.activities.some(a=>a.consultant_id===cid && a.type===type && parseDate(a.date_publication)>=addDays(today,-days));
+  const alerteCut=addDays(today,-p.delai_alerte_jours);
+  const alerteList = store.consultants.filter(c => store.activities.some(a=>a.consultant_id===c.id && a.type==='ALERTE' && parseDate(a.date_publication)>=alerteCut));
+  const finList = store.consultants.filter(c=> c.date_fin && ((d=>d>=0 && d<=p.fin_mission_sous_jours)(daysDiff(parseDate(c.date_fin),today))));
+  const stbList = store.consultants.filter(c=>!hasRecent(c.id,'ACTION_ST_BERNARD',p.stb_recent_jours));
+  const avisList = store.consultants.filter(c=>!hasRecent(c.id,'AVIS',p.avis_manquant_depuis_jours));
+  document.getElementById('db-fin-x').textContent=p.fin_mission_sous_jours;
+  document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
+  document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
+  const fmt=(arr,box,title)=>{ const out=document.getElementById(box); out.innerHTML=''; arr.forEach(c=>{ const d=document.createElement('div'); d.innerHTML=`• <span class="linklike">${esc(c.nom)}</span> <span class="sub">/ ${esc(c.titre_mission||'—')}</span>`; d.querySelector('.linklike').onclick=()=>{ openTab('activite'); setConsultantFilter(c.id); }; out.appendChild(d); }); document.getElementById(title).textContent=arr.length; };
+  fmt(alerteList,'db-alerte-list','db-alerte-title');
+  fmt(finList,'db-fin-list','db-fin-title');
+  fmt(stbList,'db-stb-list','db-stb-title');
+  fmt(avisList,'db-avis-list','db-avis-title');
 }
 
-const Store={
-  state:{consultants:[],activities:[],trends:[],settings:{}},
-  load(){
-    const raw=localStorage.getItem(KEY);
-    if(raw){ try{ this.state=JSON.parse(raw);}catch{ localStorage.removeItem(KEY); this.seed(); } }
-    else this.seed();
-  },
-  seed(){
-    const consultants=seedConsultants();
-    const trends=structuredClone(DEF_TRENDS);
-    const activities=seedActivities(consultants,trends);
-    this.state={consultants,activities,trends,settings:structuredClone(DEF_SETTINGS)};
-    this.save();
-  },
-  save(){ localStorage.setItem(KEY,JSON.stringify(this.state)); },
-  export(){ return JSON.stringify(this.state,null,2) },
-  import(obj,mode="merge"){
-    if(mode==="replace"){ this.state=obj; }
-    else{
-      const byId=(arr)=>Object.fromEntries(arr.map(x=>[x.id,x]));
-      const cur=this.state;
-      const mergeArr=(curr,incoming)=>Object.values({...byId(curr),...byId(incoming||[])});
-      this.state={
-        consultants:mergeArr(cur.consultants,obj.consultants),
-        activities:mergeArr(cur.activities,obj.activities).sort((a,b)=>b.date_publication.localeCompare(a.date_publication)),
-        trends:mergeArr(cur.trends,obj.trends),
-        settings:{...cur.settings,...(obj.settings||{})}
-      }
-    }
-    this.save();
-  },
-  upsertConsultant(c){
-    if(!c.nom?.trim()) throw new Error("Nom requis");
-    const i=this.state.consultants.findIndex(x=>x.id===c.id);
-    if(i>=0)this.state.consultants[i]={...this.state.consultants[i],...c,updated_at:new Date().toISOString()};
-    else this.state.consultants.push({...c,id:c.id||uuid(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
-    this.save();
-  },
-  deleteConsultant(id){
-    this.state.consultants=this.state.consultants.filter(x=>x.id!==id);
-    this.state.activities=this.state.activities.filter(a=>a.consultant_id!==id);
-    this.save();
-  },
-  upsertActivity(a){
-    if(!a.consultant_id||!a.type||!a.date_publication||!a.description?.trim()) throw new Error("Champs requis manquants");
-    if(a.type==="ACTION_ST_BERNARD" && (a.heures===undefined || a.heures===null || a.heures==="")) throw new Error("Heures requis pour STB");
-    const i=this.state.activities.findIndex(x=>x.id===a.id);
-    if(i>=0)this.state.activities[i]={...this.state.activities[i],...a,updated_at:new Date().toISOString()};
-    else this.state.activities.unshift({...a,id:uuid(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
-    this.save();
-  },
-  deleteActivity(id){ this.state.activities=this.state.activities.filter(x=>x.id!==id); this.save(); },
-  upsertTrend(t){
-    const i=this.state.trends.findIndex(x=>x.id===t.id);
-    if(i>=0)this.state.trends[i]={...this.state.trends[i],...t};
-    else this.state.trends.push({...t,id:t.id||uuid()});
-    this.save();
-  },
-  deleteTrend(id){ this.state.trends=this.state.trends.filter(x=>x.id!==id); this.save(); }
-};
+/* ===== ACTIVITE ===== */
+let state={sortCol:'nom',sortDir:1,filters:{q:'',consultant_id:''}};
+const consTBody=document.querySelector('#consultants-table tbody');
+const consHead=document.querySelectorAll('#consultants-table thead th[data-sort]');
+consHead.forEach(th=>th.onclick=()=>{state.sortCol=th.dataset.sort;state.sortDir*=-1;renderConsultants();});
 
-/*** UI State ***/
-const UI={ currentView:"dashboard",
-  actFilters:{ types:new Set(["ACTION_ST_BERNARD","NOTE","VERBATIM","AVIS","ALERTE"]), text:"", consultantId:null },
-  sort:{ by:"nom", dir:1 }
-};
-
-/*** Tabs ***/
-$$("header .tab").forEach(b=>{
-  b.onclick=()=>{
-    $$("header .tab").forEach(x=>x.classList.remove("active")); b.classList.add("active");
-    const tgt=b.dataset.target; UI.currentView=tgt; $$(".view").forEach(v=>v.hidden=true); $("#"+tgt).hidden=false;
-    if(tgt==="dashboard") renderDashboard();
-    if(tgt==="activite"){ renderConsultants(); renderActs(); }
-    if(tgt==="parametres") renderSettings();
-    if(tgt==="sync") renderSyncPreview();
-  };
-});
-
-/*** Dashboard ***/
-function renderDashboard(){
-  const {consultants,activities,settings}=Store.state;
-  const t0=parseISO(today());
-  const X=settings.fin_mission_sous_jours||0, Y=settings.stb_recent_jours||0, Z=settings.avis_manquant_depuis_jours||0;
-  $("#h-fin").textContent = `⏳ Fin de mission < ${X} jours`;
-  $("#h-stb").textContent = `🧯 Action STB ≤ ${Y} jours`;
-  $("#h-avis").textContent = `📝 Sans avis > ${Z} jours`;
-  $("#h-alertes").textContent = `🚨 En alerte (≤ ${settings.delai_alerte_jours||0} jours)`;
-
-  const alertLimit=new Date(t0); alertLimit.setDate(alertLimit.getDate()+(settings.delai_alerte_jours||0));
-  const alertes=consultants.filter(c=>c.date_fin && parseISO(c.date_fin)<=alertLimit);
-  const fins=consultants.filter(c=>c.date_fin && (d=>{const dd=diffDays(d,t0); return dd>0 && dd<=X;})(parseISO(c.date_fin)));
-  const stbMap=new Map();
-  activities.filter(a=>a.type==="ACTION_ST_BERNARD").forEach(a=>{ const last=stbMap.get(a.consultant_id); if(!last || a.date_publication>last) stbMap.set(a.consultant_id,a.date_publication); });
-  const stbList=consultants.filter(c=>{ const last=stbMap.get(c.id); if(!last) return false; return Math.abs(diffDays(parseISO(today()),parseISO(last)))<=Y; });
-  const avisCut=new Date(t0); avisCut.setDate(avisCut.getDate()-Z);
-  const hadAvis=new Set(activities.filter(a=>a.type==="AVIS" && parseISO(a.date_publication)>=avisCut).map(a=>a.consultant_id));
-  const sansAvis=consultants.filter(c=>!hadAvis.has(c.id));
-
-  const fill=(id,list)=>{ const box=$(id+" .list"); box.innerHTML="";
-    list.slice(0,50).forEach(c=>{ const div=document.createElement("div");
-      div.className="consultant-card"; div.innerHTML=`<div class="l1">${esc(c.nom)}</div><div class="l2">${esc(c.titre_mission||"")}</div>`;
-      div.onclick=()=>{ $$("header .tab")[1].click(); UI.actFilters.consultantId=c.id; renderConsultantFilterHighlight(); renderActs(); };
-      box.appendChild(div);
-    });
-  };
-  fill("#kpi-alertes",alertes); fill("#kpi-fin",fins); fill("#kpi-stb",stbList); fill("#kpi-avis",sansAvis);
+function statusOf(c){
+  const p=store.params, today=new Date();
+  const hasSTB=store.activities.some(a=>a.consultant_id===c.id && a.type==='ACTION_ST_BERNARD' && parseDate(a.date_publication)>=addDays(today,-p.stb_recent_jours));
+  const hasAlerte=store.activities.some(a=>a.consultant_id===c.id && a.type==='ALERTE' && parseDate(a.date_publication)>=addDays(today,-p.delai_alerte_jours));
+  const soon = c.date_fin? (daysDiff(parseDate(c.date_fin),today)<=p.fin_mission_sous_jours && daysDiff(parseDate(c.date_fin),today)>=0):false;
+  const past = c.date_fin? (daysDiff(parseDate(c.date_fin),today)<0):false;
+  if(past || hasAlerte) return 'r'; if(soon || !hasSTB) return 'y'; return 'g';
 }
-
-/*** Activité – Left ***/
 function renderConsultants(){
-  const {consultants}=Store.state, cont=$("#consultantsList");
-  const arr=[...consultants].sort((a,b)=>{
-    if(UI.sort.by==="nom") return UI.sort.dir * a.nom.localeCompare(b.nom);
-    if(UI.sort.by==="fin") return UI.sort.dir * (a.date_fin||"").localeCompare((b.date_fin||""));
-    return 0;
+  const rows=[...store.consultants];
+  rows.sort((a,b)=> state.sortCol==='nom' ? state.sortDir * a.nom.localeCompare(b.nom) : state.sortDir * (a.date_fin||'').localeCompare(b.date_fin||''));
+  consTBody.innerHTML='';
+  rows.forEach(c=>{
+    const tr=document.createElement('tr'), dot=statusOf(c);
+    tr.innerHTML=`
+      <td><div class="row"><span class="dot ${dot}"></span><b>${esc(c.nom)}</b></div><div class="sub">${esc(c.titre_mission||'—')}</div></td>
+      <td>${esc(c.date_fin||'—')}</td>
+      <td class="nowrap">
+        ${c.url?`<a class="btn small" href="${esc(c.url)}" target="_blank">🔗</a>`:''}
+        <button class="btn small" data-edit="${c.id}">✏️</button>
+        <button class="btn small" data-filter="${c.id}">Filtrer</button>
+      </td>`;
+    tr.querySelector('[data-edit]').onclick=()=>openConsultantModal(c.id);
+    tr.querySelector('[data-filter]').onclick=()=>{ setConsultantFilter(c.id); };
+    consTBody.appendChild(tr);
   });
-  cont.innerHTML="";
-  arr.forEach(c=>{
-    const remain = c.date_fin ? diffDays(parseISO(c.date_fin),parseISO(today())) : null;
-    const dot = remain==null ? "dot-warn" : remain<0 ? "dot-bad" : remain<=7 ? "dot-warn" : "dot-ok";
-    const row=document.createElement("div"); row.className="row"; row.tabIndex=0;
-    row.innerHTML=`
-      <div><span class="state-dot ${dot}"></span><div class="l1">${esc(c.nom)}</div><div class="l2">${esc(c.titre_mission||"")}</div></div>
-      <div>${esc(c.date_fin||"")}</div>
-      <div class="row-actions">
-        <button class="icon-btn" title="URL">${c.url? "🔗":"⛓️"}</button>
-        <button class="icon-btn" title="Éditer">✏️</button>
-      </div>`;
-    const [bUrl,bEdit]=row.querySelectorAll(".icon-btn");
-    bUrl.onclick=(ev)=>{ev.stopPropagation(); if(c.url) window.open(c.url,"_blank")};
-    bEdit.onclick=(ev)=>{ev.stopPropagation(); openConsultantModal(c)};
-    row.onclick=()=>{ UI.actFilters.consultantId=c.id; renderConsultantFilterHighlight(); renderActs(); };
-    row.onkeydown=(e)=>{ if(e.key==="Enter") row.click(); };
-    cont.appendChild(row);
-  });
-  $$(".left .head .sortable").forEach(el=>{
-    el.onclick=()=>{ const key=el.dataset.sort; UI.sort.by===key ? UI.sort.dir*=-1 : (UI.sort.by=key, UI.sort.dir= key==="nom"?1:-1); $("#chev-nom").textContent=UI.sort.by==="nom"?(UI.sort.dir>0?"▲":"▼"):"–"; $("#chev-fin").textContent=UI.sort.by==="fin"?(UI.sort.dir>0?"▲":"▼"):"–"; renderConsultants(); }
-  });
-  renderConsultantFilterHighlight();
 }
-function renderConsultantFilterHighlight(){
-  const id=UI.actFilters.consultantId;
-  [...$("#consultantsList").children].forEach(row=>row.style.outline="none");
-  if(!id) return;
-  // simple highlight by matching name text
-  const idx=Store.state.consultants.findIndex(c=>c.id===id);
-  if(idx>=0 && $("#consultantsList").children[idx]) $("#consultantsList").children[idx].style.outline="2px solid color-mix(in srgb,var(--primary) 40%,transparent)";
-}
+function setConsultantFilter(cid){ state.filters.consultant_id=cid; renderActivities(); }
 
-/*** Activité – Right ***/
+const actTBody=document.querySelector('#activities-table tbody');
+document.getElementById('search-activities').addEventListener('input',e=>{state.filters.q=e.target.value.trim().toLowerCase(); renderActivities();});
+document.getElementById('btn-reset-filters').onclick=()=>{state.filters.q='';state.filters.consultant_id='';document.getElementById('search-activities').value=''; renderActivities();};
+document.getElementById('btn-reset-filters-left').onclick=()=>{state.filters.consultant_id=''; renderActivities();};
+
 const TYPE_META={
-  ACTION_ST_BERNARD:{label:"STB",cls:"b-stb",emoji:"🟦"},
-  NOTE:{label:"Note",cls:"b-note",emoji:"🟩"},
-  VERBATIM:{label:"Verbatim",cls:"b-verb",emoji:"🟨"},
-  AVIS:{label:"Avis",cls:"b-avis",emoji:"🟪"},
-  ALERTE:{label:"Alerte",cls:"b-alert",emoji:"🟥"},
+  ACTION_ST_BERNARD:{emoji:'🧰', pill:'stb', label:'Action STB'},
+  NOTE:{emoji:'📝', pill:'note', label:'Note'},
+  VERBATIM:{emoji:'💬', pill:'verb', label:'Verbatim'},
+  AVIS:{emoji:'🗣️', pill:'avis', label:'Avis'},
+  ALERTE:{emoji:'🚨', pill:'alerte', label:'Alerte'}
 };
-function setupTypeChips(){
-  const box=$("#typeChips"); box.innerHTML="";
-  Object.keys(TYPE_META).forEach(tp=>{
-    const chip=document.createElement("button");
-    chip.className="chip active"; chip.setAttribute("aria-pressed","true"); chip.textContent=TYPE_META[tp].label; chip.dataset.type=tp;
-    chip.onclick=()=>{ const on=chip.classList.toggle("active"); chip.setAttribute("aria-pressed",on?"true":"false"); on?UI.actFilters.types.add(tp):UI.actFilters.types.delete(tp); renderActs(); };
-    box.appendChild(chip);
+
+function renderActivities(){
+  const q=state.filters.q;
+  const list= store.activities
+    .filter(a=>!state.filters.consultant_id || a.consultant_id===state.filters.consultant_id)
+    .filter(a=>!q || (a.description||'').toLowerCase().includes(q))
+    .sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
+  actTBody.innerHTML='';
+  list.forEach(a=>{
+    const c=store.consultants.find(x=>x.id===a.consultant_id);
+    const o=a.objectif_id ? store.objectifs.find(x=>x.id===a.objectif_id):null;
+    const meta=TYPE_META[a.type]||{emoji:'❓',pill:'',label:a.type};
+    const heuresTxt = a.type==='ACTION_ST_BERNARD' ? ` — <b>${a.heures??0}h</b>`:'';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><b>${esc(c?.nom||'—')}</b><div class="sub">${esc(c?.titre_mission||'—')}</div></td>
+      <td>
+        <div class="pill ${meta.pill}">${meta.emoji} ${meta.label}</div>
+        <div class="sub">${esc(a.date_publication)}</div>
+      </td>
+      <td>
+        <div>${o?`🎯 <b>${esc(o.titre)}</b>`:'—'}</div>
+        <div>${esc(a.description)}${heuresTxt}</div>
+      </td>
+      <td class="nowrap">
+        <button class="btn small" data-edit="${a.id}">✏️</button>
+        <button class="btn small danger" data-del="${a.id}">🗑️</button>
+      </td>`;
+    tr.querySelector('[data-edit]').onclick=()=>openActivityModal(a.id);
+    tr.querySelector('[data-del]').onclick=()=>{ if(confirm('Supprimer cette activité ?')){ store.activities=store.activities.filter(x=>x.id!==a.id); save(); } };
+    actTBody.appendChild(tr);
   });
 }
-function renderActs(){
-  const {activities,consultants}=Store.state, list=$("#actsList");
-  const text=$("#search").value.trim().toLowerCase(); UI.actFilters.text=text;
-  let arr=activities.filter(a=>UI.actFilters.types.has(a.type));
-  if(UI.actFilters.consultantId) arr=arr.filter(a=>a.consultant_id===UI.actFilters.consultantId);
-  if(text) arr=arr.filter(a=>a.description.toLowerCase().includes(text));
-  arr.sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
-  list.innerHTML="";
-  const nameById=Object.fromEntries(consultants.map(c=>[c.id,c.nom]));
-  const titleById=Object.fromEntries(consultants.map(c=>[c.id,c.titre_mission||""]));
-  const renderOne=a=>{
-    const m=TYPE_META[a.type], nm=nameById[a.consultant_id]||"—", ti=titleById[a.consultant_id]||"";
-    const div=document.createElement("div"); div.className="act";
-    div.innerHTML=`
-      <div><div class="l1">${esc(nm)}</div><div class="l2">${esc(ti)}</div></div>
-      <div><div class="badge ${m.cls}">${m.emoji} ${m.label}</div><div class="mut" style="margin-top:4px">${esc(a.date_publication)}</div></div>
-      <div><div>${esc(a.description)}</div>${a.type==="ACTION_ST_BERNARD"?`<div class="mut" style="margin-top:6px">Heures: ${a.heures??0}</div>`:""}</div>
-      <div class="inline" style="justify-content:end"><button class="icon-btn" title="Éditer">✏️</button><button class="icon-btn" title="Supprimer">🗑️</button></div>`;
-    const [bE,bD]=div.querySelectorAll(".icon-btn");
-    bE.onclick=()=>openActivityModal(a);
-    bD.onclick=()=>{ if(confirm("Supprimer cette activité ?")){ Store.deleteActivity(a.id); toast("Supprimé ✅"); renderActs(); } };
-    list.appendChild(div);
-  };
-  const MAX=200;
-  if(arr.length>MAX){
-    arr.slice(0,MAX).forEach(renderOne);
-    const more=document.createElement("button"); more.className="btn"; more.textContent=`Charger plus (${arr.length-MAX} restants)`; more.onclick=()=>{ arr.slice(MAX).forEach(renderOne); more.remove();}; list.appendChild(more);
-  }else arr.forEach(renderOne);
-}
 
-/*** Modals ***/
-function openActivityModal(a){
-  const dlg=$("#dlg-activity"), selC=$("#a-consultant"), selT=$("#a-type"), inpD=$("#a-date"), ta=$("#a-desc"), wrapH=$("#wrap-heures"), inpH=$("#a-heures");
-  selC.innerHTML=Store.state.consultants.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join("");
-  const editing=!!a, model= editing? {...a} : {consultant_id:UI.actFilters.consultantId || Store.state.consultants[0]?.id, type:"NOTE", date_publication:today(), description:""};
-  selC.value=model.consultant_id; selT.value=model.type; inpD.value=model.date_publication; ta.value=model.description||"";
-  inpH.value=(model.heures??""); wrapH.hidden = selT.value!=="ACTION_ST_BERNARD"; selT.onchange=()=>{ wrapH.hidden = selT.value!=="ACTION_ST_BERNARD"; };
-  dlg.showModal();
-  $("#a-save").onclick=(ev)=>{ ev.preventDefault();
-    try{ Store.upsertActivity({ id:model.id, consultant_id:selC.value, type:selT.value, date_publication:inpD.value, description:ta.value.trim(), heures: selT.value==="ACTION_ST_BERNARD" ? Number(inpH.value) : undefined });
-      toast(editing?"Activité mise à jour ✅":"Activité créée ✅"); dlg.close(); renderActs(); renderDashboard();
-    }catch(e){ alert(e.message); }
-  };
+/* ===== OBJECTIFS ===== */
+function hoursForObjective(objId, byConsultantId=null, recentDays=null){
+  const acts=store.activities.filter(a=>a.type==='ACTION_ST_BERNARD' && a.objectif_id===objId);
+  const now=new Date();
+  return acts.filter(a=>{
+    if(byConsultantId && a.consultant_id!==byConsultantId) return false;
+    if(recentDays!=null && parseDate(a.date_publication) < addDays(now,-recentDays)) return false;
+    return true;
+  }).reduce((s,a)=>s+(Number(a.heures)||0),0);
 }
-function openConsultantModal(c){
-  const dlg=$("#dlg-consultant"); const editing=!!c; const m= editing? {...c}: {id:uuid()};
-  $("#c-nom").value=m.nom||""; $("#c-titre").value=m.titre_mission||""; $("#c-fin").value=m.date_fin||""; $("#c-url").value=m.url||""; $("#c-desc").value=m.description||"";
-  dlg.showModal();
-  $("#c-save").onclick=(ev)=>{ ev.preventDefault();
-    try{ Store.upsertConsultant({ id:m.id, nom:$("#c-nom").value.trim(), titre_mission:$("#c-titre").value.trim(), date_fin:$("#c-fin").value||null, url:$("#c-url").value.trim(), description:$("#c-desc").value.trim() });
-      toast(editing?"Consultant mis à jour ✅":"Consultant créé ✅"); dlg.close(); renderConsultants(); renderActs(); renderDashboard();
-    }catch(e){ alert(e.message); }
-  }
-}
-
-/*** Paramètres ***/
-function renderSettings(){
-  $("#set-delai").value=Store.state.settings.delai_alerte_jours||0;
-  $("#set-fin").value=Store.state.settings.fin_mission_sous_jours||0;
-  $("#set-stb").value=Store.state.settings.stb_recent_jours||0;
-  $("#set-avis").value=Store.state.settings.avis_manquant_depuis_jours||0;
-  // Tendances
-  const box=$("#trendsList"); box.innerHTML="";
-  Store.state.trends.forEach(t=>{
-    const row=document.createElement("div"); row.className="inline";
-    const slug=document.createElement("input"); slug.type="text"; slug.value=t.slug; slug.style.width="220px";
-    const lab=document.createElement("input"); lab.type="text"; lab.value=t.label; lab.style.width="280px";
-    const btnE=document.createElement("button"); btnE.className="btn"; btnE.textContent="✏️";
-    const btnD=document.createElement("button"); btnD.className="btn"; btnD.textContent="🗑️";
-    btnE.onclick=()=>{ Store.upsertTrend({id:t.id,slug:slug.value.trim(),label:lab.value.trim()}); toast("Tendance mise à jour ✅"); renderSettings(); };
-    btnD.onclick=()=>{ if(confirm("Supprimer la tendance ?")){ Store.deleteTrend(t.id); toast("Supprimé ✅"); renderSettings(); } };
-    row.append(slug,lab,btnE,btnD); box.appendChild(row);
+function renderObjectifs(){
+  const grid=document.getElementById('objectifs-grid'); grid.innerHTML='';
+  const p=store.params;
+  store.objectifs.forEach(o=>{
+    const total=hoursForObjective(o.id,null,null);
+    const recent=hoursForObjective(o.id,null,p.objectif_recent_jours);
+    const card=document.createElement('div'); card.className='card';
+    const consList=o.consultants.map(link=>{
+      const c=store.consultants.find(x=>x.id===link.consultant_id);
+      const t=hoursForObjective(o.id,c?.id,null);
+      const r=hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
+      return `
+        <div class="row space" style="margin:6px 0">
+          <div><span class="linklike" data-goto="${c?.id||''}">${esc(c?.nom||'—')}</span> <span class="sub">(${Math.max(0,Math.min(100,link.progression_pct))}% ✅)</span></div>
+          <div class="nowrap"><b>${t}h</b> <span class="green">(+${r}h)</span></div>
+        </div>`;
+    }).join('');
+    card.innerHTML=`
+      <div class="row space">
+        <div class="title">${esc(o.titre)}</div>
+        <button class="btn small" data-edit="${o.id}">✏️</button>
+      </div>
+      <div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
+      <div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> <span class="green">(+${recent}h)</span></div>
+      <div>${consList||'<span class="muted">Aucun consultant associé</span>'}</div>`;
+    card.querySelectorAll('[data-goto]').forEach(a=>a.addEventListener('click',()=>{ openTab('activite'); state.filters.consultant_id=a.dataset.goto; renderActivities(); }));
+    card.querySelector('[data-edit]').onclick=()=>openObjectifModal(o.id);
+    grid.appendChild(card);
   });
 }
-$("#btn-add-trend").onclick=()=>{ Store.upsertTrend({slug:"nouvelle-tendance",label:"Nouvelle tendance"}); renderSettings(); }
-$("#btn-save-settings").onclick=()=>{ Store.state.settings={
-  delai_alerte_jours:Number($("#set-delai").value||0),
-  fin_mission_sous_jours:Number($("#set-fin").value||0),
-  stb_recent_jours:Number($("#set-stb").value||0),
-  avis_manquant_depuis_jours:Number($("#set-avis").value||0),
-}; Store.save(); toast("Seuils enregistrés ✅"); renderDashboard(); }
-$("#btn-reset-settings").onclick=()=>{ Store.state.settings=structuredClone({delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60}); Store.save(); renderSettings(); toast("Réinitialisé ✅"); renderDashboard(); }
 
-/*** Sync tab ***/
-function renderSyncPreview(){ $("#sync-preview").textContent=Store.export(); }
-$("#btn-copy-json").onclick=async()=>{ await navigator.clipboard.writeText(Store.export()); toast("JSON copié ✅"); };
-$("#btn-download-json").onclick=()=>{
-  const blob=new Blob([Store.export()],{type:"application/json"}), a=document.createElement("a");
-  a.href=URL.createObjectURL(blob); a.download="data.json"; a.click(); URL.revokeObjectURL(a.href);
+/* ===== PARAMS ===== */
+function renderParams(){
+  const p=store.params;
+  document.getElementById('p-delai_alerte').value=p.delai_alerte_jours;
+  document.getElementById('p-fin_mission_sous').value=p.fin_mission_sous_jours;
+  document.getElementById('p-stb_recent').value=p.stb_recent_jours;
+  document.getElementById('p-avis_manquant').value=p.avis_manquant_depuis_jours;
+  document.getElementById('p-objectif_recent').value=p.objectif_recent_jours;
+  document.getElementById('repo-fullname').value=p.github_repo_fullname||'';
+}
+document.getElementById('btn-save-params').onclick=()=>{
+  const p=store.params;
+  p.delai_alerte_jours=Number(document.getElementById('p-delai_alerte').value||7);
+  p.fin_mission_sous_jours=Number(document.getElementById('p-fin_mission_sous').value||60);
+  p.stb_recent_jours=Number(document.getElementById('p-stb_recent').value||30);
+  p.avis_manquant_depuis_jours=Number(document.getElementById('p-avis_manquant').value||60);
+  p.objectif_recent_jours=Number(document.getElementById('p-objectif_recent').value||15);
+  p.github_repo_fullname=document.getElementById('repo-fullname').value.trim();
+  save(); alert('Paramètres enregistrés.');
+}
+
+/* ===== MODALS (ACTIVITE) ===== */
+const dlgA=document.getElementById('dlg-activity');
+const faType=document.getElementById('fa-type');
+const faHeuresWrap=document.getElementById('fa-heures-wrap');
+const faHeures=document.getElementById('fa-heures');
+const faConsult=document.getElementById('fa-consultant');
+const faObj=document.getElementById('fa-objectif');
+faType.onchange=()=>{const isSTB=faType.value==='ACTION_ST_BERNARD'; faHeuresWrap.classList.toggle('hidden',!isSTB); if(isSTB && !faHeures.value) faHeures.value=1; updateFaObjOptions();};
+faConsult.onchange=updateFaObjOptions;
+function updateFaObjOptions(){
+  const cid=faConsult.value;
+  const related=store.objectifs.filter(o=>o.consultants.some(co=>co.consultant_id===cid));
+  const selected=faObj.value;
+  faObj.innerHTML='<option value="">(aucun)</option>'+related.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
+  if(related.some(o=>o.id===selected)) faObj.value=selected;
+}
+document.getElementById('btn-new-activity').onclick=()=>openActivityModal();
+let currentActivityId=null;
+function openActivityModal(id=null){
+  currentActivityId=id;
+  faConsult.innerHTML=store.consultants.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join('');
+  document.getElementById('fa-date').value=todayStr();
+  document.getElementById('fa-desc').value='';
+  faType.value='ACTION_ST_BERNARD'; faHeuresWrap.classList.remove('hidden'); faHeures.value=1;
+  faObj.innerHTML='<option value="">(aucun)</option>';
+  if(id){
+    const a=store.activities.find(x=>x.id===id); if(!a) return;
+    faConsult.value=a.consultant_id; faType.value=a.type; document.getElementById('fa-date').value=a.date_publication; document.getElementById('fa-desc').value=a.description||''; faHeures.value=a.heures||1; updateFaObjOptions(); faObj.value=a.objectif_id||''; faType.onchange();
+  }else{ updateFaObjOptions(); }
+  dlgA.showModal();
+}
+document.getElementById('form-activity').onsubmit=(e)=>{
+  e.preventDefault();
+  const data={ consultant_id:faConsult.value, type:faType.value, date_publication:document.getElementById('fa-date').value, description:document.getElementById('fa-desc').value.trim(), heures: faType.value==='ACTION_ST_BERNARD' ? Number(faHeures.value||1): undefined, objectif_id: document.getElementById('fa-objectif').value || undefined };
+  if(!data.consultant_id || !data.type || !data.date_publication || !data.description){ alert('Champs requis manquants.'); return; }
+  if(data.type==='ACTION_ST_BERNARD' && !(data.heures>0)){ alert('Heures requises pour STB.'); return; }
+  if(currentActivityId){ Object.assign(store.activities.find(x=>x.id===currentActivityId),data,{updated_at:nowISO()}); }else{ store.activities.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
+  dlgA.close('ok'); save();
 };
-const ISSUE_URL="https://github.com/quangfr/sherpa/issues/new?title=%5BSYNC%5D%20replace%20data.json&labels=sync&body=%60%60%60json%0A%7B%0A%20%20%22REPLACE_ME%22%3A%20%22Collez%20ici%20le%20JSON%20copi%C3%A9%20depuis%20l%27onglet%20Sync%22%0A%7D%0A%60%60%60";
-$("#btn-open-issue").onclick=()=>{ window.open(ISSUE_URL,"_blank"); toast("Ouvre l’issue [SYNC]…"); };
 
-/*** Init ***/
-function setupTypeChips(){ const box=$("#typeChips"); box.innerHTML=""; Object.keys(TYPE_META).forEach(tp=>{ const chip=document.createElement("button"); chip.className="chip active"; chip.setAttribute("aria-pressed","true"); chip.textContent=TYPE_META[tp].label; chip.dataset.type=tp; chip.onclick=()=>{ const on=chip.classList.toggle("active"); chip.setAttribute("aria-pressed",on?"true":"false"); on?UI.actFilters.types.add(tp):UI.actFilters.types.delete(tp); renderActs(); }; box.appendChild(chip); }); }
-$("#search").addEventListener("input",()=>renderActs());
-Store.load(); renderDashboard(); setupTypeChips();
-document.addEventListener("keydown",(e)=>{ if(e.key==="Escape"){ document.querySelectorAll("dialog").forEach(d=>d.close?.()); }});
+/* ===== MODALS (CONSULTANT) ===== */
+const dlgC=document.getElementById('dlg-consultant'); let currentConsultantId=null;
+function openConsultantModal(id=null){
+  currentConsultantId=id;
+  const c=id? store.consultants.find(x=>x.id===id) : {nom:'',titre_mission:'',date_fin:'',url:'',description:''};
+  document.getElementById('fc-nom').value=c.nom||''; document.getElementById('fc-titre').value=c.titre_mission||''; document.getElementById('fc-fin').value=c.date_fin||''; document.getElementById('fc-url').value=c.url||''; document.getElementById('fc-desc').value=c.description||'';
+  dlgC.showModal();
+}
+document.getElementById('btn-new-consultant').onclick=()=>openConsultantModal();
+document.getElementById('form-consultant').onsubmit=(e)=>{
+  e.preventDefault();
+  const data={ nom:document.getElementById('fc-nom').value.trim(), titre_mission:document.getElementById('fc-titre').value.trim()||undefined, date_fin:document.getElementById('fc-fin').value||undefined, url:document.getElementById('fc-url').value||undefined, description:document.getElementById('fc-desc').value.trim()||undefined };
+  if(!data.nom){ alert('Nom requis.'); return; }
+  if(currentConsultantId){ Object.assign(store.consultants.find(x=>x.id===currentConsultantId),data,{updated_at:nowISO()}); }
+  else{ store.consultants.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
+  dlgC.close('ok'); save();
+};
+document.querySelector('#dlg-consultant .actions [value="del"]').onclick=(e)=>{ e.preventDefault(); if(!currentConsultantId){ dlgC.close(); return; } if(confirm('Supprimer ce consultant (et garder ses activités) ?')){ store.consultants=store.consultants.filter(c=>c.id!==currentConsultantId); dlgC.close('del'); save(); } };
+
+/* ===== MODALS (OBJECTIF) ===== */
+const dlgO=document.getElementById('dlg-objectif'); let currentObjectifId=null;
+function openObjectifModal(id=null){
+  currentObjectifId=id;
+  const o=id? store.objectifs.find(x=>x.id===id) : {titre:'',description:'',consultants:[]};
+  document.getElementById('fo-titre').value=o.titre||''; document.getElementById('fo-desc').value=o.description||'';
+  const pane=document.getElementById('fo-consultants'); pane.innerHTML='';
+  store.consultants.forEach(c=>{
+    const link=o.consultants.find(x=>x.consultant_id===c.id);
+    const row=document.createElement('div'); row.className='row space'; row.style.margin='6px 0';
+    row.innerHTML=`<label class="row" style="gap:6px"><input type="checkbox" data-cid="${c.id}" ${link?'checked':''}/> ${esc(c.nom)}</label>
+                   <label class="row" style="gap:6px">Progression <input type="number" min="0" max="100" step="1" value="${link?link.progression_pct:0}" data-pct="${c.id}" style="width:80px"/></label>`;
+    pane.appendChild(row);
+  });
+  dlgO.showModal();
+}
+document.getElementById('btn-new-objectif').onclick=()=>openObjectifModal();
+document.getElementById('form-objectif').onsubmit=(e)=>{
+  e.preventDefault();
+  const titre=document.getElementById('fo-titre').value.trim(); if(!titre){ alert('Titre requis.'); return; }
+  const description=document.getElementById('fo-desc').value.trim()||undefined;
+  const links=[...document.querySelectorAll('#fo-consultants [data-cid]')].filter(ch=>ch.checked).map(ch=>{ const pctEl=document.querySelector(`#fo-consultants [data-pct="${ch.dataset.cid}"]`); return {consultant_id:ch.dataset.cid, progression_pct: Math.max(0,Math.min(100,Number(pctEl.value||0)))}; });
+  if(links.length===0){ alert('Associer au moins 1 consultant.'); return; }
+  if(currentObjectifId){ Object.assign(store.objectifs.find(x=>x.id===currentObjectifId),{titre,description,consultants:links,updated_at:nowISO()}); }
+  else{ store.objectifs.push({id:uid(),titre,description,consultants:links,created_at:nowISO(),updated_at:nowISO()}); }
+  dlgO.close('ok'); save();
+};
+document.querySelector('#dlg-objectif .actions [value="del"]').onclick=(e)=>{ e.preventDefault(); if(!currentObjectifId){ dlgO.close(); return; } if(confirm('Supprimer cet objectif ?')){ store.objectifs=store.objectifs.filter(o=>o.id!==currentObjectifId); dlgO.close('del'); save(); } };
+
+/* ===== SYNC ===== */
+function updateSyncPreview(){ document.getElementById('json-preview').textContent=JSON.stringify(store,null,2); }
+document.getElementById('btn-copy-json').onclick=async()=>{ await navigator.clipboard.writeText(JSON.stringify(store,null,2)); alert('JSON copié ✅'); };
+document.getElementById('btn-open-issue').onclick=()=>{
+  const repo=(document.getElementById('repo-fullname').value||store.params.github_repo_fullname||'').trim();
+  if(!repo || !repo.includes('/')){ alert('Renseigner owner/repo dans Paramètres ou ci-dessus.'); return; }
+  const title=encodeURIComponent('[SYNC] data.json'); const body=encodeURIComponent('```json\n'+JSON.stringify(store,null,2)+'\n```'); const url=`https://github.com/${repo}/issues/new?title=${title}&body=${body}`;
+  window.open(url,'_blank');
+};
+document.getElementById('btn-download-json').onclick=()=>{ const blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click(); URL.revokeObjectURL(a.href); };
+
+/* ===== RENDER ALL ===== */
+function refreshAll(){
+  renderConsultants(); renderActivities(); renderObjectifs(); renderParams(); dashboard(); updateSyncPreview();
+}
+refreshAll();
 </script>
 </body>
 </html>
