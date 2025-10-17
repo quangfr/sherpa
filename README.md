@@ -1,4 +1,4 @@
-# 🔆 Spécification SHERPA – MVP v3.1 (compact, thème clair)
+# 🔆 Spécification SHERPA – V2 MVP (compact, thème clair)
 
 ## 1) Objectif
 Mono-fichier **HTML/CSS/JS vanilla** pour suivre **Consultants** & **Activités** avec **3 onglets** (Dashboard / Activité / Paramètres).  
