@@ -1,864 +1,513 @@
 {
   "consultants": [
     {
-      "id": "e84d091f-47ec-4295-975a-d535a454c7f8",
+      "id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
       "nom": "Livier HASSLER",
       "titre_mission": "CPO MAESTRO",
       "date_fin": "2025-12-31",
-      "url": "",
-      "description": "#goal-digger"
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
+      "id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
       "nom": "Samuel MERY",
       "titre_mission": "PO SCORE",
       "date_fin": "2025-11-30",
-      "url": "",
-      "description": "#gutenberg"
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "nom": "Quentin DURAND",
-      "titre_mission": "UX Designer",
-      "date_fin": "2026-01-31",
-      "url": "",
-      "description": "#protocop"
-    },
-    {
-      "id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "nom": "Léonard SAVANE",
-      "titre_mission": "Data Analyst",
-      "date_fin": "2025-10-31",
-      "url": "",
-      "description": "#soulgorithm"
-    },
-    {
-      "id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
+      "id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
       "nom": "Grimaud SAVANE",
-      "titre_mission": "Chef de projet",
-      "date_fin": "2025-12-15",
-      "url": "",
-      "description": "#le-cardinal"
-    },
-    {
-      "id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "nom": "Camille LEROY",
       "titre_mission": "Coach Produit",
-      "date_fin": "2026-03-15",
-      "url": "",
-      "description": "#promptzilla"
+      "date_fin": "2025-12-15",
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "56c64242-8584-488f-bc41-149de2a5c17d",
-      "nom": "Théo MARTIN",
-      "titre_mission": "Dev Front",
-      "date_fin": "2025-12-01",
-      "url": "",
-      "description": "#indelebile"
+      "id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
+      "nom": "Léonard SAVANE",
+      "titre_mission": "Data Eng.",
+      "date_fin": "2025-10-31",
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
-      "nom": "Anaïs ROBERT",
-      "titre_mission": "Test Lead",
-      "date_fin": "2025-11-15",
-      "url": "",
-      "description": "#tarantino"
+      "id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
+      "nom": "Alain DUPONT",
+      "titre_mission": "PMO",
+      "date_fin": "2026-01-31",
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     }
   ],
   "activities": [
     {
-      "id": "e1c284d5-9695-4167-b902-b62ae826e114",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
+      "id": "01f2a1bc-7b6a-4f18-9c10-b2d7a9ee0001",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-17",
+      "description": "Atelier backlog MAESTRO",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000001",
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
+    },
+    {
+      "id": "02f2a1bc-7b6a-4f18-9c10-b2d7a9ee0002",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
+      "type": "AVIS",
+      "date_publication": "2025-10-17",
+      "description": "Feedback client sprint 12",
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
+    },
+    {
+      "id": "03f2a1bc-7b6a-4f18-9c10-b2d7a9ee0003",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
       "type": "ALERTE",
       "date_publication": "2025-10-17",
-      "description": "Note #robert-jr",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "description": "Glissement planning import DATA",
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "e777bb2c-a84f-4c2f-84de-bb33a248db77",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "ALERTE",
+      "id": "04f2a1bc-7b6a-4f18-9c10-b2d7a9ee0004",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-17",
+      "description": "Correction règles SCORE",
+      "heures": 1,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000002",
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
+    },
+    {
+      "id": "05f2a1bc-7b6a-4f18-9c10-b2d7a9ee0005",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
+      "type": "NOTE",
+      "date_publication": "2025-10-16",
+      "description": "Préparer démo cockpit",
+      "created_at": "2025-10-16T09:12:00.000Z",
+      "updated_at": "2025-10-16T09:12:00.000Z"
+    },
+    {
+      "id": "06f2a1bc-7b6a-4f18-9c10-b2d7a9ee0006",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-16",
+      "description": "Maquette écrans MAESTRO",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000003",
+      "created_at": "2025-10-16T14:20:00.000Z",
+      "updated_at": "2025-10-16T14:20:00.000Z"
+    },
+    {
+      "id": "07f2a1bc-7b6a-4f18-9c10-b2d7a9ee0007",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-15",
+      "description": "Coaching backlog produit",
+      "heures": 3,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000004",
+      "created_at": "2025-10-15T10:00:00.000Z",
+      "updated_at": "2025-10-15T10:00:00.000Z"
+    },
+    {
+      "id": "08f2a1bc-7b6a-4f18-9c10-b2d7a9ee0008",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-15",
+      "description": "Nettoyage pipeline ETL",
+      "heures": 1,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000003",
+      "created_at": "2025-10-15T15:30:00.000Z",
+      "updated_at": "2025-10-15T15:30:00.000Z"
+    },
+    {
+      "id": "09f2a1bc-7b6a-4f18-9c10-b2d7a9ee0009",
+      "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
+      "type": "NOTE",
       "date_publication": "2025-10-14",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "description": "Rituels projet hebdo",
+      "created_at": "2025-10-14T08:40:00.000Z",
+      "updated_at": "2025-10-14T08:40:00.000Z"
     },
     {
-      "id": "e722bd0d-ceba-4e9a-917d-9dde5e12df31",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "NOTE",
-      "date_publication": "2025-10-12",
-      "description": "Note #promptzilla",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "id": "10f2a1bc-7b6a-4f18-9c10-b2d7a9ee0010",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-14",
+      "description": "Refacto règles de calcul",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000002",
+      "created_at": "2025-10-14T13:05:00.000Z",
+      "updated_at": "2025-10-14T13:05:00.000Z"
     },
     {
-      "id": "cad5c57c-a03b-4d81-a3bc-e1238c7fcd38",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
+      "id": "11f2a1bc-7b6a-4f18-9c10-b2d7a9ee0011",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
       "type": "AVIS",
-      "date_publication": "2025-10-12",
-      "description": "Note #goal-digger",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-10-13",
+      "description": "Retour positif atelier Go-Roadmap",
+      "created_at": "2025-10-13T17:00:00.000Z",
+      "updated_at": "2025-10-13T17:00:00.000Z"
     },
     {
-      "id": "c2c40a08-523e-49d7-b13b-2a1d82e514f1",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
-      "type": "VERBATIM",
-      "date_publication": "2025-10-12",
-      "description": "« Point d’attention » #polene",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "id": "12f2a1bc-7b6a-4f18-9c10-b2d7a9ee0012",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-13",
+      "description": "Support cadrage user-stories",
+      "heures": 1,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000001",
+      "created_at": "2025-10-13T10:10:00.000Z",
+      "updated_at": "2025-10-13T10:10:00.000Z"
     },
     {
-      "id": "6be5259a-34d4-4e7c-af5e-99d50ad4d693",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
-      "type": "VERBATIM",
-      "date_publication": "2025-10-11",
-      "description": "EDIT",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T10:05:06.889Z"
-    },
-    {
-      "id": "3629cbb1-792d-4f4c-83a4-acb7bd4df9b1",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "VERBATIM",
-      "date_publication": "2025-10-09",
-      "description": "« Roadmap claire » #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "19a21892-7019-40b5-af0d-801cbcb81d87",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "VERBATIM",
-      "date_publication": "2025-10-08",
-      "description": "« Très bon retour » #soulgorithm",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "91d0187f-da59-4293-8390-2606b0631736",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
+      "id": "13f2a1bc-7b6a-4f18-9c10-b2d7a9ee0013",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
       "type": "NOTE",
-      "date_publication": "2025-10-07",
-      "description": "Note #goal-digger",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-10-12",
+      "description": "Checklist data quality",
+      "created_at": "2025-10-12T09:00:00.000Z",
+      "updated_at": "2025-10-12T09:00:00.000Z"
     },
     {
-      "id": "5743de73-7245-4df6-bd8c-4e9034d3c3a3",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
+      "id": "14f2a1bc-7b6a-4f18-9c10-b2d7a9ee0014",
+      "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-12",
+      "description": "Préparation Sprint Planning",
+      "heures": 3,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000003",
+      "created_at": "2025-10-12T15:25:00.000Z",
+      "updated_at": "2025-10-12T15:25:00.000Z"
+    },
+    {
+      "id": "15f2a1bc-7b6a-4f18-9c10-b2d7a9ee0015",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-11",
+      "description": "Coaching priorisation OKR",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000004",
+      "created_at": "2025-10-11T11:45:00.000Z",
+      "updated_at": "2025-10-11T11:45:00.000Z"
+    },
+    {
+      "id": "16f2a1bc-7b6a-4f18-9c10-b2d7a9ee0016",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
+      "type": "ALERTE",
+      "date_publication": "2025-10-10",
+      "description": "Retard recette SCORE",
+      "created_at": "2025-10-10T08:20:00.000Z",
+      "updated_at": "2025-10-10T08:20:00.000Z"
+    },
+    {
+      "id": "17f2a1bc-7b6a-4f18-9c10-b2d7a9ee0017",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-10",
+      "description": "Optimisation vues PowerBI",
+      "heures": 1,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000002",
+      "created_at": "2025-10-10T13:30:00.000Z",
+      "updated_at": "2025-10-10T13:30:00.000Z"
+    },
+    {
+      "id": "18f2a1bc-7b6a-4f18-9c10-b2d7a9ee0018",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-09",
+      "description": "Pairing sur user-stories",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000001",
+      "created_at": "2025-10-09T16:00:00.000Z",
+      "updated_at": "2025-10-09T16:00:00.000Z"
+    },
+    {
+      "id": "19f2a1bc-7b6a-4f18-9c10-b2d7a9ee0019",
+      "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
+      "type": "NOTE",
+      "date_publication": "2025-10-08",
+      "description": "Checklist Sprint Planning",
+      "created_at": "2025-10-08T09:10:00.000Z",
+      "updated_at": "2025-10-08T09:10:00.000Z"
+    },
+    {
+      "id": "20f2a1bc-7b6a-4f18-9c10-b2d7a9ee0020",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-08",
+      "description": "Atelier Go-Roadmap v2",
+      "heures": 3,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000004",
+      "created_at": "2025-10-08T14:00:00.000Z",
+      "updated_at": "2025-10-08T14:00:00.000Z"
+    },
+    {
+      "id": "21f2a1bc-7b6a-4f18-9c10-b2d7a9ee0021",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-07",
+      "description": "Revue règles SCORE (lot 2)",
+      "heures": 1,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000002",
+      "created_at": "2025-10-07T10:35:00.000Z",
+      "updated_at": "2025-10-07T10:35:00.000Z"
+    },
+    {
+      "id": "22f2a1bc-7b6a-4f18-9c10-b2d7a9ee0022",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
+      "type": "AVIS",
+      "date_publication": "2025-10-06",
+      "description": "Avis technique sur ETL Delta",
+      "created_at": "2025-10-06T12:00:00.000Z",
+      "updated_at": "2025-10-06T12:00:00.000Z"
+    },
+    {
+      "id": "23f2a1bc-7b6a-4f18-9c10-b2d7a9ee0023",
+      "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
       "type": "ACTION_ST_BERNARD",
       "date_publication": "2025-10-06",
-      "description": "Note #promptzilla",
-      "heures": 1,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "description": "Facilitation Sprint Planning",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000003",
+      "created_at": "2025-10-06T16:30:00.000Z",
+      "updated_at": "2025-10-06T16:30:00.000Z"
     },
     {
-      "id": "4c459fe5-4c05-47a3-b028-d29c1ad33992",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-10-05",
-      "description": "Note #tarantino",
-      "heures": 2.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "b55d848c-9e2d-4664-a0ca-fde625b888fe",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-10-05",
-      "description": "Note #gutenberg",
-      "heures": 1,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "d2604845-cbbb-4982-83b5-f07299d5f5ed",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
+      "id": "24f2a1bc-7b6a-4f18-9c10-b2d7a9ee0024",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
       "type": "NOTE",
+      "date_publication": "2025-10-05",
+      "description": "Plan d’animation ateliers",
+      "created_at": "2025-10-05T09:00:00.000Z",
+      "updated_at": "2025-10-05T09:00:00.000Z"
+    },
+    {
+      "id": "25f2a1bc-7b6a-4f18-9c10-b2d7a9ee0025",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-10-05",
+      "description": "Live prototypage écrans",
+      "heures": 3,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000001",
+      "created_at": "2025-10-05T15:10:00.000Z",
+      "updated_at": "2025-10-05T15:10:00.000Z"
+    },
+    {
+      "id": "26f2a1bc-7b6a-4f18-9c10-b2d7a9ee0026",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
+      "type": "ACTION_ST_BERNARD",
       "date_publication": "2025-10-04",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "30d1e8a6-dc90-4d9f-88c9-0d9b6fa95a5e",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "ALERTE",
-      "date_publication": "2025-10-01",
-      "description": "Note #promptzilla",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "2f64bc12-1f4c-4792-bcad-9597a112d060",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "ALERTE",
-      "date_publication": "2025-09-29",
-      "description": "Note #goal-digger",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "8047a624-8eef-4dda-9f57-c8ede618fb6b",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "VERBATIM",
-      "date_publication": "2025-09-26",
-      "description": "« Très bon retour » #protocop",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "3a6eabad-f0cf-4a1e-bf72-85f0cb397c4d",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "VERBATIM",
-      "date_publication": "2025-09-23",
-      "description": "« Client hésitant » #soulgorithm",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "37cfb889-c1f6-4a45-a571-68c51933cede",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
-      "type": "ALERTE",
-      "date_publication": "2025-09-22",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "ec047075-e348-4aaf-9de4-51f11b58f76f",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "VERBATIM",
-      "date_publication": "2025-09-21",
-      "description": "« Point d’attention » #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "c8bc5656-088e-49e9-8572-851de48382d0",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-09-20",
-      "description": "Note #polene",
+      "description": "Débogage règles SCORE",
       "heures": 2,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "objectif_id": "11111111-aaaa-4444-8888-000000000002",
+      "created_at": "2025-10-04T11:00:00.000Z",
+      "updated_at": "2025-10-04T11:00:00.000Z"
     },
     {
-      "id": "c40db88d-1f14-4677-9224-92d06b0098d1",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
+      "id": "27f2a1bc-7b6a-4f18-9c10-b2d7a9ee0027",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
       "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-09-20",
-      "description": "Note #robert-jr",
-      "heures": 1.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "eb2a65c6-de8b-4cf8-867f-0bcfea231333",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "AVIS",
-      "date_publication": "2025-09-19",
-      "description": "Note #indelebile",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "2dce9be7-34a7-4cdc-839e-0b0caea4f3aa",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "AVIS",
-      "date_publication": "2025-09-18",
-      "description": "Note #gutenberg",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "121b141b-ea55-41ae-a2bd-661d6804fcac",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "AVIS",
-      "date_publication": "2025-09-16",
-      "description": "Note #polene",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "dd86f6d1-af56-431a-8a07-cb61546b2ce4",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
-      "type": "VERBATIM",
-      "date_publication": "2025-09-15",
-      "description": "« Client hésitant » #gutenberg",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "3a91ff64-e27a-460f-96dd-c8ea03ef7ed8",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "AVIS",
-      "date_publication": "2025-09-13",
-      "description": "Note #promptzilla",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "75b301e7-7eaa-45c1-96b0-c4c8b6d36d55",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-09-10",
-      "description": "Note #robert-jr",
-      "heures": 2,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "a2aa8a04-dffe-4b57-bc41-6d69165872b9",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "VERBATIM",
-      "date_publication": "2025-09-08",
-      "description": "« Roadmap claire » #protocop",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "5b2cb7c6-37a8-4613-84ef-0c26281e8c71",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "AVIS",
-      "date_publication": "2025-09-07",
-      "description": "Note #robert-jr",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "3cc4c6e9-6d2a-474a-87f7-fb12c5609347",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "VERBATIM",
-      "date_publication": "2025-09-07",
-      "description": "« Client hésitant » #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "876e84f8-2e09-4f54-94f7-49cc3ec744d7",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-09-07",
-      "description": "Note #promptzilla",
+      "date_publication": "2025-10-03",
+      "description": "Refacto pipeline ingestion",
       "heures": 1,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "objectif_id": "11111111-aaaa-4444-8888-000000000003",
+      "created_at": "2025-10-03T14:45:00.000Z",
+      "updated_at": "2025-10-03T14:45:00.000Z"
     },
     {
-      "id": "c7db10e0-8032-4651-8f59-fb28f5d92b9c",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "ALERTE",
-      "date_publication": "2025-09-05",
-      "description": "Note #gutenberg",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "id": "28f2a1bc-7b6a-4f18-9c10-b2d7a9ee0028",
+      "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
+      "type": "AVIS",
+      "date_publication": "2025-10-02",
+      "description": "Avis stakeholders sur roadmap",
+      "created_at": "2025-10-02T10:00:00.000Z",
+      "updated_at": "2025-10-02T10:00:00.000Z"
     },
     {
-      "id": "44190d78-7246-4b91-aa93-fd6a05bad60d",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "ALERTE",
-      "date_publication": "2025-09-04",
-      "description": "Note #soulgorithm",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "8664417e-839e-4675-9b06-0106779a976c",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "ALERTE",
-      "date_publication": "2025-09-02",
-      "description": "Note #indelebile",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "e78f2a09-63de-47a3-af07-a2d69e50ed9a",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "VERBATIM",
-      "date_publication": "2025-09-02",
-      "description": "« Roadmap claire » #promptzilla",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "a664bb1b-a962-4feb-b07a-43e8cae61846",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
-      "type": "ALERTE",
-      "date_publication": "2025-09-02",
-      "description": "Note #robert-jr",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "51db0c6b-345f-4e5e-b79d-c6dd11b3fe03",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
+      "id": "29f2a1bc-7b6a-4f18-9c10-b2d7a9ee0029",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
       "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-08-28",
-      "description": "Note #robert-jr",
-      "heures": 2.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-10-02",
+      "description": "Coaching Protocop MVP",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000001",
+      "created_at": "2025-10-02T16:20:00.000Z",
+      "updated_at": "2025-10-02T16:20:00.000Z"
     },
     {
-      "id": "4287fe55-7f90-419a-88e0-5b24afbcde7c",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
-      "type": "ALERTE",
-      "date_publication": "2025-08-28",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "70550366-d756-4370-a0ed-0441defcd71f",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
+      "id": "30f2a1bc-7b6a-4f18-9c10-b2d7a9ee0030",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
       "type": "NOTE",
-      "date_publication": "2025-08-27",
-      "description": "Note #gutenberg",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-10-01",
+      "description": "Idées UX cockpit",
+      "created_at": "2025-10-01T09:15:00.000Z",
+      "updated_at": "2025-10-01T09:15:00.000Z"
     },
     {
-      "id": "b12736d6-ba50-4341-a8b7-f920850e5054",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
-      "type": "AVIS",
-      "date_publication": "2025-08-27",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "b468d5e8-e821-4761-bb60-15aa8aeadb7d",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "AVIS",
-      "date_publication": "2025-08-25",
-      "description": "Note #indelebile",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "959f675b-0864-417f-8447-b2001cf32a32",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
+      "id": "31f2a1bc-7b6a-4f18-9c10-b2d7a9ee0031",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
       "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-08-22",
-      "description": "Note #tarantino",
+      "date_publication": "2025-10-01",
+      "description": "Tests unitaires règles",
+      "heures": 1,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000002",
+      "created_at": "2025-10-01T13:00:00.000Z",
+      "updated_at": "2025-10-01T13:00:00.000Z"
+    },
+    {
+      "id": "32f2a1bc-7b6a-4f18-9c10-b2d7a9ee0032",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
+      "type": "NOTE",
+      "date_publication": "2025-09-30",
+      "description": "Plan migration data",
+      "created_at": "2025-09-30T08:30:00.000Z",
+      "updated_at": "2025-09-30T08:30:00.000Z"
+    },
+    {
+      "id": "33f2a1bc-7b6a-4f18-9c10-b2d7a9ee0033",
+      "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-09-30",
+      "description": "Préparation Sprint Planning",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000003",
+      "created_at": "2025-09-30T15:40:00.000Z",
+      "updated_at": "2025-09-30T15:40:00.000Z"
+    },
+    {
+      "id": "34f2a1bc-7b6a-4f18-9c10-b2d7a9ee0034",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-09-29",
+      "description": "Workshop Go-Roadmap",
       "heures": 3,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "objectif_id": "11111111-aaaa-4444-8888-000000000004",
+      "created_at": "2025-09-29T10:25:00.000Z",
+      "updated_at": "2025-09-29T10:25:00.000Z"
     },
     {
-      "id": "e40843e3-8121-4ded-b789-364a681b9fe1",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-08-21",
-      "description": "Note #tarantino",
-      "heures": 2.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "04a4936c-4e89-43eb-8916-09fafd38b137",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-08-20",
-      "description": "Note #indelebile",
-      "heures": 1.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "c82a2f64-436c-44bc-b4c9-28e5fb304990",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "NOTE",
-      "date_publication": "2025-08-17",
-      "description": "Note #soulgorithm",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "23d22493-abb8-4dfc-8a13-45e156541178",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
-      "type": "ALERTE",
-      "date_publication": "2025-08-16",
-      "description": "Note #soulgorithm",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "f0979377-2bc2-42f5-a124-d3687048d338",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "ALERTE",
-      "date_publication": "2025-08-15",
-      "description": "Note #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "056eb1e6-eae4-4050-adfc-8420a292eef9",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
+      "id": "35f2a1bc-7b6a-4f18-9c10-b2d7a9ee0035",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
       "type": "AVIS",
-      "date_publication": "2025-08-15",
-      "description": "Note #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-09-28",
+      "description": "Avis client sur SCORE",
+      "created_at": "2025-09-28T12:00:00.000Z",
+      "updated_at": "2025-09-28T12:00:00.000Z"
     },
     {
-      "id": "41033510-8e23-4b08-b565-e6a9f10d2258",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
-      "type": "AVIS",
-      "date_publication": "2025-08-12",
-      "description": "Note #gutenberg",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "391a7137-cc00-432c-998d-c8fde5cde30b",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
+      "id": "36f2a1bc-7b6a-4f18-9c10-b2d7a9ee0036",
+      "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01",
       "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-08-11",
-      "description": "Note #goal-digger",
-      "heures": 1.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-09-28",
+      "description": "Coaching rédaction US",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000001",
+      "created_at": "2025-09-28T16:45:00.000Z",
+      "updated_at": "2025-09-28T16:45:00.000Z"
     },
     {
-      "id": "0645094b-73a7-4485-be4a-3fd25d71bbd7",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "AVIS",
-      "date_publication": "2025-08-08",
-      "description": "Note #soulgorithm",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "14b3dc8a-7932-4925-aca6-474cd3ddf01a",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "NOTE",
-      "date_publication": "2025-08-07",
-      "description": "Note #indelebile",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "f8d35ce5-3eae-4198-9636-daeda3f3f1ad",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "NOTE",
-      "date_publication": "2025-08-05",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "b7b78b49-f723-4f09-8cfb-542aa48e44f4",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "AVIS",
-      "date_publication": "2025-08-03",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "e8474da3-54a5-4b80-ab76-26149b53ba1d",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
-      "type": "NOTE",
-      "date_publication": "2025-08-02",
-      "description": "Note #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "4cf7c800-12c5-4895-b073-4f0f729fdc55",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "NOTE",
-      "date_publication": "2025-08-01",
-      "description": "Note #robert-jr",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "a4143676-2e7b-49af-8e2d-c67bdecc34f0",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "NOTE",
-      "date_publication": "2025-08-01",
-      "description": "Note #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "2f226aec-cd92-4b3d-ad7e-99bb4bfbb60e",
-      "consultant_id": "c24ded6b-95bb-41bc-b674-0ec9610ea948",
+      "id": "37f2a1bc-7b6a-4f18-9c10-b2d7a9ee0037",
+      "consultant_id": "d8b6f1a2-3c4e-4b5d-8a76-9e0f1c2b7d04",
       "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-07-31",
-      "description": "Note #polene",
-      "heures": 0.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-09-27",
+      "description": "Monitoring jobs ETL",
+      "heures": 1,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000003",
+      "created_at": "2025-09-27T09:20:00.000Z",
+      "updated_at": "2025-09-27T09:20:00.000Z"
     },
     {
-      "id": "9f3d6b0e-55a8-462b-8c23-12e2cb70d3f4",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
+      "id": "38f2a1bc-7b6a-4f18-9c10-b2d7a9ee0038",
+      "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05",
       "type": "NOTE",
-      "date_publication": "2025-07-30",
-      "description": "Note #protocop",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "date_publication": "2025-09-26",
+      "description": "Notes cadrage sprint",
+      "created_at": "2025-09-26T10:30:00.000Z",
+      "updated_at": "2025-09-26T10:30:00.000Z"
     },
     {
-      "id": "ede56820-538d-4863-913d-0f92a1c6a0f4",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
-      "type": "AVIS",
-      "date_publication": "2025-07-30",
-      "description": "Note #goal-digger",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "eb063c7e-e676-40fc-813c-1f24228be0c6",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "NOTE",
-      "date_publication": "2025-07-28",
-      "description": "Note #soulgorithm",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "096bc56a-9c12-469b-888e-86a3a0d1545a",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "ALERTE",
-      "date_publication": "2025-07-22",
-      "description": "Note #robert-jr",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "04c4569d-aed5-4ad2-ae48-750ee6a5849d",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "ALERTE",
-      "date_publication": "2025-07-20",
-      "description": "Note #robert-jr",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "3e23b45a-1327-4bf0-99f2-fca85a6787c5",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
+      "id": "39f2a1bc-7b6a-4f18-9c10-b2d7a9ee0039",
+      "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03",
       "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-07-18",
-      "description": "Note #tarantino",
+      "date_publication": "2025-09-25",
+      "description": "Coaching vision produit",
+      "heures": 2,
+      "objectif_id": "11111111-aaaa-4444-8888-000000000004",
+      "created_at": "2025-09-25T14:15:00.000Z",
+      "updated_at": "2025-09-25T14:15:00.000Z"
+    },
+    {
+      "id": "40f2a1bc-7b6a-4f18-9c10-b2d7a9ee0040",
+      "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02",
+      "type": "ACTION_ST_BERNARD",
+      "date_publication": "2025-09-24",
+      "description": "Correction mapping données",
       "heures": 3,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "6421b3e2-b9e0-4400-99d2-46b871364a23",
-      "consultant_id": "56c64242-8584-488f-bc41-149de2a5c17d",
-      "type": "VERBATIM",
-      "date_publication": "2025-07-18",
-      "description": "« Point d’attention » #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "bb3c2f56-4ff1-4f32-8ca9-a3e4a7ce84b0",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-07-17",
-      "description": "Note #indelebile",
-      "heures": 0.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "4cf44c64-56d5-453d-b887-be35b80b83b2",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "VERBATIM",
-      "date_publication": "2025-07-13",
-      "description": "« Client hésitant » #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "234de5f4-1782-4973-a397-f2f37c301649",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "ALERTE",
-      "date_publication": "2025-07-12",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "e467e75d-1e50-4fa9-af94-52d1ffd66564",
-      "consultant_id": "d77828fc-95db-4fdb-9bfe-78ee0e5688c1",
-      "type": "VERBATIM",
-      "date_publication": "2025-07-11",
-      "description": "« Très bon retour » #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "c02e9da5-4e40-422b-9107-4fc86bddf354",
-      "consultant_id": "5b37dcd5-9271-4e5c-8083-2bb7ae2cea97",
-      "type": "AVIS",
-      "date_publication": "2025-07-10",
-      "description": "Note #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "9a938eb6-c668-4eb9-a917-5d77447ea99a",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "VERBATIM",
-      "date_publication": "2025-07-09",
-      "description": "« Roadmap claire » #polene",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "8c4b51fe-d39c-4f05-9ef8-0da41be09b0f",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "NOTE",
-      "date_publication": "2025-07-08",
-      "description": "Note #goal-digger",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "0c0e28fc-f1d5-4149-9a29-cfa5aa8bb0d8",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "ACTION_ST_BERNARD",
-      "date_publication": "2025-07-06",
-      "description": "Note #indelebile",
-      "heures": 2.5,
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "0f8b2460-639d-4f12-ab66-32fccd38d147",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "NOTE",
-      "date_publication": "2025-07-05",
-      "description": "Note #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "9c057769-e1a8-47cd-a8c6-a0ffc6614b82",
-      "consultant_id": "e84d091f-47ec-4295-975a-d535a454c7f8",
-      "type": "AVIS",
-      "date_publication": "2025-07-05",
-      "description": "Note #promptzilla",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "ac99e4c0-1c98-461e-bc10-5c7847982992",
-      "consultant_id": "a4814465-bb3f-403c-a132-2302e308d2a7",
-      "type": "NOTE",
-      "date_publication": "2025-07-02",
-      "description": "Note #le-cardinal",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "25e5751f-70b7-49f0-b367-d7033fe3f0b2",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "ALERTE",
-      "date_publication": "2025-07-02",
-      "description": "Note #indelebile",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "4c9307cf-9366-4f5d-ab55-4e3353a921de",
-      "consultant_id": "b72c9ba3-f9cf-4eaf-a517-0d193f286418",
-      "type": "NOTE",
-      "date_publication": "2025-06-29",
-      "description": "Note #indelebile",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "e6a191a5-8999-4b7a-9a7b-e81521496fb0",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "VERBATIM",
-      "date_publication": "2025-06-23",
-      "description": "« Client hésitant » #promptzilla",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
-    },
-    {
-      "id": "150b0087-b772-47d6-bc94-90c9fb1a5e50",
-      "consultant_id": "654cf03b-97d2-45be-ad57-7a4c2da21254",
-      "type": "AVIS",
-      "date_publication": "2025-06-21",
-      "description": "Note #tarantino",
-      "created_at": "2025-10-17T09:48:59.173Z",
-      "updated_at": "2025-10-17T09:48:59.173Z"
+      "objectif_id": "11111111-aaaa-4444-8888-000000000002",
+      "created_at": "2025-09-24T11:05:00.000Z",
+      "updated_at": "2025-09-24T11:05:00.000Z"
     }
   ],
-  "trends": [
+  "objectifs": [
     {
-      "id": "39b69328-9ac6-449f-9b14-ed44e4f20738",
-      "slug": "le-cardinal",
-      "label": "Le Cardinal"
+      "id": "11111111-aaaa-4444-8888-000000000001",
+      "titre": "Protocop",
+      "description": "MVP prototypage et cadrage",
+      "consultants": [
+        { "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01", "progression_pct": 65 },
+        { "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03", "progression_pct": 40 }
+      ],
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "e3a6741e-3481-4ca6-a1fa-ba919c93be84",
-      "slug": "robert-jr",
-      "label": "Robert Jr"
+      "id": "11111111-aaaa-4444-8888-000000000002",
+      "titre": "Go-Roadmap",
+      "description": "Ateliers et consolidation",
+      "consultants": [
+        { "consultant_id": "a4e9b0d6-2b3f-45d4-9d2a-5f3e1a7c8b02", "progression_pct": 55 },
+        { "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03", "progression_pct": 30 }
+      ],
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "3bb0c973-881e-4475-8e1d-40d5c3a5f7eb",
-      "slug": "gutenberg",
-      "label": "Gutenberg"
+      "id": "11111111-aaaa-4444-8888-000000000003",
+      "titre": "Sprint Planning",
+      "description": "Préparation et facilitation",
+      "consultants": [
+        { "consultant_id": "e1f2a3b4-5c6d-7e8f-9a01-2b3c4d5e6f05", "progression_pct": 50 }
+      ],
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     },
     {
-      "id": "3193b1df-516f-409d-8c41-a85b8a2bb77b",
-      "slug": "indelebile",
-      "label": "Indélébile"
-    },
-    {
-      "id": "3dd280f3-839b-4626-bd14-8b65f5f78043",
-      "slug": "protocop",
-      "label": "Protocop"
-    },
-    {
-      "id": "9d3b503f-a286-47f6-935a-a656da85a8a3",
-      "slug": "tarantino",
-      "label": "Tarantino"
-    },
-    {
-      "id": "c25c0373-4599-4ef2-86ed-bcfc44914d6f",
-      "slug": "goal-digger",
-      "label": "Goal Digger"
-    },
-    {
-      "id": "b1422c0e-961c-4217-91dd-f7fdfb89e9da",
-      "slug": "promptzilla",
-      "label": "Promptzilla"
-    },
-    {
-      "id": "64f16892-cb0c-4552-a324-216c03a24be6",
-      "slug": "soulgorithm",
-      "label": "Soulgorithm"
-    },
-    {
-      "id": "045c4420-d4e7-43b3-8d6b-afe955c5e405",
-      "slug": "polene",
-      "label": "PÔLÈNE"
+      "id": "11111111-aaaa-4444-8888-000000000004",
+      "titre": "Prompt IA",
+      "description": "Bibliothèque de prompts",
+      "consultants": [
+        { "consultant_id": "c2a1d0e5-8f74-4a6e-9a33-2b1f0d9e7c03", "progression_pct": 45 },
+        { "consultant_id": "7f5d3b2c-1d7a-4b2a-9a65-6e3a1e2f9a01", "progression_pct": 25 }
+      ],
+      "created_at": "2025-10-17T20:32:00.000Z",
+      "updated_at": "2025-10-17T20:32:00.000Z"
     }
   ],
-  "settings": {
+  "params": {
     "delai_alerte_jours": 7,
     "fin_mission_sous_jours": 60,
     "stb_recent_jours": 30,
-    "avis_manquant_depuis_jours": 60
+    "avis_manquant_depuis_jours": 60,
+    "objectif_recent_jours": 15,
+    "github_repo_fullname": "quangfr/sherpa"
+  },
+  "meta": {
+    "version": 4.1,
+    "updated_at": "2025-10-17T20:32:00.000Z"
   }
 }
