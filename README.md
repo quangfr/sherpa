@@ -149,4 +149,57 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 
 ## 8) États / couleurs
 - Pastille état consultant :
-  - 🔴 : `date_fin` passée **ou** ALERTE récente (≤ `delai_alerte_jou_
+  - 🔴 : `date_fin` passée **ou** ALERTE récente (≤ `delai_alerte_jours`)  
+  - 🟡 : `date_fin` dans `fin_mission_sous_jours` **ou** **pas de STB** dans `stb_recent_jours`  
+  - 🟢 : sinon  
+- **Badges type** = emoji + couleur dédiée (voir §6.2)
+
+---
+
+## 9) Sync GitHub 🔁
+### 9.1 Onglet **Sync**
+- **📋 Copier JSON** (dump complet du store)  
+- **🐙 Ouvrir Issue `[SYNC]`** (préremplie avec le JSON)  
+- **⬇️ Télécharger `data.json`**  
+- Champ **Repo** (`owner/repo`) ; si vide, utiliser `params.github_repo_fullname`  
+- Prévisualisation `<pre>` du JSON
+
+### 9.2 Workflow (côté dépôt)
+- Fichier attendu : `.github/workflows/sync-data-from-issue.yml`  
+- Déclenché sur issue contenant `[SYNC]` ; met à jour `data.json` depuis le corps de l’issue
+
+---
+
+## 10) Accessibilité / UX
+- Focus visible, boutons clavier-navigables  
+- Labels associés aux champs, `aria` sur dialogues si nécessaire  
+- Dialogs natifs `<dialog>` ; fermeture `Esc`
+
+---
+
+## 11) Performances & robustesse
+- **Aucune dépendance** externe (vanilla)  
+- Rendus par lot (DOM minimal), tri client  
+- Sauvegarde **atomique** (maj `updated_at`)  
+- **Échappement** HTML systématique des textes  
+- Comportement déterministe sans réseau (offline-first)
+
+---
+
+## 12) Seed (exemple embarqué)
+- 3 consultants (ex. Livier, Samuel, Léonard)  
+- 1 objectif (“Lancer sprints MAESTRO”) avec 2 consultants  
+- 5 activités (dont 2 **STB**) datées du jour
+
+---
+
+## 13) Critères d’acceptation ✅
+- Plein écran + 5 onglets fonctionnels (switch 1 vue à la fois)  
+- Dashboard calcule et liste correctement les 4 catégories  
+- Activité : **layout colonnes conforme** + types **emoji/couleur**  
+- Création/édition/suppression : **Consultant / Activité / Objectif** OK, validations OK  
+- Objectif : calcul **total** et **(+récent)** juste (paramétrable)  
+- Paramètres persistés et **répercutés** dans les titres Dashboard  
+- Sync : **copie**, **issue**, **download** opérationnels
+
+---
