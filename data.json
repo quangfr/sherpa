@@ -196,7 +196,7 @@
     {
       "id": "b3b57661-cf7b-4f93-a114-2f03407da5ec",
       "consultant_id": "f3e60b78-0421-40b3-a542-7e2de69ceafb",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-10-16",
       "description": "Feedback: retour positif sur la clarté des écrans.\nRisques: dépendance externe et dette tech à surveiller.\nPoint d'attention: attentes fortes sur la simplicité.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte utilisateur détaillé pour interpréter le propos.\nCitation verbatim collectée lors d'un entretien structuré.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.\nHypothèses: à valider lors du prochain point hebdo.\nBlocage: environnement de recette instable en fin de journée.\nContexte: échanges avec l'équipe et rappel des priorités.\nFeedback: retour positif sur la clarté des écrans. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)\nPoint d'attention: attentes fortes sur la simplicité. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -324,7 +324,7 @@
     {
       "id": "c55a74a8-9138-481a-9f4f-7ebd7e16d2fa",
       "consultant_id": "6805f93f-8b6a-4d7a-80b5-c1bc7d26bc8c",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-10-08",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -396,7 +396,7 @@
     {
       "id": "815bbd22-fdf3-4d51-aee4-baaf76d4deda",
       "consultant_id": "837fca3f-8167-45fa-8c5e-ed9feb626152",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-09-30",
       "description": "Contexte utilisateur détaillé pour interpréter le propos.\nRisques: dépendance externe et dette tech à surveiller.\nFeedback: retour positif sur la clarté des écrans.\nMesure: KPI de complétion et temps médian de traitement.\nHypothèses: à valider lors du prochain point hebdo.\nPoint d'attention: attentes fortes sur la simplicité.\nAction: suivi des anomalies critiques et priorisation.\nProchaines étapes: préparer un test utilisateur ciblé.\nContexte: échanges avec l'équipe et rappel des priorités.\nDécisions: en attente d'un arbitrage produit.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nCitation verbatim collectée lors d'un entretien structuré.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -564,7 +564,7 @@
     {
       "id": "d2a91d0d-9efa-4ed7-9114-ec8cfe5ef45f",
       "consultant_id": "23594882-83a6-4580-9a9f-a9ee69cc06af",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-09-22",
       "description": "Blocage: environnement de recette instable en fin de journée.\nPoint d'attention: attentes fortes sur la simplicité.\nAction: suivi des anomalies critiques et priorisation.\nProchaines étapes: préparer un test utilisateur ciblé.\nHypothèses: à valider lors du prochain point hebdo.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.\nCitation verbatim collectée lors d'un entretien structuré.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -634,7 +634,7 @@
     {
       "id": "8a91936f-31df-4d92-b1c8-702423bc7526",
       "consultant_id": "37226c54-e0fd-4a48-9782-807eca67b1e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-09-19",
       "description": "Risques: dépendance externe et dette tech à surveiller.\nAction: suivi des anomalies critiques et priorisation.\nFeedback: retour positif sur la clarté des écrans.\nAlignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -769,7 +769,7 @@
     {
       "id": "21b72328-bb1f-4fc3-a2f7-427111e4efe5",
       "consultant_id": "37226c54-e0fd-4a48-9782-807eca67b1e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-09-10",
       "description": "Risques: dépendance externe et dette tech à surveiller.\nMesure: KPI de complétion et temps médian de traitement.\nCitation verbatim collectée lors d'un entretien structuré.\nDécisions: en attente d'un arbitrage produit.\nHypothèses: à valider lors du prochain point hebdo.\nProchaines étapes: préparer un test utilisateur ciblé.\nAction: suivi des anomalies critiques et priorisation.\nBlocage: environnement de recette instable en fin de journée.\nContexte utilisateur détaillé pour interpréter le propos.\nFeedback: retour positif sur la clarté des écrans.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.\nRisques: dépendance externe et dette tech à surveiller. (v2)\nMesure: KPI de complétion et temps médian de traitement. (v2)\nCitation verbatim collectée lors d'un entretien structuré. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -779,7 +779,7 @@
     {
       "id": "e122d521-d3c6-4f32-b867-09f6b20a3f3b",
       "consultant_id": "f3e60b78-0421-40b3-a542-7e2de69ceafb",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-09-10",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nDécisions: en attente d'un arbitrage produit.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -1093,7 +1093,7 @@
     {
       "id": "1f3b71a6-dea4-413d-933b-273c73ce9720",
       "consultant_id": "6f6048b2-c237-4525-b2b2-f962be8083a5",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-08-26",
       "description": "Feedback: retour positif sur la clarté des écrans.\nMesure: KPI de complétion et temps médian de traitement.\nBlocage: environnement de recette instable en fin de journée.\nPoint d'attention: attentes fortes sur la simplicité.\nHypothèses: à valider lors du prochain point hebdo.\nDécisions: en attente d'un arbitrage produit.\nRisques: dépendance externe et dette tech à surveiller.\nAlignement: partage sur le canal projet et note de synthèse.\nProchaines étapes: préparer un test utilisateur ciblé.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -1260,7 +1260,7 @@
     {
       "id": "6060b5dd-2871-4ed6-905a-d0afcb82462f",
       "consultant_id": "81eb7242-d517-46a3-8b8a-c048794eec74",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-08-18",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nAlignement: partage sur le canal projet et note de synthèse.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nProchaines étapes: préparer un test utilisateur ciblé.\nFeedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -1333,7 +1333,7 @@
     {
       "id": "b984a06b-d5c4-41fc-a865-0c3e1505c631",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-08-10",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nAction: suivi des anomalies critiques et priorisation.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nProchaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré.\nContexte utilisateur détaillé pour interpréter le propos.\nBlocage: environnement de recette instable en fin de journée.\nDécisions: en attente d'un arbitrage produit.\nMesure: KPI de complétion et temps médian de traitement.\nRisques: dépendance externe et dette tech à surveiller.\nFeedback: retour positif sur la clarté des écrans.\nAlignement: partage sur le canal projet et note de synthèse.\nHypothèses: à valider lors du prochain point hebdo. (v2)\nAction: suivi des anomalies critiques et priorisation. (v2)\nPoint d'attention: attentes fortes sur la simplicité. (v2)\nContexte: échanges avec l'équipe et rappel des priorités. (v2)\nProchaines étapes: préparer un test utilisateur ciblé. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -1362,7 +1362,7 @@
     {
       "id": "62831c35-ccc2-4312-9ce9-95da119d1b50",
       "consultant_id": "02035608-a85a-4070-810e-447938f1e4e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-08-09",
       "description": "Action: suivi des anomalies critiques et priorisation.\nPoint d'attention: attentes fortes sur la simplicité.\nDécisions: en attente d'un arbitrage produit.\nFeedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.\nMesure: KPI de complétion et temps médian de traitement.\nProchaines étapes: préparer un test utilisateur ciblé.\nContexte: échanges avec l'équipe et rappel des priorités.\nCitation verbatim collectée lors d'un entretien structuré.\nHypothèses: à valider lors du prochain point hebdo.\nAlignement: partage sur le canal projet et note de synthèse.\nBlocage: environnement de recette instable en fin de journée.\nRisques: dépendance externe et dette tech à surveiller.\nAction: suivi des anomalies critiques et priorisation. (v2)\nPoint d'attention: attentes fortes sur la simplicité. (v2)\nDécisions: en attente d'un arbitrage produit. (v2)\nFeedback: retour positif sur la clarté des écrans. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -1464,7 +1464,7 @@
     {
       "id": "c9ae4877-8640-46aa-8d25-1436e9a766b5",
       "consultant_id": "0b4351a7-58d5-4912-a4bd-dd6f763b43d8",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-08-01",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.\nFeedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -1607,7 +1607,7 @@
     {
       "id": "07edb8ab-2936-494b-8e6d-bd3105932917",
       "consultant_id": "ccbd0c93-47e4-4847-bb0c-f793d3feaa59",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-07-21",
       "description": "Mesure: KPI de complétion et temps médian de traitement.\nProchaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré.\nRisques: dépendance externe et dette tech à surveiller.\nBlocage: environnement de recette instable en fin de journée.\nAction: suivi des anomalies critiques et priorisation.\nDécisions: en attente d'un arbitrage produit.\nPoint d'attention: attentes fortes sur la simplicité.\nFeedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.\nAlignement: partage sur le canal projet et note de synthèse.\nHypothèses: à valider lors du prochain point hebdo.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement. (v2)\nProchaines étapes: préparer un test utilisateur ciblé. (v2)\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)\nBlocage: environnement de recette instable en fin de journée. (v2)\nAction: suivi des anomalies critiques et priorisation. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -1810,7 +1810,7 @@
     {
       "id": "e904875c-3410-45d0-b523-16e2a15bbd96",
       "consultant_id": "02035608-a85a-4070-810e-447938f1e4e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-07-02",
       "description": "Risques: dépendance externe et dette tech à surveiller.\nDécisions: en attente d'un arbitrage produit.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2033,7 +2033,7 @@
     {
       "id": "bdca1cce-1211-4b0d-89ee-229b08d1e7cd",
       "consultant_id": "837fca3f-8167-45fa-8c5e-ed9feb626152",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-06-12",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nCitation verbatim collectée lors d'un entretien structuré.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nFeedback: retour positif sur la clarté des écrans.\nBlocage: environnement de recette instable en fin de journée.\nContexte: échanges avec l'équipe et rappel des priorités.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte utilisateur détaillé pour interpréter le propos.\nProchaines étapes: préparer un test utilisateur ciblé.\nDécisions: en attente d'un arbitrage produit.\nHypothèses: à valider lors du prochain point hebdo.\nRisques: dépendance externe et dette tech à surveiller.\nPoint d'attention: attentes fortes sur la simplicité. (v2)\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nAction: suivi des anomalies critiques et priorisation. (v2)\nMesure: KPI de complétion et temps médian de traitement. (v2)\nFeedback: retour positif sur la clarté des écrans. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2074,7 +2074,7 @@
     {
       "id": "f3be316e-9e5b-40e4-8270-bfdb6e6179be",
       "consultant_id": "02035608-a85a-4070-810e-447938f1e4e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-06-10",
       "description": "Mesure: KPI de complétion et temps médian de traitement.\nAction: suivi des anomalies critiques et priorisation.\nAlignement: partage sur le canal projet et note de synthèse.\nHypothèses: à valider lors du prochain point hebdo.\nProchaines étapes: préparer un test utilisateur ciblé.\nFeedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.\nDécisions: en attente d'un arbitrage produit.\nCitation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.\nRisques: dépendance externe et dette tech à surveiller.\nMesure: KPI de complétion et temps médian de traitement. (v2)\nAction: suivi des anomalies critiques et priorisation. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2156,7 +2156,7 @@
     {
       "id": "e958f13e-f61e-44bf-bebe-77e8ef6d24dd",
       "consultant_id": "39008734-90c7-4ae3-b7fd-e06d1e0ab056",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-06-06",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nHypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.\nDécisions: en attente d'un arbitrage produit.\nContexte utilisateur détaillé pour interpréter le propos.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.\nRisques: dépendance externe et dette tech à surveiller.\nAction: suivi des anomalies critiques et priorisation.\nBlocage: environnement de recette instable en fin de journée.\nMesure: KPI de complétion et temps médian de traitement.\nAlignement: partage sur le canal projet et note de synthèse.\nProchaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nHypothèses: à valider lors du prochain point hebdo. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2301,7 +2301,7 @@
     {
       "id": "823f8252-3bed-43f3-908e-e8cc703fa74d",
       "consultant_id": "86b971a6-3066-4b03-bb92-3a835b527fe1",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-05-26",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nAction: suivi des anomalies critiques et priorisation.\nAlignement: partage sur le canal projet et note de synthèse.\nBlocage: environnement de recette instable en fin de journée.\nCitation verbatim collectée lors d'un entretien structuré.\nFeedback: retour positif sur la clarté des écrans.\nContexte: échanges avec l'équipe et rappel des priorités.\nDécisions: en attente d'un arbitrage produit.\nMesure: KPI de complétion et temps médian de traitement.\nRisques: dépendance externe et dette tech à surveiller.\nHypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2319,7 +2319,7 @@
     {
       "id": "d0a833b7-7b6c-483d-94d7-95306317d308",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-05-25",
       "description": "Décisions: en attente d'un arbitrage produit.\nRisques: dépendance externe et dette tech à surveiller.\nAlignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2329,7 +2329,7 @@
     {
       "id": "bd9673fb-26ae-44bd-af79-8d8e576042cd",
       "consultant_id": "86b971a6-3066-4b03-bb92-3a835b527fe1",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-05-25",
       "description": "Contexte utilisateur détaillé pour interpréter le propos.\nProchaines étapes: préparer un test utilisateur ciblé.\nPoint d'attention: attentes fortes sur la simplicité.\nBlocage: environnement de recette instable en fin de journée.\nCitation verbatim collectée lors d'un entretien structuré.\nRisques: dépendance externe et dette tech à surveiller.\nMesure: KPI de complétion et temps médian de traitement.\nDécisions: en attente d'un arbitrage produit.\nContexte: échanges avec l'équipe et rappel des priorités.\nFeedback: retour positif sur la clarté des écrans.\nAlignement: partage sur le canal projet et note de synthèse.\nAction: suivi des anomalies critiques et priorisation.\nHypothèses: à valider lors du prochain point hebdo.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2383,7 +2383,7 @@
     {
       "id": "85abec6c-3fca-4cb7-b0c2-e39d0d36148b",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-05-22",
       "description": "Prochaines étapes: préparer un test utilisateur ciblé.\nContexte: échanges avec l'équipe et rappel des priorités.\nAction: suivi des anomalies critiques et priorisation.\nRisques: dépendance externe et dette tech à surveiller.\nAlignement: partage sur le canal projet et note de synthèse.\nBlocage: environnement de recette instable en fin de journée.\nDécisions: en attente d'un arbitrage produit.\nCitation verbatim collectée lors d'un entretien structuré.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2412,7 +2412,7 @@
     {
       "id": "c0795dfd-919f-4948-9d96-0d8ee68e791d",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-05-20",
       "description": "Alignement: partage sur le canal projet et note de synthèse.\nProchaines étapes: préparer un test utilisateur ciblé.\nBlocage: environnement de recette instable en fin de journée.\nContexte utilisateur détaillé pour interpréter le propos.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2560,7 +2560,7 @@
     {
       "id": "b0ab907d-9022-45c5-947f-42d4149c9b5c",
       "consultant_id": "23594882-83a6-4580-9a9f-a9ee69cc06af",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-05-12",
       "description": "Alignement: partage sur le canal projet et note de synthèse.\nProchaines étapes: préparer un test utilisateur ciblé.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2675,7 +2675,7 @@
     {
       "id": "500f02a6-3f01-475f-adb5-de511cf1992f",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-05-05",
       "description": "Feedback: retour positif sur la clarté des écrans.\nProchaines étapes: préparer un test utilisateur ciblé.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2927,7 +2927,7 @@
     {
       "id": "15bf9696-c4ac-4d1b-ae5a-839ba5ba47d9",
       "consultant_id": "39008734-90c7-4ae3-b7fd-e06d1e0ab056",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-04-16",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.\nAction: suivi des anomalies critiques et priorisation.\nProchaines étapes: préparer un test utilisateur ciblé.\nFeedback: retour positif sur la clarté des écrans.\nRisques: dépendance externe et dette tech à surveiller.\nAlignement: partage sur le canal projet et note de synthèse.\nPoint d'attention: attentes fortes sur la simplicité.\nCitation verbatim collectée lors d'un entretien structuré.\nDécisions: en attente d'un arbitrage produit.\nBlocage: environnement de recette instable en fin de journée.\nMesure: KPI de complétion et temps médian de traitement.\nContexte: échanges avec l'équipe et rappel des priorités.\nHypothèses: à valider lors du prochain point hebdo. (v2)\nContexte utilisateur détaillé pour interpréter le propos. (v2)\nAction: suivi des anomalies critiques et priorisation. (v2)\nProchaines étapes: préparer un test utilisateur ciblé. (v2)\nFeedback: retour positif sur la clarté des écrans. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -2978,7 +2978,7 @@
     {
       "id": "afa63f83-39d6-4a58-9726-a048543b3480",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-04-12",
       "description": "Citation verbatim collectée lors d'un entretien structuré.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3053,7 +3053,7 @@
     {
       "id": "95cdc8c8-6222-4be0-9ac2-de95835984d2",
       "consultant_id": "02035608-a85a-4070-810e-447938f1e4e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-04-06",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.\nMesure: KPI de complétion et temps médian de traitement.\nRisques: dépendance externe et dette tech à surveiller.\nCitation verbatim collectée lors d'un entretien structuré.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nBlocage: environnement de recette instable en fin de journée.\nFeedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.\nAction: suivi des anomalies critiques et priorisation.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3062,7 +3062,7 @@
     {
       "id": "730a2fd6-2c4a-4e7a-8278-89a6d161331a",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-04-05",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée.\nRisques: dépendance externe et dette tech à surveiller.\nContexte utilisateur détaillé pour interpréter le propos.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nAlignement: partage sur le canal projet et note de synthèse.\nHypothèses: à valider lors du prochain point hebdo.\nProchaines étapes: préparer un test utilisateur ciblé.\nDécisions: en attente d'un arbitrage produit.\nFeedback: retour positif sur la clarté des écrans.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nBlocage: environnement de recette instable en fin de journée. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)\nContexte utilisateur détaillé pour interpréter le propos. (v2)\nPoint d'attention: attentes fortes sur la simplicité. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3234,7 +3234,7 @@
     {
       "id": "61ab174e-839a-47ab-bfe3-0ff2b068b75f",
       "consultant_id": "a78dba16-4e89-4353-ad2c-89ec888a0e1d",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-03-24",
       "description": "Risques: dépendance externe et dette tech à surveiller.\nContexte utilisateur détaillé pour interpréter le propos.\nContexte: échanges avec l'équipe et rappel des priorités.\nProchaines étapes: préparer un test utilisateur ciblé.\nFeedback: retour positif sur la clarté des écrans.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nHypothèses: à valider lors du prochain point hebdo.\nBlocage: environnement de recette instable en fin de journée.\nPoint d'attention: attentes fortes sur la simplicité.\nCitation verbatim collectée lors d'un entretien structuré.\nDécisions: en attente d'un arbitrage produit.\nAlignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3287,7 +3287,7 @@
     {
       "id": "9cc1a374-e0c6-4751-bf00-5b08bd0d3cc8",
       "consultant_id": "6805f93f-8b6a-4d7a-80b5-c1bc7d26bc8c",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-03-20",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nContexte utilisateur détaillé pour interpréter le propos.\nProchaines étapes: préparer un test utilisateur ciblé.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.\nMesure: KPI de complétion et temps médian de traitement.\nAlignement: partage sur le canal projet et note de synthèse.\nFeedback: retour positif sur la clarté des écrans.\nAction: suivi des anomalies critiques et priorisation.\nHypothèses: à valider lors du prochain point hebdo.\nBlocage: environnement de recette instable en fin de journée.\nDécisions: en attente d'un arbitrage produit.\nRisques: dépendance externe et dette tech à surveiller.\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nContexte utilisateur détaillé pour interpréter le propos. (v2)\nProchaines étapes: préparer un test utilisateur ciblé. (v2)\nContexte: échanges avec l'équipe et rappel des priorités. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3429,7 +3429,7 @@
     {
       "id": "431a5bc9-1ea8-47d3-a1b8-c307b9561d2d",
       "consultant_id": "ccbd0c93-47e4-4847-bb0c-f793d3feaa59",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-03-13",
       "description": "Action: suivi des anomalies critiques et priorisation.\nPoint d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3591,7 +3591,7 @@
     {
       "id": "32d841c6-79b2-46a9-81ec-5423a895dc31",
       "consultant_id": "ebc4dcc2-4dc0-4878-b2ec-e69fac2622a6",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-03-03",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3621,7 +3621,7 @@
     {
       "id": "929991cf-937b-419e-9b4e-8ae20fdeaa2d",
       "consultant_id": "86b971a6-3066-4b03-bb92-3a835b527fe1",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-03-01",
       "description": "Feedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3671,7 +3671,7 @@
     {
       "id": "c4dd28f2-6ddb-406a-85e6-6551bcfe445e",
       "consultant_id": "837fca3f-8167-45fa-8c5e-ed9feb626152",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-02-25",
       "description": "Contexte utilisateur détaillé pour interpréter le propos.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nAction: suivi des anomalies critiques et priorisation.\nHypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3764,7 +3764,7 @@
     {
       "id": "f213facc-92d7-4330-acbc-4c617c3a3cdf",
       "consultant_id": "02035608-a85a-4070-810e-447938f1e4e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-02-20",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nAlignement: partage sur le canal projet et note de synthèse.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nProchaines étapes: préparer un test utilisateur ciblé.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -3868,7 +3868,7 @@
     {
       "id": "b88dd448-0e01-4aac-8a82-307676ac6888",
       "consultant_id": "0b4351a7-58d5-4912-a4bd-dd6f763b43d8",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-02-14",
       "description": "Mesure: KPI de complétion et temps médian de traitement.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4027,7 +4027,7 @@
     {
       "id": "53f14023-ed97-4e9d-8b14-eb2844739a3c",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-01-29",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4047,7 +4047,7 @@
     {
       "id": "b9baf167-404c-4ef4-afd7-80c824bac912",
       "consultant_id": "08e9e32e-61c0-49a4-8685-863be5b2e1d9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2025-01-28",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.\nCitation verbatim collectée lors d'un entretien structuré.\nPoint d'attention: attentes fortes sur la simplicité.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4528,7 +4528,7 @@
     {
       "id": "1dd9e3fd-6b27-42da-a6de-95c62af27856",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-12-30",
       "description": "Alignement: partage sur le canal projet et note de synthèse.\nPoint d'attention: attentes fortes sur la simplicité.\nFeedback: retour positif sur la clarté des écrans.\nCitation verbatim collectée lors d'un entretien structuré.\nProchaines étapes: préparer un test utilisateur ciblé.\nAction: suivi des anomalies critiques et priorisation.\nContexte utilisateur détaillé pour interpréter le propos.\nContexte: échanges avec l'équipe et rappel des priorités.\nHypothèses: à valider lors du prochain point hebdo.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4631,7 +4631,7 @@
     {
       "id": "5016b53d-60f4-4547-9c0f-19b489bac442",
       "consultant_id": "f3e60b78-0421-40b3-a542-7e2de69ceafb",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-12-21",
       "description": "Blocage: environnement de recette instable en fin de journée.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4671,7 +4671,7 @@
     {
       "id": "b2523684-cafb-4133-8db5-d9ebd81779f6",
       "consultant_id": "23594882-83a6-4580-9a9f-a9ee69cc06af",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-12-19",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nFeedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4680,7 +4680,7 @@
     {
       "id": "a4c90826-3842-45e7-9e1d-1ccda863677a",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-12-19",
       "description": "Décisions: en attente d'un arbitrage produit.\nHypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.\nAlignement: partage sur le canal projet et note de synthèse.\nCitation verbatim collectée lors d'un entretien structuré.\nPoint d'attention: attentes fortes sur la simplicité.\nProchaines étapes: préparer un test utilisateur ciblé.\nBlocage: environnement de recette instable en fin de journée.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4812,7 +4812,7 @@
     {
       "id": "48d42c07-564f-492a-8e6e-69b6787c53b6",
       "consultant_id": "6805f93f-8b6a-4d7a-80b5-c1bc7d26bc8c",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-12-11",
       "description": "Contexte utilisateur détaillé pour interpréter le propos.\nDécisions: en attente d'un arbitrage produit.\nMesure: KPI de complétion et temps médian de traitement.\nRisques: dépendance externe et dette tech à surveiller.\nFeedback: retour positif sur la clarté des écrans.\nHypothèses: à valider lors du prochain point hebdo.\nAction: suivi des anomalies critiques et priorisation.\nProchaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4873,7 +4873,7 @@
     {
       "id": "7bdef4b5-0d78-4b07-950f-f220f440f8fe",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-12-04",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.\nPoint d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -4999,7 +4999,7 @@
     {
       "id": "37820950-913c-4cba-b897-ddfdf8758446",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-11-27",
       "description": "Décisions: en attente d'un arbitrage produit.\nFeedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -5040,7 +5040,7 @@
     {
       "id": "c677eb46-f670-4752-be77-9edb83e47ca1",
       "consultant_id": "590b1b30-a1ff-4115-a056-94b07e3d1c55",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-11-25",
       "description": "Alignement: partage sur le canal projet et note de synthèse.\nCitation verbatim collectée lors d'un entretien structuré.\nContexte utilisateur détaillé pour interpréter le propos.\nBlocage: environnement de recette instable en fin de journée.\nHypothèses: à valider lors du prochain point hebdo.\nProchaines étapes: préparer un test utilisateur ciblé.\nMesure: KPI de complétion et temps médian de traitement.\nDécisions: en attente d'un arbitrage produit.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nRisques: dépendance externe et dette tech à surveiller.\nAction: suivi des anomalies critiques et priorisation.\nFeedback: retour positif sur la clarté des écrans.\nAlignement: partage sur le canal projet et note de synthèse. (v2)\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nContexte utilisateur détaillé pour interpréter le propos. (v2)\nBlocage: environnement de recette instable en fin de journée. (v2)\nHypothèses: à valider lors du prochain point hebdo. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -5241,7 +5241,7 @@
     {
       "id": "cd0188b1-d703-4afa-b6ca-c63a81d905aa",
       "consultant_id": "6f6048b2-c237-4525-b2b2-f962be8083a5",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-11-13",
       "description": "Hypothèses: à valider lors du prochain point hebdo.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -5333,7 +5333,7 @@
     {
       "id": "6488469d-7c98-484c-803c-287984e1bcb0",
       "consultant_id": "39008734-90c7-4ae3-b7fd-e06d1e0ab056",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-11-05",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nBlocage: environnement de recette instable en fin de journée.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nFeedback: retour positif sur la clarté des écrans.\nAlignement: partage sur le canal projet et note de synthèse.\nDécisions: en attente d'un arbitrage produit.\nHypothèses: à valider lors du prochain point hebdo.\nCitation verbatim collectée lors d'un entretien structuré.\nContexte utilisateur détaillé pour interpréter le propos.\nProchaines étapes: préparer un test utilisateur ciblé.\nRisques: dépendance externe et dette tech à surveiller.\nPoint d'attention: attentes fortes sur la simplicité. (v2)\nContexte: échanges avec l'équipe et rappel des priorités. (v2)\nBlocage: environnement de recette instable en fin de journée. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -5353,7 +5353,7 @@
     {
       "id": "2090d4b5-f46d-4d3a-8a8a-bb8297f531c8",
       "consultant_id": "37226c54-e0fd-4a48-9782-807eca67b1e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-11-02",
       "description": "Alignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -5579,7 +5579,7 @@
     {
       "id": "6ab67628-879b-4af6-adcb-2666f75da692",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-10-09",
       "description": "Action: suivi des anomalies critiques et priorisation.\nFeedback: retour positif sur la clarté des écrans.\nBlocage: environnement de recette instable en fin de journée.\nMesure: KPI de complétion et temps médian de traitement.\nProchaines étapes: préparer un test utilisateur ciblé.\nRisques: dépendance externe et dette tech à surveiller.\nPoint d'attention: attentes fortes sur la simplicité.\nHypothèses: à valider lors du prochain point hebdo.\nCitation verbatim collectée lors d'un entretien structuré.\nDécisions: en attente d'un arbitrage produit.\nContexte utilisateur détaillé pour interpréter le propos.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte: échanges avec l'équipe et rappel des priorités.\nAction: suivi des anomalies critiques et priorisation. (v2)\nFeedback: retour positif sur la clarté des écrans. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -5684,7 +5684,7 @@
     {
       "id": "57f5fedc-105e-42f5-90df-65c39083c683",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-10-02",
       "description": "Alignement: partage sur le canal projet et note de synthèse.\nCitation verbatim collectée lors d'un entretien structuré.\nAction: suivi des anomalies critiques et priorisation.\nRisques: dépendance externe et dette tech à surveiller.\nProchaines étapes: préparer un test utilisateur ciblé.\nHypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.\nBlocage: environnement de recette instable en fin de journée.\nDécisions: en attente d'un arbitrage produit.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.\nFeedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6011,7 +6011,7 @@
     {
       "id": "c126c709-6463-4a4b-b3fa-e5d2f0b6fef2",
       "consultant_id": "a78dba16-4e89-4353-ad2c-89ec888a0e1d",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-09-11",
       "description": "Mesure: KPI de complétion et temps médian de traitement.\nDécisions: en attente d'un arbitrage produit.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6043,7 +6043,7 @@
     {
       "id": "a3e1b637-a558-4a9e-b172-bdf3ff70e651",
       "consultant_id": "39584f86-4609-4882-bfa7-e8e1e91e619e",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-09-10",
       "description": "Action: suivi des anomalies critiques et priorisation.\nProchaines étapes: préparer un test utilisateur ciblé.\nBlocage: environnement de recette instable en fin de journée.\nMesure: KPI de complétion et temps médian de traitement.\nContexte: échanges avec l'équipe et rappel des priorités.\nHypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.\nRisques: dépendance externe et dette tech à surveiller.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6063,7 +6063,7 @@
     {
       "id": "1454c699-31c3-483e-9fd0-a3815222a0b5",
       "consultant_id": "23594882-83a6-4580-9a9f-a9ee69cc06af",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-09-09",
       "description": "Blocage: environnement de recette instable en fin de journée.\nFeedback: retour positif sur la clarté des écrans.\nRisques: dépendance externe et dette tech à surveiller.\nHypothèses: à valider lors du prochain point hebdo.\nAction: suivi des anomalies critiques et priorisation.\nPoint d'attention: attentes fortes sur la simplicité.\nProchaines étapes: préparer un test utilisateur ciblé.\nDécisions: en attente d'un arbitrage produit.\nContexte utilisateur détaillé pour interpréter le propos.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.\nCitation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée. (v2)\nFeedback: retour positif sur la clarté des écrans. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)\nHypothèses: à valider lors du prochain point hebdo. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6158,7 +6158,7 @@
     {
       "id": "e30eef96-49d0-4e55-b87f-1b8f66773d27",
       "consultant_id": "0b4351a7-58d5-4912-a4bd-dd6f763b43d8",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-09-02",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.\nProchaines étapes: préparer un test utilisateur ciblé.\nHypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.\nMesure: KPI de complétion et temps médian de traitement.\nDécisions: en attente d'un arbitrage produit.\nContexte utilisateur détaillé pour interpréter le propos.\nAction: suivi des anomalies critiques et priorisation.\nRisques: dépendance externe et dette tech à surveiller.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nPoint d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6178,7 +6178,7 @@
     {
       "id": "0c09584b-f349-4631-b559-987727e32c64",
       "consultant_id": "f3e60b78-0421-40b3-a542-7e2de69ceafb",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-08-31",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.\nHypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6412,7 +6412,7 @@
     {
       "id": "327c7c71-d9af-4222-9b7e-dfbfabe2da13",
       "consultant_id": "08e9e32e-61c0-49a4-8685-863be5b2e1d9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-08-14",
       "description": "Feedback: retour positif sur la clarté des écrans.\nMesure: KPI de complétion et temps médian de traitement.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6464,7 +6464,7 @@
     {
       "id": "49a07d36-6bd7-46da-93e7-67849b274d5e",
       "consultant_id": "f3e60b78-0421-40b3-a542-7e2de69ceafb",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-08-10",
       "description": "Feedback: retour positif sur la clarté des écrans.\nCitation verbatim collectée lors d'un entretien structuré.\nContexte utilisateur détaillé pour interpréter le propos.\nAlignement: partage sur le canal projet et note de synthèse.\nRisques: dépendance externe et dette tech à surveiller.\nProchaines étapes: préparer un test utilisateur ciblé.\nBlocage: environnement de recette instable en fin de journée.\nContexte: échanges avec l'équipe et rappel des priorités.\nHypothèses: à valider lors du prochain point hebdo.\nMesure: KPI de complétion et temps médian de traitement.\nAction: suivi des anomalies critiques et priorisation.\nDécisions: en attente d'un arbitrage produit.\nPoint d'attention: attentes fortes sur la simplicité.\nFeedback: retour positif sur la clarté des écrans. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6636,7 +6636,7 @@
     {
       "id": "a15c9ab6-8ab9-419d-a78f-7bb6d0fcc6d2",
       "consultant_id": "81eb7242-d517-46a3-8b8a-c048794eec74",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-07-27",
       "description": "Mesure: KPI de complétion et temps médian de traitement.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -6834,7 +6834,7 @@
     {
       "id": "d9e0a900-742b-4342-b9d9-15c4a3fc6382",
       "consultant_id": "39584f86-4609-4882-bfa7-e8e1e91e619e",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-07-13",
       "description": "Prochaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7072,7 +7072,7 @@
     {
       "id": "dcb6a7b7-fbc1-4d6b-ac8e-85cc10d49c19",
       "consultant_id": "39008734-90c7-4ae3-b7fd-e06d1e0ab056",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-06-29",
       "description": "Prochaines étapes: préparer un test utilisateur ciblé.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7186,7 +7186,7 @@
     {
       "id": "9f1b2cc2-3a03-463b-aeec-4625e611f91c",
       "consultant_id": "f3e60b78-0421-40b3-a542-7e2de69ceafb",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-06-17",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7334,7 +7334,7 @@
     {
       "id": "f6ea7ac7-7767-4c33-b789-4c9a2c146ef4",
       "consultant_id": "6f6048b2-c237-4525-b2b2-f962be8083a5",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-06-07",
       "description": "Feedback: retour positif sur la clarté des écrans.\nCitation verbatim collectée lors d'un entretien structuré.\nContexte: échanges avec l'équipe et rappel des priorités.\nContexte utilisateur détaillé pour interpréter le propos.\nMesure: KPI de complétion et temps médian de traitement.\nProchaines étapes: préparer un test utilisateur ciblé.\nAction: suivi des anomalies critiques et priorisation.\nAlignement: partage sur le canal projet et note de synthèse.\nDécisions: en attente d'un arbitrage produit.\nPoint d'attention: attentes fortes sur la simplicité.\nBlocage: environnement de recette instable en fin de journée.\nHypothèses: à valider lors du prochain point hebdo.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7365,7 +7365,7 @@
     {
       "id": "b2ddeaec-9098-4afe-b715-35501b04d9ee",
       "consultant_id": "37226c54-e0fd-4a48-9782-807eca67b1e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-06-05",
       "description": "Risques: dépendance externe et dette tech à surveiller.\nCitation verbatim collectée lors d'un entretien structuré.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7384,7 +7384,7 @@
     {
       "id": "c890ee9e-d862-4a64-98d9-58b08e730708",
       "consultant_id": "a78dba16-4e89-4353-ad2c-89ec888a0e1d",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-06-03",
       "description": "Contexte utilisateur détaillé pour interpréter le propos.\nMesure: KPI de complétion et temps médian de traitement.\nProchaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré.\nAlignement: partage sur le canal projet et note de synthèse.\nHypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.\nBlocage: environnement de recette instable en fin de journée.\nDécisions: en attente d'un arbitrage produit.\nPoint d'attention: attentes fortes sur la simplicité.\nAction: suivi des anomalies critiques et priorisation.\nContexte: échanges avec l'équipe et rappel des priorités.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7553,7 +7553,7 @@
     {
       "id": "de0a79ee-3e97-4c17-a425-5eca997ff39c",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-05-21",
       "description": "Contexte utilisateur détaillé pour interpréter le propos.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte: échanges avec l'équipe et rappel des priorités.\nBlocage: environnement de recette instable en fin de journée.\nPoint d'attention: attentes fortes sur la simplicité.\nRisques: dépendance externe et dette tech à surveiller.\nHypothèses: à valider lors du prochain point hebdo.\nMesure: KPI de complétion et temps médian de traitement.\nCitation verbatim collectée lors d'un entretien structuré.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7624,7 +7624,7 @@
     {
       "id": "7a558e86-b7ee-4f88-9472-ade996be25c4",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-05-15",
       "description": "Blocage: environnement de recette instable en fin de journée.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.\nCitation verbatim collectée lors d'un entretien structuré.\nRisques: dépendance externe et dette tech à surveiller.\nPoint d'attention: attentes fortes sur la simplicité.\nDécisions: en attente d'un arbitrage produit.\nAlignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7663,7 +7663,7 @@
     {
       "id": "49c34cdd-49c1-4a63-9702-c3b5d3a656d3",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-05-11",
       "description": "Action: suivi des anomalies critiques et priorisation.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nProchaines étapes: préparer un test utilisateur ciblé.\nRisques: dépendance externe et dette tech à surveiller.\nCitation verbatim collectée lors d'un entretien structuré.\nContexte: échanges avec l'équipe et rappel des priorités.\nDécisions: en attente d'un arbitrage produit.\nFeedback: retour positif sur la clarté des écrans.\nPoint d'attention: attentes fortes sur la simplicité.\nHypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.\nMesure: KPI de complétion et temps médian de traitement.\nAction: suivi des anomalies critiques et priorisation. (v2)\nBlocage: environnement de recette instable en fin de journée. (v2)\nAlignement: partage sur le canal projet et note de synthèse. (v2)\nProchaines étapes: préparer un test utilisateur ciblé. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7694,7 +7694,7 @@
     {
       "id": "20fa7275-0402-4b11-a282-f28636136925",
       "consultant_id": "86b971a6-3066-4b03-bb92-3a835b527fe1",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-05-08",
       "description": "Risques: dépendance externe et dette tech à surveiller.\nDécisions: en attente d'un arbitrage produit.\nMesure: KPI de complétion et temps médian de traitement.\nBlocage: environnement de recette instable en fin de journée.\nProchaines étapes: préparer un test utilisateur ciblé.\nAlignement: partage sur le canal projet et note de synthèse.\nCitation verbatim collectée lors d'un entretien structuré.\nAction: suivi des anomalies critiques et priorisation.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte utilisateur détaillé pour interpréter le propos.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7798,7 +7798,7 @@
     {
       "id": "7417d8dd-6c5d-471d-879e-08a4406dd225",
       "consultant_id": "f3e60b78-0421-40b3-a542-7e2de69ceafb",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-27",
       "description": "Risques: dépendance externe et dette tech à surveiller.\nAlignement: partage sur le canal projet et note de synthèse.\nCitation verbatim collectée lors d'un entretien structuré.\nMesure: KPI de complétion et temps médian de traitement.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte utilisateur détaillé pour interpréter le propos.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.\nBlocage: environnement de recette instable en fin de journée.\nContexte: échanges avec l'équipe et rappel des priorités.\nHypothèses: à valider lors du prochain point hebdo.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7807,7 +7807,7 @@
     {
       "id": "dbf1cfd6-c841-4101-8c2a-136562f07d64",
       "consultant_id": "6805f93f-8b6a-4d7a-80b5-c1bc7d26bc8c",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-26",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.\nRisques: dépendance externe et dette tech à surveiller.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte utilisateur détaillé pour interpréter le propos.\nMesure: KPI de complétion et temps médian de traitement.\nHypothèses: à valider lors du prochain point hebdo.\nProchaines étapes: préparer un test utilisateur ciblé.\nFeedback: retour positif sur la clarté des écrans.\nCitation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nDécisions: en attente d'un arbitrage produit.\nAction: suivi des anomalies critiques et priorisation.\nContexte: échanges avec l'équipe et rappel des priorités. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7828,7 +7828,7 @@
     {
       "id": "a9ca685d-b23e-474d-b7b9-9a7290254f5d",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-24",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nContexte utilisateur détaillé pour interpréter le propos.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nFeedback: retour positif sur la clarté des écrans.\nContexte: échanges avec l'équipe et rappel des priorités.\nHypothèses: à valider lors du prochain point hebdo.\nBlocage: environnement de recette instable en fin de journée.\nRisques: dépendance externe et dette tech à surveiller.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.\nPoint d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -7857,7 +7857,7 @@
     {
       "id": "5b1c91aa-6413-408e-bbda-dc72f7d62ee0",
       "consultant_id": "ebc4dcc2-4dc0-4878-b2ec-e69fac2622a6",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-20",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.\nDécisions: en attente d'un arbitrage produit.\nHypothèses: à valider lors du prochain point hebdo.\nCitation verbatim collectée lors d'un entretien structuré.\nPoint d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8039,7 +8039,7 @@
     {
       "id": "132f030e-f17d-4d9c-8f3e-69c7c08d4daf",
       "consultant_id": "ccbd0c93-47e4-4847-bb0c-f793d3feaa59",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-07",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée.\nAction: suivi des anomalies critiques et priorisation.\nRisques: dépendance externe et dette tech à surveiller.\nFeedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.\nHypothèses: à valider lors du prochain point hebdo.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8070,7 +8070,7 @@
     {
       "id": "81479ee7-08b4-4047-bc25-5640e0e13093",
       "consultant_id": "0b4351a7-58d5-4912-a4bd-dd6f763b43d8",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-06",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nCitation verbatim collectée lors d'un entretien structuré.\nRisques: dépendance externe et dette tech à surveiller.\nMesure: KPI de complétion et temps médian de traitement.\nAction: suivi des anomalies critiques et priorisation.\nBlocage: environnement de recette instable en fin de journée.\nHypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.\nContexte: échanges avec l'équipe et rappel des priorités.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.\nAlignement: partage sur le canal projet et note de synthèse.\nFeedback: retour positif sur la clarté des écrans.\nPoint d'attention: attentes fortes sur la simplicité. (v2)\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)\nMesure: KPI de complétion et temps médian de traitement. (v2)\nAction: suivi des anomalies critiques et priorisation. (v2)\nBlocage: environnement de recette instable en fin de journée. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8132,7 +8132,7 @@
     {
       "id": "8cb6a673-5b69-4a15-932a-9f7f4af6a87a",
       "consultant_id": "ccbd0c93-47e4-4847-bb0c-f793d3feaa59",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-03",
       "description": "Feedback: retour positif sur la clarté des écrans.\nContexte utilisateur détaillé pour interpréter le propos.\nCitation verbatim collectée lors d'un entretien structuré.\nDécisions: en attente d'un arbitrage produit.\nAction: suivi des anomalies critiques et priorisation.\nBlocage: environnement de recette instable en fin de journée.\nMesure: KPI de complétion et temps médian de traitement.\nRisques: dépendance externe et dette tech à surveiller.\nContexte: échanges avec l'équipe et rappel des priorités.\nAlignement: partage sur le canal projet et note de synthèse.\nProchaines étapes: préparer un test utilisateur ciblé.\nHypothèses: à valider lors du prochain point hebdo.\nPoint d'attention: attentes fortes sur la simplicité.\nFeedback: retour positif sur la clarté des écrans. (v2)\nContexte utilisateur détaillé pour interpréter le propos. (v2)\nCitation verbatim collectée lors d'un entretien structuré. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8151,7 +8151,7 @@
     {
       "id": "21659257-2966-4be9-8bc9-cca537923e74",
       "consultant_id": "39008734-90c7-4ae3-b7fd-e06d1e0ab056",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-04-01",
       "description": "Alignement: partage sur le canal projet et note de synthèse.\nBlocage: environnement de recette instable en fin de journée.\nCitation verbatim collectée lors d'un entretien structuré.\nContexte utilisateur détaillé pour interpréter le propos.\nHypothèses: à valider lors du prochain point hebdo.\nPoint d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8200,7 +8200,7 @@
     {
       "id": "c76421c0-cb4d-46b6-803f-38fd0d0226a5",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-03-28",
       "description": "Feedback: retour positif sur la clarté des écrans.\nProchaines étapes: préparer un test utilisateur ciblé.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte utilisateur détaillé pour interpréter le propos.\nCitation verbatim collectée lors d'un entretien structuré.\nHypothèses: à valider lors du prochain point hebdo.\nRisques: dépendance externe et dette tech à surveiller.\nContexte: échanges avec l'équipe et rappel des priorités.\nAction: suivi des anomalies critiques et priorisation.\nPoint d'attention: attentes fortes sur la simplicité.\nBlocage: environnement de recette instable en fin de journée.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8389,7 +8389,7 @@
     {
       "id": "ed99ae4d-af42-44d8-aab3-1ac2ab983728",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-03-13",
       "description": "Alignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8472,7 +8472,7 @@
     {
       "id": "4b29d276-ede5-4698-96a9-0e45ebd164e1",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-03-06",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nProchaines étapes: préparer un test utilisateur ciblé.\nHypothèses: à valider lors du prochain point hebdo.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.\nBlocage: environnement de recette instable en fin de journée.\nContexte utilisateur détaillé pour interpréter le propos.\nRisques: dépendance externe et dette tech à surveiller.\nDécisions: en attente d'un arbitrage produit.\nAction: suivi des anomalies critiques et priorisation.\nFeedback: retour positif sur la clarté des écrans.\nAlignement: partage sur le canal projet et note de synthèse.\nMesure: KPI de complétion et temps médian de traitement.\nCitation verbatim collectée lors d'un entretien structuré. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8586,7 +8586,7 @@
     {
       "id": "e61cb5fb-98a9-40dc-84a2-4853c66a3971",
       "consultant_id": "590b1b30-a1ff-4115-a056-94b07e3d1c55",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-02-27",
       "description": "Blocage: environnement de recette instable en fin de journée.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8644,7 +8644,7 @@
     {
       "id": "4ff5bc09-6f9f-4d59-8c2f-6316b4101e97",
       "consultant_id": "0b4351a7-58d5-4912-a4bd-dd6f763b43d8",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-02-21",
       "description": "Décisions: en attente d'un arbitrage produit.\nContexte: échanges avec l'équipe et rappel des priorités.\nMesure: KPI de complétion et temps médian de traitement.\nContexte utilisateur détaillé pour interpréter le propos.\nPoint d'attention: attentes fortes sur la simplicité.\nFeedback: retour positif sur la clarté des écrans.\nHypothèses: à valider lors du prochain point hebdo.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8653,7 +8653,7 @@
     {
       "id": "b983179b-754b-4465-bf2f-900cd4dd0099",
       "consultant_id": "482cbae3-1d77-432f-9650-46f144b6d7dd",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-02-21",
       "description": "Mesure: KPI de complétion et temps médian de traitement.\nContexte utilisateur détaillé pour interpréter le propos.\nCitation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nAction: suivi des anomalies critiques et priorisation.\nFeedback: retour positif sur la clarté des écrans.\nProchaines étapes: préparer un test utilisateur ciblé.\nRisques: dépendance externe et dette tech à surveiller.\nHypothèses: à valider lors du prochain point hebdo.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.\nDécisions: en attente d'un arbitrage produit.\nMesure: KPI de complétion et temps médian de traitement. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8734,7 +8734,7 @@
     {
       "id": "18c3a018-dbbf-4d25-ab68-36a21a6eaf05",
       "consultant_id": "02035608-a85a-4070-810e-447938f1e4e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-02-15",
       "description": "Prochaines étapes: préparer un test utilisateur ciblé.\nFeedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8766,7 +8766,7 @@
     {
       "id": "ed88b84c-ce74-4b7c-9e1a-e47c2a4fc9c5",
       "consultant_id": "86b971a6-3066-4b03-bb92-3a835b527fe1",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-02-13",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nProchaines étapes: préparer un test utilisateur ciblé.\nContexte: échanges avec l'équipe et rappel des priorités.\nRisques: dépendance externe et dette tech à surveiller.\nCitation verbatim collectée lors d'un entretien structuré.\nFeedback: retour positif sur la clarté des écrans.\nDécisions: en attente d'un arbitrage produit.\nAction: suivi des anomalies critiques et priorisation.\nMesure: KPI de complétion et temps médian de traitement.\nBlocage: environnement de recette instable en fin de journée.\nHypothèses: à valider lors du prochain point hebdo.\nAlignement: partage sur le canal projet et note de synthèse.\nContexte utilisateur détaillé pour interpréter le propos.\nPoint d'attention: attentes fortes sur la simplicité. (v2)\nProchaines étapes: préparer un test utilisateur ciblé. (v2)\nContexte: échanges avec l'équipe et rappel des priorités. (v2)\nRisques: dépendance externe et dette tech à surveiller. (v2)\nCitation verbatim collectée lors d'un entretien structuré. (v2)\nFeedback: retour positif sur la clarté des écrans. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -8978,7 +8978,7 @@
     {
       "id": "de491b4a-16d0-4cc1-ab45-3f5efb3199f6",
       "consultant_id": "08e9e32e-61c0-49a4-8685-863be5b2e1d9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-01-29",
       "description": "Point d'attention: attentes fortes sur la simplicité.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9192,7 +9192,7 @@
     {
       "id": "13dbd985-70ff-471c-8906-94abe60ed877",
       "consultant_id": "837fca3f-8167-45fa-8c5e-ed9feb626152",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-01-15",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.\nAction: suivi des anomalies critiques et priorisation.\nCitation verbatim collectée lors d'un entretien structuré.\nBlocage: environnement de recette instable en fin de journée.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9233,7 +9233,7 @@
     {
       "id": "1aabbc28-ff19-4d09-9ecc-7cdcbd13aa04",
       "consultant_id": "6f6048b2-c237-4525-b2b2-f962be8083a5",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-01-13",
       "description": "Hypothèses: à valider lors du prochain point hebdo.\nFeedback: retour positif sur la clarté des écrans.\nProchaines étapes: préparer un test utilisateur ciblé.\nCitation verbatim collectée lors d'un entretien structuré.\nAlignement: partage sur le canal projet et note de synthèse.\nAction: suivi des anomalies critiques et priorisation.\nRisques: dépendance externe et dette tech à surveiller.\nPoint d'attention: attentes fortes sur la simplicité.\nContexte utilisateur détaillé pour interpréter le propos.\nMesure: KPI de complétion et temps médian de traitement.\nDécisions: en attente d'un arbitrage produit.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9307,7 +9307,7 @@
     {
       "id": "1dadc6af-f43f-4a0a-a41b-1ef295bba483",
       "consultant_id": "0b4351a7-58d5-4912-a4bd-dd6f763b43d8",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2024-01-08",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nProchaines étapes: préparer un test utilisateur ciblé.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9578,7 +9578,7 @@
     {
       "id": "ef84bca4-869e-4b39-b557-9556f5e456d0",
       "consultant_id": "86b971a6-3066-4b03-bb92-3a835b527fe1",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-12-22",
       "description": "Blocage: environnement de recette instable en fin de journée.\nRisques: dépendance externe et dette tech à surveiller.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9627,7 +9627,7 @@
     {
       "id": "0c85bf2e-e3df-4863-843f-f05725985d96",
       "consultant_id": "08e9e32e-61c0-49a4-8685-863be5b2e1d9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-12-20",
       "description": "Contexte utilisateur détaillé pour interpréter le propos.\nDécisions: en attente d'un arbitrage produit.\nProchaines étapes: préparer un test utilisateur ciblé.\nRisques: dépendance externe et dette tech à surveiller.\nMesure: KPI de complétion et temps médian de traitement.\nAction: suivi des anomalies critiques et priorisation.\nContexte: échanges avec l'équipe et rappel des priorités.\nBlocage: environnement de recette instable en fin de journée.\nFeedback: retour positif sur la clarté des écrans.\nHypothèses: à valider lors du prochain point hebdo.\nPoint d'attention: attentes fortes sur la simplicité.\nAlignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9647,7 +9647,7 @@
     {
       "id": "ec78682a-0a65-48ac-846d-03f627ce2d1a",
       "consultant_id": "37226c54-e0fd-4a48-9782-807eca67b1e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-12-15",
       "description": "Contexte: échanges avec l'équipe et rappel des priorités.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9694,7 +9694,7 @@
     {
       "id": "46b59b0b-bee2-4198-a1b0-e7b57562b135",
       "consultant_id": "86b971a6-3066-4b03-bb92-3a835b527fe1",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-12-11",
       "description": "Hypothèses: à valider lors du prochain point hebdo.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9798,7 +9798,7 @@
     {
       "id": "22e8757b-af8f-4473-9067-bb59976f961f",
       "consultant_id": "37226c54-e0fd-4a48-9782-807eca67b1e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-12-07",
       "description": "Point d'attention: attentes fortes sur la simplicité.\nDécisions: en attente d'un arbitrage produit.\nRisques: dépendance externe et dette tech à surveiller.\nFeedback: retour positif sur la clarté des écrans.\nHypothèses: à valider lors du prochain point hebdo.\nAlignement: partage sur le canal projet et note de synthèse.\nMesure: KPI de complétion et temps médian de traitement.\nAction: suivi des anomalies critiques et priorisation.\nContexte: échanges avec l'équipe et rappel des priorités.\nCitation verbatim collectée lors d'un entretien structuré.\nProchaines étapes: préparer un test utilisateur ciblé.\nBlocage: environnement de recette instable en fin de journée.\nContexte utilisateur détaillé pour interpréter le propos.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9807,7 +9807,7 @@
     {
       "id": "e19649cb-8e40-40f9-820a-d67a4d182adc",
       "consultant_id": "02035608-a85a-4070-810e-447938f1e4e7",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-12-06",
       "description": "Feedback: retour positif sur la clarté des écrans.\nCitation verbatim collectée lors d'un entretien structuré.\nRisques: dépendance externe et dette tech à surveiller.\nContexte: échanges avec l'équipe et rappel des priorités.\nPoint d'attention: attentes fortes sur la simplicité.\nMesure: KPI de complétion et temps médian de traitement.\nHypothèses: à valider lors du prochain point hebdo.\nContexte utilisateur détaillé pour interpréter le propos.\nProchaines étapes: préparer un test utilisateur ciblé.\nBlocage: environnement de recette instable en fin de journée.\nAlignement: partage sur le canal projet et note de synthèse.\nDécisions: en attente d'un arbitrage produit.\nAction: suivi des anomalies critiques et priorisation.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9816,7 +9816,7 @@
     {
       "id": "74df87b5-a124-4441-8d43-705cbe415c90",
       "consultant_id": "a78dba16-4e89-4353-ad2c-89ec888a0e1d",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-12-06",
       "description": "Feedback: retour positif sur la clarté des écrans.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -9930,7 +9930,7 @@
     {
       "id": "9849b726-d1d0-4974-8590-e3b32750e0b6",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-11-30",
       "description": "Action: suivi des anomalies critiques et priorisation.\nProchaines étapes: préparer un test utilisateur ciblé.",
       "created_at": "2025-10-17T20:45:00Z",
@@ -10194,7 +10194,7 @@
     {
       "id": "203b4ae3-5f00-4ccb-9167-ae07bbe0b00c",
       "consultant_id": "ed64319c-da68-46b1-bcaf-569b389660d0",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-11-13",
       "description": "Prochaines étapes: préparer un test utilisateur ciblé.\nMesure: KPI de complétion et temps médian de traitement.\nAlignement: partage sur le canal projet et note de synthèse.\nBlocage: environnement de recette instable en fin de journée.\nContexte utilisateur détaillé pour interpréter le propos.\nDécisions: en attente d'un arbitrage produit.\nFeedback: retour positif sur la clarté des écrans.\nHypothèses: à valider lors du prochain point hebdo.\nContexte: échanges avec l'équipe et rappel des priorités.\nAction: suivi des anomalies critiques et priorisation.\nRisques: dépendance externe et dette tech à surveiller.\nCitation verbatim collectée lors d'un entretien structuré.\nPoint d'attention: attentes fortes sur la simplicité.\nProchaines étapes: préparer un test utilisateur ciblé. (v2)\nMesure: KPI de complétion et temps médian de traitement. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -10232,7 +10232,7 @@
     {
       "id": "a5a0025e-3ced-4321-b98d-595e928ff84c",
       "consultant_id": "6805f93f-8b6a-4d7a-80b5-c1bc7d26bc8c",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-11-07",
       "description": "Citation verbatim collectée lors d'un entretien structuré.\nContexte: échanges avec l'équipe et rappel des priorités.\nHypothèses: à valider lors du prochain point hebdo.\nAlignement: partage sur le canal projet et note de synthèse.\nDécisions: en attente d'un arbitrage produit.\nMesure: KPI de complétion et temps médian de traitement.\nContexte utilisateur détaillé pour interpréter le propos.\nBlocage: environnement de recette instable en fin de journée.\nFeedback: retour positif sur la clarté des écrans.\nProchaines étapes: préparer un test utilisateur ciblé.\nPoint d'attention: attentes fortes sur la simplicité.\nAction: suivi des anomalies critiques et priorisation.\nRisques: dépendance externe et dette tech à surveiller.\nCitation verbatim collectée lors d'un entretien structuré. (v2)",
       "created_at": "2025-10-17T20:45:00Z",
@@ -10241,7 +10241,7 @@
     {
       "id": "992aa67b-fac2-4073-8e1c-04a420a5c3b7",
       "consultant_id": "03d55b71-7374-4d5f-807f-038de731ffb9",
-      "type": "VERBATIM_CLIENT",
+      "type": "VERBATIM",
       "date_publication": "2023-11-07",
       "description": "Alignement: partage sur le canal projet et note de synthèse.",
       "created_at": "2025-10-17T20:45:00Z",
