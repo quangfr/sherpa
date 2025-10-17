@@ -158,6 +158,7 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 
 ## 9) Sync GitHub 🔁
 ### 9.1 Onglet **Sync**
+- **🐈‍⬛ Réinitialiser** (récupère './data.json', no-store puis remplace localStorage ; si échec → ouvrir import JSON local)
 - **📋 Copier JSON** (dump complet du store)  
 - **🐙 Ouvrir Issue `[SYNC]`** (préremplie avec le JSON)  
 - **⬇️ Télécharger `data.json`**  
