@@ -459,7 +459,7 @@ function renderObjectifs(){
       const r=hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
       return `
         <div class="row space" style="margin:6px 0">
-          <div><span class="linklike" data-goto="${c?.id||''}">${esc(c?.nom||'—')}</span> <span class="sub">(${Math.max(0,Math.min(100,link.progression_pct))}% ✅)</span></div>
+          <div><span class="linklike" data-goto="${c?.id||''}">${esc(c?.nom||'—')}</span> <span class="sub">(${Math.max(0,Math.min(100,link.progression_pct))}%)</span></div>
           <div class="nowrap"><b>${t}h</b> <span class="green">(+${r}h)</span></div>
         </div>`;
     }).join('');
