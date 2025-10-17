@@ -711,7 +711,7 @@ function renderObjectifs(){
             </div>
             <div class="nowrap">
               <b>${t}h</b>
-              ${r>0 ? ` <span class="blue">(+${r}h)</span>` : ``}
+              ${r>0 ? ` <span class="green"><b>(+${r}h)</b></span>` : ``}
             </div>
           </div>`;
       }).join('');
@@ -721,7 +721,7 @@ function renderObjectifs(){
           <button class="btn small" data-edit="${o.id}">✏️</button>
         </div>
         <div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
-        <div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> ${recent>0 ? `<span class="blue">(+${recent}h)</span>`:''}</div>
+        <div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> ${recent>0 ? `<span class="green"><b>(+${recent}h)</b></span>`:''}</div>
         <div>${consList||'<span class="muted">Aucun consultant associé</span>'}</div>`;
       card.querySelectorAll('[data-goto]').forEach(a=>a.addEventListener('click',()=>{ openTab('activite'); state.filters.consultant_id=a.dataset.goto; renderActivities(); }));
       card.querySelector('[data-edit]').onclick=()=>openObjectifModal(o.id);
