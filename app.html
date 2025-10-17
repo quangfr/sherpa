@@ -202,7 +202,6 @@
           <button class="btn small" id="btn-copy-json">📋 Copier JSON</button>
           <button class="btn small" id="btn-open-issue">🐙 Ouvrir Issue [SYNC]</button>
           <button class="btn small" id="btn-download-json">⬇️ Télécharger data.json</button>
-          <!-- 🆕 Bouton Réinitialiser -->
           <button class="btn small danger" id="btn-reset-storage">🐈‍⬛ Réinitialiser</button>
         </div>
       </div>
@@ -212,7 +211,6 @@
         <label class="pill">Repo <input id="repo-fullname" placeholder="owner/repo" style="margin-left:6px;width:220px"/></label>
         <span class="sub">Ex: <code>quangfr/sherpa</code></span>
       </div>
-      <!-- 🆕 Input fichier caché (fallback) -->
       <input id="file-import" type="file" accept="application/json,.json" class="hidden"/>
     </div>
   </section>
@@ -351,7 +349,24 @@ function dashboard(){
   document.getElementById('db-fin-x').textContent=p.fin_mission_sous_jours;
   document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
   document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
-  const fmt=(arr,box,title)=>{ const out=document.getElementById(box); out.innerHTML=''; arr.forEach(c=>{ const d=document.createElement('div'); d.innerHTML=`• <span class="linklike">${esc(c.nom)}</span> <span class="sub">/ ${esc(c.titre_mission||'—')}</span>`; d.querySelector('.linklike').onclick=()=>{ openTab('activite'); setConsultantFilter(c.id); }; out.appendChild(d); }); document.getElementById(title).textContent=arr.length; };
+
+  // 🔵 Pastilles d'état ajoutées à chaque consultant
+  const fmt=(arr,box,title)=>{
+    const out=document.getElementById(box);
+    out.innerHTML='';
+    arr.forEach(c=>{
+      const d=document.createElement('div');
+      d.className='row'; // aligne la pastille + texte
+      d.innerHTML = `
+        <span class="dot ${statusOf(c)}" title="état"></span>
+        <span class="linklike">${esc(c.nom)}</span>
+        <span class="sub">/ ${esc(c.titre_mission||'—')}</span>
+      `;
+      d.querySelector('.linklike').onclick=()=>{ openTab('activite'); setConsultantFilter(c.id); };
+      out.appendChild(d);
+    });
+    document.getElementById(title).textContent=arr.length;
+  };
   fmt(alerteList,'db-alerte-list','db-alerte-title');
   fmt(finList,'db-fin-list','db-fin-title');
   fmt(stbList,'db-stb-list','db-stb-title');
@@ -600,7 +615,7 @@ document.getElementById('btn-open-issue').onclick=()=>{
 };
 document.getElementById('btn-download-json').onclick=()=>{ const blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click(); URL.revokeObjectURL(a.href); };
 
-/* 🆕 ===== RESET FROM data.json (avec fallback import) ===== */
+/* RESET FROM data.json (fallback import) */
 const fileInput=document.getElementById('file-import');
 document.getElementById('btn-reset-storage').onclick=resetFromDataJson;
 
@@ -611,9 +626,8 @@ async function resetFromDataJson(){
     const resp=await fetch(url, {cache:'no-store'});
     if(!resp.ok) throw new Error('HTTP '+resp.status);
     const data=await resp.json();
-    applyIncomingStore(data, /*source*/'data.json');
+    applyIncomingStore(data, 'data.json');
   }catch(err){
-    // Fallback: ouvrir sélecteur de fichier local
     console.warn('Échec fetch data.json → fallback file picker:', err);
     alert("Impossible de charger 'data.json' depuis le répertoire courant.\nSélectionnez un fichier JSON local.");
     fileInput.value='';
@@ -627,7 +641,7 @@ fileInput.addEventListener('change', async (e)=>{
   try{
     const text=await f.text();
     const data=JSON.parse(text);
-    applyIncomingStore(data, /*source*/f.name);
+    applyIncomingStore(data, f.name);
   }catch(err){
     console.error('Import JSON invalide:', err);
     alert('Fichier JSON invalide ❌');
@@ -635,16 +649,12 @@ fileInput.addEventListener('change', async (e)=>{
 });
 
 function applyIncomingStore(incoming, sourceLabel){
-  // Validation très légère
   if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
   const required=['consultants','activities','objectifs','params'];
   for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
-  // Assurer meta
   incoming.meta = Object.assign({version:store?.meta?.version??4.1}, incoming.meta||{});
   incoming.meta.updated_at = nowISO();
-  // Écrase localStorage
   localStorage.setItem(LS_KEY, JSON.stringify(incoming));
-  // Recharge en mémoire + UI
   store = incoming;
   refreshAll();
   alert(`LocalStorage réinitialisé depuis « ${sourceLabel} » ✅`);
