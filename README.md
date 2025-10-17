@@ -1,9 +1,9 @@
-# 🔆 Spécification SHERPA — MVP v4.1 (full-width, types colorés)
+# 🔆 Spécification SHERPA — MVP v4.1 (full-width, types colorés, sans tendances)
 
 ## 1) Objectif
 Mono-fichier **HTML/CSS/JS vanilla** pour suivre **Consultants**, **Activités**, **Objectifs**, **Dashboard**, **Sync GitHub** via 5 onglets :
 **Dashboard / Activité / Objectif / Paramètres / Sync**  
-Interface **pleine largeur** (full-width), thème clair, compacte, accessible, données en **localStorage**, export/sync **data.json**.
+Interface **pleine largeur** (full-width), compacte, accessible, données en **localStorage**, export/sync **data.json**.
 
 ---
 
@@ -37,15 +37,12 @@ Interface **pleine largeur** (full-width), thème clair, compacte, accessible, d
 > Un objectif **agrège** les activités **STB** des consultants associés.
 
 ### 2.4 Paramètres (éditables)
-Avec description
 - `delai_alerte_jours = 7`  
 - `fin_mission_sous_jours = 60`  
 - `stb_recent_jours = 30`  
 - `avis_manquant_depuis_jours = 60`  
 - `objectif_recent_jours = 15` *(fenêtre pour “(+Yh)”)*  
 - `github_repo_fullname` (ex. `quangfr/sherpa`)
-
-Explications sur les couleurs des pastille état consultant
 
 ### 2.5 Règles / validation / sécurité
 - **Consultant** : `nom` requis  
@@ -74,10 +71,10 @@ Explications sur les couleurs des pastille état consultant
 - 4 cartes KPI en grille :
   - **🚨 En alerte** — consultants ayant une **ALERTE** ≤ `delai_alerte_jours`  
   - **⏳ Fin de mission < Xj** — `0 ≤ date_fin − aujourd’hui ≤ fin_mission_sous_jours`  
-  - **🐕‍🦺 Action STB ≤ Yj** — **liste des consultants SANS STB** dans les `stb_recent_jours` (à traiter)  
+  - **🧰 Action STB ≤ Yj** — **liste des consultants SANS STB** dans les `stb_recent_jours` (à traiter)  
   - **🗣️ Sans avis > Zj** — pas de `AVIS` depuis `avis_manquant_depuis_jours`  
 - Titres dynamiques affichant X/Y/Z (issus des paramètres)  
-- Carte consultant = 2 lignes (pastille état (🟢/🟡/🔴) + Nom / Titre mission)  
+- Carte consultant = 2 lignes (Nom / Titre mission)  
 - **Clic carte** ⇒ onglet **Activité** + filtre consultant  
 - ❌ Pas d’affichage de la date de fin ici
 
@@ -94,15 +91,14 @@ Explications sur les couleurs des pastille état consultant
 - Bouton “Réinitialiser filtres” (supprime le filtre consultant)
 
 ### 6.2 Panneau droit — “Activités”
-- **Filtres** sur **Type** et **Objectif**
-- **Recherche texte** (plein-texte sur `description`)  
+- **Recherche texte** (plein-texte sur `description`) — ❌ **pas de tendances**  
 - Boutons : “+ Nouvelle activité”, “Réinitialiser filtres”  
 - **Tri** par défaut : plus récent → plus ancien  
 - **Colonnes (exactement)** :
   1) **Consultant** (Nom + Titre sur 2 lignes)  
   2) **Type & Date** (2 lignes)  
      - **Type** = **badge coloré + emoji** :
-       - `ACTION_ST_BERNARD` → **🐕‍🦺** (vert) “Action STB”  
+       - `ACTION_ST_BERNARD` → **🧰** (vert) “Action STB”  
        - `NOTE` → **📝** (indigo) “Note”  
        - `VERBATIM` → **💬** (orange) “Verbatim”  
        - `AVIS` → **🗣️** (bleu) “Avis”  
@@ -132,8 +128,8 @@ Explications sur les couleurs des pastille état consultant
   - Description (L2)  
   - **Total objectif** : `XXh (+Yh)` où **(+Yh)** = heures récentes **en vert**  
   - Liste des **consultants associés** :
-    - **Pastille état (🟢/🟡/🔴) + Nom (cliquable)** → ouvre **Activité** filtrée **consultant + objectif**  
-    - **Progression** : “0️⃣à9️⃣”  
+    - **Nom (cliquable)** → ouvre **Activité** filtrée **consultant + objectif**  
+    - **Progression** : “80% ✅”  
     - **Heures** STB totales sur cet objectif : `12h`  
     - **Heures récentes** (sur `objectif_recent_jours`) : `(+4h)` **en vert**
 
@@ -146,7 +142,7 @@ Explications sur les couleurs des pastille état consultant
 ### 7.3 Interactions / CRUD
 - **Clic nom consultant** ⇒ Activité filtrée `consultant_id` + `objectif_id`  
 - **✏️** sur carte ⇒ modal d’édition de l’objectif :
-  - Titre, Description, associer/dissocier des consultants, **progression_pct (0-9)** par consultant  
+  - Titre, Description, associer/dissocier des consultants, **progression_pct** par consultant  
 - **Créer / Modifier / Supprimer** objectifs
 
 ---
@@ -154,7 +150,7 @@ Explications sur les couleurs des pastille état consultant
 ## 8) États / couleurs
 - Pastille état consultant :
   - 🔴 : `date_fin` passée **ou** ALERTE récente (≤ `delai_alerte_jours`)  
-  - 🟡 : `date_fin` dans `fin_mission_sous_jours` **ou** **pas de STB** dans `stb_recent_jours` **ou** pas de `AVIS` depuis `avis_manquant_depuis_jours`
+  - 🟡 : `date_fin` dans `fin_mission_sous_jours` **ou** **pas de STB** dans `stb_recent_jours`  
   - 🟢 : sinon  
 - **Badges type** = emoji + couleur dédiée (voir §6.2)
 
@@ -191,9 +187,9 @@ Explications sur les couleurs des pastille état consultant
 ---
 
 ## 12) Seed (exemple embarqué)
-- 5 consultants (ex. Livier, Samuel, Léonard, Alain, Grimaud)  
-- 3 objectifs (“Go Roadmap”,"Protocop","Lancer Sprint MAESTRO") avec 1-3 consultants  
-- 30 activités (dont 20 **STB** entre 1 et 3h ) de tous les types sur les 60 derniers jours
+- 3 consultants (ex. Livier, Samuel, Léonard)  
+- 1 objectif (“Lancer sprints MAESTRO”) avec 2 consultants  
+- 5 activités (dont 2 **STB**) datées du jour
 
 ---
 
