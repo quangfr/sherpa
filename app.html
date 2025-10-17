@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA — MVP v4.9.2</title>
+<title>SHERPA — MVP v4.9.3</title>
 <style>
   :root{
     --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
@@ -357,7 +357,7 @@
         <textarea id="fo-desc" name="description" placeholder="Description…" style="min-height:44px;resize:none;overflow:hidden"></textarea>
       </label>
       <div style="grid-column:1/-1">
-        <div class="sub">Associer des consultants & progression (%)</div>
+        <div class="sub">Progression (%) — consultants ayant au moins une 🐕‍🦺 Action STB sur cet objectif</div>
         <div id="fo-consultants" class="hover-scroll" style="max-height:260px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:6px;margin-top:6px"></div>
       </div>
     </div>
@@ -406,6 +406,9 @@ function progBadge(p){ const pct=Math.max(0,Math.min(100,Number(p)||0)); return 
 /* Auto-height textarea */
 function autoSize(el){ if(!el) return; el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
 
+/* Clamp helper */
+const clamp01=(v)=>Math.max(0,Math.min(100,Number(v)||0));
+
 /* ===== DATA ===== */
 let store=load();
 function load(){
@@ -427,7 +430,7 @@ function load(){
     {id:uid(),consultant_id:c1.id,type:'NOTE',date_publication:today,description:'Préparer démo',created_at:nowISO(),updated_at:nowISO()}
   ];
   const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/sherpa'};
-  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.9,updated_at:nowISO()}};
+  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.93,updated_at:nowISO()}};
   localStorage.setItem(LS_KEY,JSON.stringify(s));
   return s;
 }
@@ -659,6 +662,14 @@ function hoursForObjective(objId, byConsultantId=null, recentDays=null){
   }).reduce((s,a)=>s+(Number(a.heures)||0),0);
 }
 
+/* Nouvel util: liste des consultants ayant au moins 1 STB sur l'objectif */
+function consultantsWithSTBForObjective(objId){
+  const ids=new Set(store.activities
+    .filter(a=>a.type==='ACTION_ST_BERNARD' && a.objectif_id===objId)
+    .map(a=>a.consultant_id));
+  return [...ids];
+}
+
 function renderObjectifs(){
   const keep=selectObjConsult.value;
   selectObjConsult.innerHTML = '<option value="">👤 Tous les consultants</option>' +
@@ -677,32 +688,41 @@ function renderObjectifs(){
         if(!hay.includes(q)) return false;
       }
       if(onlyCid){
-        return o.consultants.some(co=>co.consultant_id===onlyCid);
+        // filtre sur consultants avec STB (pas juste déclarés)
+        return consultantsWithSTBForObjective(o.id).includes(onlyCid);
       }
       return true;
     })
     .forEach(o=>{
       const total=hoursForObjective(o.id,null,null);
       const recent=hoursForObjective(o.id,null,p.objectif_recent_jours);
+
+      // Construire la liste "affichable" = consultants avec au moins une STB, triés par progression décroissante
+      const stbIds = consultantsWithSTBForObjective(o.id);
+      const rows = stbIds.map(cid=>{
+        const c = store.consultants.find(x=>x.id===cid);
+        const link = (o.consultants||[]).find(x=>x.consultant_id===cid);
+        const pct = clamp01(link?.progression_pct ?? 0);
+        const t = hoursForObjective(o.id,c?.id,null);
+        const r = hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
+        return {c,pct,t,r};
+      }).sort((a,b)=> b.pct - a.pct || a.c.nom.localeCompare(b.c.nom));
+
       const card=document.createElement('div'); card.className='card';
-      const consList=o.consultants.map(link=>{
-        const c=store.consultants.find(x=>x.id===link.consultant_id);
-        const pct=Math.max(0,Math.min(100,link.progression_pct||0));
-        const t=hoursForObjective(o.id,c?.id,null);
-        const r=hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
-        return `
+      const consList = rows.map(row=>`
           <div class="row space" style="margin:6px 0">
             <div>
-              <span class="nowrap" title="${pct}%">${progBadge(pct)}</span>
-              <span class="linklike" data-goto-c="${c?.id||''}" data-goto-o="${o.id}" style="margin-left:6px">${esc(c?.nom||'—')}</span>
-              <span class="sub">(${pct}%)</span>
+              <span class="nowrap" title="${row.pct}%">${progBadge(row.pct)}</span>
+              <span class="linklike" data-goto-c="${row.c?.id||''}" data-goto-o="${o.id}" style="margin-left:6px">${esc(row.c?.nom||'—')}</span>
+              <span class="sub">(${row.pct}%)</span>
             </div>
             <div class="nowrap">
-              <b>${t}h</b>
-              ${r>0 ? ` <span class="green">(+${r}h)</span>` : ``}
+              <b>${row.t}h</b>
+              ${row.r>0 ? ` <span class="green">(+${row.r}h)</span>` : ``}
             </div>
-          </div>`;
-      }).join('');
+          </div>
+      `).join('');
+
       card.innerHTML=`
         <div class="row space">
           <div class="title">${esc(o.titre)}</div>
@@ -710,14 +730,15 @@ function renderObjectifs(){
         </div>
         <div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
         <div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> ${recent>0 ? `<span class="green">(+${recent}h)</span>`:''}</div>
-        <div>${consList||'<span class="muted">Aucun consultant associé</span>'}</div>`;
-      // 🔗 Nouveau comportement: clic sur consultant -> onglet Activités, filtré par consultant + objectif
+        <div>${consList || '<span class="muted">Aucun consultant avec 🐕‍🦺 Action STB pour cet objectif</span>'}</div>
+      `;
+
+      // Clic sur consultant -> onglet Activités, filtre consultant + objectif
       card.querySelectorAll('[data-goto-c]').forEach(a=>a.addEventListener('click',()=>{
         const cid=a.dataset.gotoC, oid=a.dataset.gotoO;
         openTab('activite');
         state.filters.consultant_id=cid;
         state.filters.objectif_id=oid;
-        // refléter dans l'UI des filtres
         const sel=document.getElementById('filter-objectif');
         if(sel){ sel.value=oid; }
         renderActivities();
@@ -761,10 +782,10 @@ faType.onchange=()=>{const isSTB=faType.value==='ACTION_ST_BERNARD'; faHeuresWra
 faConsult.onchange=updateFaObjOptions;
 function updateFaObjOptions(){
   const cid=faConsult.value;
-  const related=store.objectifs.filter(o=>o.consultants.some(co=>co.consultant_id===cid));
+  // on laisse tous les objectifs (évite les faux négatifs si progression=0)
   const selected=faObj.value;
-  faObj.innerHTML='<option value="">(aucun)</option>'+related.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
-  if(related.some(o=>o.id===selected)) faObj.value=selected;
+  faObj.innerHTML='<option value="">(aucun)</option>'+store.objectifs.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
+  if([...faObj.options].some(o=>o.value===selected)) faObj.value=selected;
 }
 document.getElementById('btn-new-activity').onclick=()=>openActivityModal();
 let currentActivityId=null;
@@ -799,72 +820,85 @@ const foDesc=document.getElementById('fo-desc');
 
 function openObjectifModal(id=null){
   currentObjectifId=id;
-  const o=id? store.objectifs.find(x=>x.id===id) : {titre:'',description:'',consultants:[]};
-  document.getElementById('fo-titre').value=o.titre||''; foDesc.value=o.description||'';
+  const o=id? store.objectifs.find(x=>x.id===id) : {id:uid(),titre:'',description:'',consultants:[],created_at:nowISO(),updated_at:nowISO()};
+
+  document.getElementById('fo-titre').value=o.titre||''; 
+  foDesc.value=o.description||'';
   autoSize(foDesc); requestAnimationFrame(()=>autoSize(foDesc));
 
-  const pane=document.getElementById('fo-consultants'); pane.innerHTML='';
-  store.consultants.forEach(c=>{
-    const link=o.consultants.find(x=>x.consultant_id===c.id);
-    const row=document.createElement('div'); row.className='row space'; row.style.margin='6px 0';
-    const checked = !!link;
-    const pct = checked ? (link.progression_pct||0) : 0;
-    const color = pct<30?'var(--red)':(pct<70?'var(--yellow)':'var(--green)');
-    row.innerHTML=`
-      <label class="row" style="gap:6px">
-        <input type="checkbox" data-cid="${c.id}" ${checked?'checked':''}/>
-        ${esc(c.nom)}
-      </label>
-      <label class="row" style="gap:6px">
-        Progression
-        <input type="number" min="0" max="100" step="1" value="${pct}" data-pct="${c.id}" style="width:80px; ${checked?`color:${color};font-weight:700;`:''}"/>
-      </label>`;
-    pane.appendChild(row);
-  });
+  const pane=document.getElementById('fo-consultants'); 
+  pane.innerHTML='';
 
-  pane.addEventListener('input', (e)=>{
-    const cb = e.target.closest('input[type="checkbox"][data-cid]');
-    const pctEl = e.target.closest('input[type="number"][data-pct]');
-    if(cb){
-      const num = pane.querySelector(`input[data-pct="${cb.dataset.cid}"]`);
-      if(num){
-        if(cb.checked){
-          const v = Number(num.value||0);
-          const color = v<30?'var(--red)':(v<70?'var(--yellow)':'var(--green)');
-          num.style.color=color; num.style.fontWeight='700';
-        }else{
-          num.style.color=''; num.style.fontWeight='';
-        }
-      }
-    }
-    if(pctEl){
-      const id=pctEl.dataset.pct;
-      const ch=pane.querySelector(`input[data-cid="${id}"]`);
-      if(ch && ch.checked){
-        const v=Number(pctEl.value||0);
-        const color = v<30?'var(--red)':(v<70?'var(--yellow)':'var(--green)');
-        pctEl.style.color=color; pctEl.style.fontWeight='700';
-      }
-    }
-  });
+  // ⚠️ Afficher UNIQUEMENT les consultants ayant au moins une STB sur cet objectif
+  const stbIds = consultantsWithSTBForObjective(o.id);
+  if(stbIds.length===0){
+    pane.innerHTML = `<div class="sub">Aucun consultant n'a encore de 🐕‍🦺 Action STB liée à cet objectif.</div>`;
+  }else{
+    // Construire lignes sans cases à cocher, avec contrôle 0–100
+    const rows = stbIds.map(cid=>{
+      const c=store.consultants.find(x=>x.id===cid);
+      const link=(o.consultants||[]).find(x=>x.consultant_id===cid);
+      const pct=clamp01(link?.progression_pct ?? 0);
+      return {c,pct};
+    }).sort((a,b)=> b.pct - a.pct || a.c.nom.localeCompare(b.c.nom));
+
+    rows.forEach(({c,pct})=>{
+      const color = pct<30?'var(--red)':(pct<70?'var(--yellow)':'var(--green)');
+      const row=document.createElement('div'); 
+      row.className='row space'; 
+      row.style.margin='6px 0';
+      row.innerHTML=`
+        <div>${esc(c.nom)}</div>
+        <label class="row" style="gap:6px">
+          Progression
+          <input type="number" min="0" max="100" step="1" value="${pct}" data-pct="${c.id}" style="width:80px;color:${color};font-weight:700"/>
+          <span class="sub">%</span>
+        </label>`;
+      pane.appendChild(row);
+    });
+
+    pane.addEventListener('input',(e)=>{
+      const el=e.target.closest('input[type="number"][data-pct]');
+      if(!el) return;
+      const v=clamp01(el.value);
+      el.value=v;
+      el.style.color = v<30?'var(--red)':(v<70?'var(--yellow)':'var(--green)');
+      el.style.fontWeight='700';
+    }, {once:false});
+  }
 
   dlgO.showModal();
 }
+
 document.getElementById('btn-new-objectif').onclick=()=>openObjectifModal();
+
 document.getElementById('form-objectif').onsubmit=(e)=>{
   e.preventDefault();
-  const titre=document.getElementById('fo-titre').value.trim(); if(!titre){ alert('Titre requis.'); return; }
+  const titre=document.getElementById('fo-titre').value.trim(); 
+  if(!titre){ alert('Titre requis.'); return; }
   const description=foDesc.value.trim()||undefined;
-  const links=[...document.querySelectorAll('#fo-consultants [data-cid]')].filter(ch=>ch.checked).map(ch=>{
-    const pctEl=document.querySelector(`#fo-consultants [data-pct="${ch.dataset.cid}"]`);
-    return {consultant_id:ch.dataset.cid, progression_pct: Math.max(0,Math.min(100,Number(pctEl.value||0)))};
-  });
-  if(links.length===0){ alert('Associer au moins 1 consultant.'); return; }
-  if(currentObjectifId){ Object.assign(store.objectifs.find(x=>x.id===currentObjectifId),{titre,description,consultants:links,updated_at:nowISO()}); }
-  else{ store.objectifs.push({id:uid(),titre,description,consultants:links,created_at:nowISO(),updated_at:nowISO()}); }
+
+  // Récupérer toutes les entrées progression visibles (pas de cases à cocher)
+  const entries=[...document.querySelectorAll('#fo-consultants input[data-pct]')]
+    .map(el=>({consultant_id:el.dataset.pct, progression_pct:clamp01(el.value)}));
+
+  const payload={titre,description,consultants:entries,updated_at:nowISO()};
+  if(currentObjectifId){
+    Object.assign(store.objectifs.find(x=>x.id===currentObjectifId),payload);
+  }else{
+    store.objectifs.push({id:uid(),...payload,created_at:nowISO()});
+  }
   dlgO.close('ok'); save();
 };
-document.querySelector('#dlg-objectif .actions [value="del"]').onclick=(e)=>{ e.preventDefault(); if(!currentObjectifId){ dlgO.close(); return; } if(confirm('Supprimer cet objectif ?')){ store.objectifs=store.objectifs.filter(o=>o.id!==currentObjectifId); dlgO.close('del'); save(); } };
+
+document.querySelector('#dlg-objectif .actions [value="del"]').onclick=(e)=>{
+  e.preventDefault(); 
+  if(!currentObjectifId){ dlgO.close(); return; } 
+  if(confirm('Supprimer cet objectif ?')){
+    store.objectifs=store.objectifs.filter(o=>o.id!==currentObjectifId); 
+    dlgO.close('del'); save(); 
+  } 
+};
 
 /* ===== MODALS (CONSULTANT) ===== */
 const dlgC=document.getElementById('dlg-consultant'); let currentConsultantId=null;
@@ -933,7 +967,7 @@ function applyIncomingStore(incoming, sourceLabel){
   if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
   const required=['consultants','activities','objectifs','params'];
   for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
-  incoming.meta = Object.assign({version:store?.meta?.version??4.9}, incoming.meta||{});
+  incoming.meta = Object.assign({version:store?.meta?.version??4.93}, incoming.meta||{});
   incoming.meta.updated_at = nowISO();
   localStorage.setItem(LS_KEY, JSON.stringify(incoming));
   store = incoming;
