@@ -72,9 +72,9 @@ Explications sur les couleurs des pastille état consultant
 
 ## 5) Dashboard 📊
 - 4 cartes KPI en grille :
-  - **🔴 En alerte** — consultants ayant une **ALERTE** ≤ `delai_alerte_jours`  
+  - **🚨 En alerte** — consultants ayant une **ALERTE** ≤ `delai_alerte_jours`  
   - **⏳ Fin de mission < Xj** — `0 ≤ date_fin − aujourd’hui ≤ fin_mission_sous_jours`  
-  - **🧰 Action STB ≤ Yj** — **liste des consultants SANS STB** dans les `stb_recent_jours` (à traiter)  
+  - **🐕‍🦺 Action STB ≤ Yj** — **liste des consultants SANS STB** dans les `stb_recent_jours` (à traiter)  
   - **🗣️ Sans avis > Zj** — pas de `AVIS` depuis `avis_manquant_depuis_jours`  
 - Titres dynamiques affichant X/Y/Z (issus des paramètres)  
 - Carte consultant = 2 lignes (pastille état (🟢/🟡/🔴) + Nom / Titre mission)  
@@ -102,7 +102,7 @@ Explications sur les couleurs des pastille état consultant
   1) **Consultant** (Nom + Titre sur 2 lignes)  
   2) **Type & Date** (2 lignes)  
      - **Type** = **badge coloré + emoji** :
-       - `ACTION_ST_BERNARD` → **🧰** (vert) “Action STB”  
+       - `ACTION_ST_BERNARD` → **🐕‍🦺** (vert) “Action STB”  
        - `NOTE` → **📝** (indigo) “Note”  
        - `VERBATIM` → **💬** (orange) “Verbatim”  
        - `AVIS` → **🗣️** (bleu) “Avis”  
