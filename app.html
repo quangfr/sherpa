@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA — MVP v4.9.3</title>
+<title>SHERPA — MVP v4.9.4</title>
 <style>
   :root{
     --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
@@ -134,6 +134,9 @@
   }
 
   #objectif-pane .pane-header{top:0}
+
+  /* Highlight ligne consultant filtré (onglet Objectifs) */
+  .hl{background:var(--hover);border-radius:8px;padding:2px 4px}
 </style>
 </head>
 <body>
@@ -430,7 +433,7 @@ function load(){
     {id:uid(),consultant_id:c1.id,type:'NOTE',date_publication:today,description:'Préparer démo',created_at:nowISO(),updated_at:nowISO()}
   ];
   const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/sherpa'};
-  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.93,updated_at:nowISO()}};
+  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.94,updated_at:nowISO()}};
   localStorage.setItem(LS_KEY,JSON.stringify(s));
   return s;
 }
@@ -688,7 +691,6 @@ function renderObjectifs(){
         if(!hay.includes(q)) return false;
       }
       if(onlyCid){
-        // filtre sur consultants avec STB (pas juste déclarés)
         return consultantsWithSTBForObjective(o.id).includes(onlyCid);
       }
       return true;
@@ -697,9 +699,8 @@ function renderObjectifs(){
       const total=hoursForObjective(o.id,null,null);
       const recent=hoursForObjective(o.id,null,p.objectif_recent_jours);
 
-      // Construire la liste "affichable" = consultants avec au moins une STB, triés par progression décroissante
       const stbIds = consultantsWithSTBForObjective(o.id);
-      const rows = stbIds.map(cid=>{
+      const rowsAll = stbIds.map(cid=>{
         const c = store.consultants.find(x=>x.id===cid);
         const link = (o.consultants||[]).find(x=>x.consultant_id===cid);
         const pct = clamp01(link?.progression_pct ?? 0);
@@ -708,10 +709,20 @@ function renderObjectifs(){
         return {c,pct,t,r};
       }).sort((a,b)=> b.pct - a.pct || a.c.nom.localeCompare(b.c.nom));
 
+      // 🔎 Si filtre consultant actif : n’afficher que 3 lignes (top), en incluant le consultant filtré
+      let rows = rowsAll;
+      if(onlyCid){
+        const sel = rowsAll.find(x=>x.c?.id===onlyCid);
+        const others = rowsAll.filter(x=>x.c?.id!==onlyCid);
+        rows = sel ? [sel, ...others.slice(0,2)] : others.slice(0,3);
+      }
+
       const card=document.createElement('div'); card.className='card';
-      const consList = rows.map(row=>`
+      const consList = rows.map(row=>{
+          const isSel = row.c?.id===onlyCid && Boolean(onlyCid);
+          return `
           <div class="row space" style="margin:6px 0">
-            <div>
+            <div class="${isSel?'hl':''}">
               <span class="nowrap" title="${row.pct}%">${progBadge(row.pct)}</span>
               <span class="linklike" data-goto-c="${row.c?.id||''}" data-goto-o="${o.id}" style="margin-left:6px">${esc(row.c?.nom||'—')}</span>
               <span class="sub">(${row.pct}%)</span>
@@ -720,12 +731,12 @@ function renderObjectifs(){
               <b>${row.t}h</b>
               ${row.r>0 ? ` <span class="green">(+${row.r}h)</span>` : ``}
             </div>
-          </div>
-      `).join('');
+          </div>`;
+      }).join('');
 
       card.innerHTML=`
         <div class="row space">
-          <div class="title">${esc(o.titre)}</div>
+          <div class="title">${esc(o.titre)} <span class="sub">(${stbIds.length})</span></div>
           <button class="btn small" data-edit="${o.id}">✏️</button>
         </div>
         <div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
@@ -781,8 +792,6 @@ const faDesc=document.getElementById('fa-desc');
 faType.onchange=()=>{const isSTB=faType.value==='ACTION_ST_BERNARD'; faHeuresWrap.classList.toggle('hidden',!isSTB); if(isSTB && !faHeures.value) faHeures.value=1; updateFaObjOptions();};
 faConsult.onchange=updateFaObjOptions;
 function updateFaObjOptions(){
-  const cid=faConsult.value;
-  // on laisse tous les objectifs (évite les faux négatifs si progression=0)
   const selected=faObj.value;
   faObj.innerHTML='<option value="">(aucun)</option>'+store.objectifs.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
   if([...faObj.options].some(o=>o.value===selected)) faObj.value=selected;
@@ -808,8 +817,9 @@ faDesc.addEventListener('input',()=>autoSize(faDesc));
 document.getElementById('form-activity').onsubmit=(e)=>{
   e.preventDefault();
   const data={ consultant_id:faConsult.value, type:faType.value, date_publication:document.getElementById('fa-date').value, description:faDesc.value.trim(), heures: faType.value==='ACTION_ST_BERNARD' ? Number(faHeures.value||1): undefined, objectif_id: faObj.value || undefined };
-  if(!data.consultant_id || !data.type || !data.date_publication || !data.description){ alert('Champs requis manquants.'); return; }
-  if(data.type==='ACTION_ST_BERNARD' && !(data.heures>0)){ alert('Heures requises pour STB.'); return; }
+  const missing = !data.consultant_id || !data.type || !data.date_publication || !data.description || (data.type==='ACTION_ST_BERNARD' && !(data.heures>0));
+  if(!currentActivityId && missing){ dlgA.close('cancel'); return; } // ✅ annuler si nouveau + champs vides
+  if(missing){ alert('Champs requis manquants.'); return; }
   if(currentActivityId){ Object.assign(store.activities.find(x=>x.id===currentActivityId),data,{updated_at:nowISO()}); }else{ store.activities.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
   dlgA.close('ok'); save();
 };
@@ -829,12 +839,11 @@ function openObjectifModal(id=null){
   const pane=document.getElementById('fo-consultants'); 
   pane.innerHTML='';
 
-  // ⚠️ Afficher UNIQUEMENT les consultants ayant au moins une STB sur cet objectif
+  // ⚠️ Uniquement consultants avec ≥1 STB sur l’objectif
   const stbIds = consultantsWithSTBForObjective(o.id);
   if(stbIds.length===0){
     pane.innerHTML = `<div class="sub">Aucun consultant n'a encore de 🐕‍🦺 Action STB liée à cet objectif.</div>`;
   }else{
-    // Construire lignes sans cases à cocher, avec contrôle 0–100
     const rows = stbIds.map(cid=>{
       const c=store.consultants.find(x=>x.id===cid);
       const link=(o.consultants||[]).find(x=>x.consultant_id===cid);
@@ -875,10 +884,10 @@ document.getElementById('btn-new-objectif').onclick=()=>openObjectifModal();
 document.getElementById('form-objectif').onsubmit=(e)=>{
   e.preventDefault();
   const titre=document.getElementById('fo-titre').value.trim(); 
+  if(!currentObjectifId && !titre){ dlgO.close('cancel'); return; } // ✅ annuler si nouveau + vide
   if(!titre){ alert('Titre requis.'); return; }
   const description=foDesc.value.trim()||undefined;
 
-  // Récupérer toutes les entrées progression visibles (pas de cases à cocher)
   const entries=[...document.querySelectorAll('#fo-consultants input[data-pct]')]
     .map(el=>({consultant_id:el.dataset.pct, progression_pct:clamp01(el.value)}));
 
@@ -912,6 +921,7 @@ document.getElementById('btn-new-consultant').onclick=()=>openConsultantModal();
 document.getElementById('form-consultant').onsubmit=(e)=>{
   e.preventDefault();
   const data={ nom:document.getElementById('fc-nom').value.trim(), titre_mission:document.getElementById('fc-titre').value.trim()||undefined, date_fin:document.getElementById('fc-fin').value||undefined, url:document.getElementById('fc-url').value||undefined, description:document.getElementById('fc-desc').value.trim()||undefined };
+  if(!currentConsultantId && !data.nom){ dlgC.close('cancel'); return; } // ✅ annuler si nouveau + vide
   if(!data.nom){ alert('Nom requis.'); return; }
   if(currentConsultantId){ Object.assign(store.consultants.find(x=>x.id===currentConsultantId),data,{updated_at:nowISO()}); }
   else{ store.consultants.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
@@ -967,7 +977,7 @@ function applyIncomingStore(incoming, sourceLabel){
   if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
   const required=['consultants','activities','objectifs','params'];
   for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
-  incoming.meta = Object.assign({version:store?.meta?.version??4.93}, incoming.meta||{});
+  incoming.meta = Object.assign({version:store?.meta?.version??4.94}, incoming.meta||{});
   incoming.meta.updated_at = nowISO();
   localStorage.setItem(LS_KEY, JSON.stringify(incoming));
   store = incoming;
