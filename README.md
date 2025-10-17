@@ -1,4 +1,4 @@
-# 🔆 Spécification SHERPA — MVP v4.1 (full-width, types colorés, sans tendances)
+# 🔆 Spécification SHERPA — MVP v4.1 (full-width, types colorés)
 
 ## 1) Objectif
 Mono-fichier **HTML/CSS/JS vanilla** pour suivre **Consultants**, **Activités**, **Objectifs**, **Dashboard**, **Sync GitHub** via 5 onglets :
@@ -37,12 +37,15 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 > Un objectif **agrège** les activités **STB** des consultants associés.
 
 ### 2.4 Paramètres (éditables)
+Avec description
 - `delai_alerte_jours = 7`  
 - `fin_mission_sous_jours = 60`  
 - `stb_recent_jours = 30`  
 - `avis_manquant_depuis_jours = 60`  
 - `objectif_recent_jours = 15` *(fenêtre pour “(+Yh)”)*  
 - `github_repo_fullname` (ex. `quangfr/sherpa`)
+
+Explications sur les couleurs des pastille état consultant
 
 ### 2.5 Règles / validation / sécurité
 - **Consultant** : `nom` requis  
@@ -69,12 +72,12 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 
 ## 5) Dashboard 📊
 - 4 cartes KPI en grille :
-  - **🚨 En alerte** — consultants ayant une **ALERTE** ≤ `delai_alerte_jours`  
+  - **🔴 En alerte** — consultants ayant une **ALERTE** ≤ `delai_alerte_jours`  
   - **⏳ Fin de mission < Xj** — `0 ≤ date_fin − aujourd’hui ≤ fin_mission_sous_jours`  
   - **🧰 Action STB ≤ Yj** — **liste des consultants SANS STB** dans les `stb_recent_jours` (à traiter)  
   - **🗣️ Sans avis > Zj** — pas de `AVIS` depuis `avis_manquant_depuis_jours`  
 - Titres dynamiques affichant X/Y/Z (issus des paramètres)  
-- Carte consultant = 2 lignes (Nom / Titre mission)  
+- Carte consultant = 2 lignes (pastille état (🟢/🟡/🔴) + Nom / Titre mission)  
 - **Clic carte** ⇒ onglet **Activité** + filtre consultant  
 - ❌ Pas d’affichage de la date de fin ici
 
@@ -91,7 +94,7 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 - Bouton “Réinitialiser filtres” (supprime le filtre consultant)
 
 ### 6.2 Panneau droit — “Activités”
-- **Recherche texte** (plein-texte sur `description`) — ❌ **pas de tendances**  
+- **Recherche texte** (plein-texte sur `description`)  
 - Boutons : “+ Nouvelle activité”, “Réinitialiser filtres”  
 - **Tri** par défaut : plus récent → plus ancien  
 - **Colonnes (exactement)** :
@@ -128,8 +131,8 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
   - Description (L2)  
   - **Total objectif** : `XXh (+Yh)` où **(+Yh)** = heures récentes **en vert**  
   - Liste des **consultants associés** :
-    - **Nom (cliquable)** → ouvre **Activité** filtrée **consultant + objectif**  
-    - **Progression** : “80% ✅”  
+    - **Pastille état (🟢/🟡/🔴) + Nom (cliquable)** → ouvre **Activité** filtrée **consultant + objectif**  
+    - **Progression** : “0️⃣0️⃣à9️⃣9️⃣et💯”  
     - **Heures** STB totales sur cet objectif : `12h`  
     - **Heures récentes** (sur `objectif_recent_jours`) : `(+4h)` **en vert**
 
@@ -142,7 +145,7 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 ### 7.3 Interactions / CRUD
 - **Clic nom consultant** ⇒ Activité filtrée `consultant_id` + `objectif_id`  
 - **✏️** sur carte ⇒ modal d’édition de l’objectif :
-  - Titre, Description, associer/dissocier des consultants, **progression_pct** par consultant  
+  - Titre, Description, associer/dissocier des consultants, **progression_pct (0-100)** par consultant  
 - **Créer / Modifier / Supprimer** objectifs
 
 ---
@@ -150,7 +153,7 @@ Interface **pleine largeur** (full-width), compacte, accessible, données en **l
 ## 8) États / couleurs
 - Pastille état consultant :
   - 🔴 : `date_fin` passée **ou** ALERTE récente (≤ `delai_alerte_jours`)  
-  - 🟡 : `date_fin` dans `fin_mission_sous_jours` **ou** **pas de STB** dans `stb_recent_jours`  
+  - 🟡 : `date_fin` dans `fin_mission_sous_jours` **ou** **pas de STB** dans `stb_recent_jours` **ou** pas de `AVIS` depuis `avis_manquant_depuis_jours`
   - 🟢 : sinon  
 - **Badges type** = emoji + couleur dédiée (voir §6.2)
 
