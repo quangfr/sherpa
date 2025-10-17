@@ -95,14 +95,14 @@
       </div>
       <div class="card">
         <div class="row space">
-          <div class="title">🧰 Action STB ≤ <span id="db-stb-y"></span>j</div>
+          <div class="title">🐕‍🦺 Action STB > <span id="db-stb-y"></span>j</div>
           <div class="pill" id="db-stb-title">0</div>
         </div>
         <div id="db-stb-list" class="mono"></div>
       </div>
       <div class="card">
         <div class="row space">
-          <div class="title">🗣️ Sans avis > <span id="db-avis-z"></span>j</div>
+          <div class="title">🗣️ Avis > <span id="db-avis-z"></span>j</div>
           <div class="pill" id="db-avis-title">0</div>
         </div>
         <div id="db-avis-list" class="mono"></div>
@@ -303,6 +303,12 @@ const parseDate=s=>s? new Date(s+'T00:00:00'):null;
 const daysDiff=(a,b)=>Math.round((a-b)/86400000);
 const addDays=(d,n)=>new Date(d.getTime()+n*86400000);
 
+/* Pastille progression (🟥 <30, 🟨 <70, 🟩 ≥70) */
+function progBadge(p){
+  const pct = Math.max(0, Math.min(100, Number(p)||0));
+  return pct < 30 ? '🟥' : (pct < 70 ? '🟨' : '🟩');
+}
+
 /* ===== DATA (sans tendances) ===== */
 let store=load();
 function load(){
@@ -350,13 +356,13 @@ function dashboard(){
   document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
   document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
 
-  // 🔵 Pastilles d'état ajoutées à chaque consultant
+  // Pastilles d'état par consultant (dot r/y/g)
   const fmt=(arr,box,title)=>{
     const out=document.getElementById(box);
     out.innerHTML='';
     arr.forEach(c=>{
       const d=document.createElement('div');
-      d.className='row'; // aligne la pastille + texte
+      d.className='row';
       d.innerHTML = `
         <span class="dot ${statusOf(c)}" title="état"></span>
         <span class="linklike">${esc(c.nom)}</span>
@@ -381,12 +387,18 @@ consHead.forEach(th=>th.onclick=()=>{state.sortCol=th.dataset.sort;state.sortDir
 
 function statusOf(c){
   const p=store.params, today=new Date();
-  const hasSTB=store.activities.some(a=>a.consultant_id===c.id && a.type==='ACTION_ST_BERNARD' && parseDate(a.date_publication)>=addDays(today,-p.stb_recent_jours));
-  const hasAlerte=store.activities.some(a=>a.consultant_id===c.id && a.type==='ALERTE' && parseDate(a.date_publication)>=addDays(today,-p.delai_alerte_jours));
-  const soon = c.date_fin? (daysDiff(parseDate(c.date_fin),today)<=p.fin_mission_sous_jours && daysDiff(parseDate(c.date_fin),today)>=0):false;
+  const hasSTBRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='ACTION_ST_BERNARD' && parseDate(a.date_publication)>=addDays(today,-p.stb_recent_jours));
+  const hasAvisRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='AVIS' && parseDate(a.date_publication)>=addDays(today,-p.avis_manquant_depuis_jours));
+  const hasAlerteRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='ALERTE' && parseDate(a.date_publication)>=addDays(today,-p.delai_alerte_jours));
   const past = c.date_fin? (daysDiff(parseDate(c.date_fin),today)<0):false;
-  if(past || hasAlerte) return 'r'; if(soon || !hasSTB) return 'y'; return 'g';
+
+  // 🔴 prioritaire si mission passée ou alerte récente
+  if(past || hasAlerteRecent) return 'r';
+
+  // 🟢 si au moins l'un des deux récents (STB OU AVIS), sinon 🟡
+  return (hasSTBRecent || hasAvisRecent) ? 'g' : 'y';
 }
+
 function renderConsultants(){
   const rows=[...store.consultants];
   rows.sort((a,b)=> state.sortCol==='nom' ? state.sortDir * a.nom.localeCompare(b.nom) : state.sortDir * (a.date_fin||'').localeCompare(b.date_fin||''));
@@ -394,7 +406,10 @@ function renderConsultants(){
   rows.forEach(c=>{
     const tr=document.createElement('tr'), dot=statusOf(c);
     tr.innerHTML=`
-      <td><div class="row"><span class="dot ${dot}"></span><b>${esc(c.nom)}</b></div><div class="sub">${esc(c.titre_mission||'—')}</div></td>
+      <td>
+        <div class="row"><span class="dot ${dot}"></span><b>${esc(c.nom)}</b></div>
+        <div class="sub">${esc(c.titre_mission||'—')}</div>
+      </td>
       <td>${esc(c.date_fin||'—')}</td>
       <td class="nowrap">
         ${c.url?`<a class="btn small" href="${esc(c.url)}" target="_blank">🔗</a>`:''}
@@ -414,7 +429,7 @@ document.getElementById('btn-reset-filters').onclick=()=>{state.filters.q='';sta
 document.getElementById('btn-reset-filters-left').onclick=()=>{state.filters.consultant_id=''; renderActivities();};
 
 const TYPE_META={
-  ACTION_ST_BERNARD:{emoji:'🧰', pill:'stb', label:'Action STB'},
+  ACTION_ST_BERNARD:{emoji:'🐕‍🦺', pill:'stb', label:'Action STB'},
   NOTE:{emoji:'📝', pill:'note', label:'Note'},
   VERBATIM:{emoji:'💬', pill:'verb', label:'Verbatim'},
   AVIS:{emoji:'🗣️', pill:'avis', label:'Avis'},
@@ -473,11 +488,16 @@ function renderObjectifs(){
     const card=document.createElement('div'); card.className='card';
     const consList=o.consultants.map(link=>{
       const c=store.consultants.find(x=>x.id===link.consultant_id);
+      const pct=Math.max(0,Math.min(100,link.progression_pct||0));
       const t=hoursForObjective(o.id,c?.id,null);
       const r=hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
       return `
         <div class="row space" style="margin:6px 0">
-          <div><span class="linklike" data-goto="${c?.id||''}">${esc(c?.nom||'—')}</span> <span class="sub">(${Math.max(0,Math.min(100,link.progression_pct))}%)</span></div>
+          <div>
+            <span class="nowrap" title="${pct}%">${progBadge(pct)}</span>
+            <span class="linklike" data-goto="${c?.id||''}" style="margin-left:6px">${esc(c?.nom||'—')}</span>
+            <span class="sub">(${pct}%)</span>
+          </div>
           <div class="nowrap"><b>${t}h</b> <span class="green">(+${r}h)</span></div>
         </div>`;
     }).join('');
