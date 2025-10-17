@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA – MVP v3.2 (Sync)</title>
+<title>SHERPA – MVP v3.3 (Sync + UX sélection)</title>
 <style>
   :root{
     --bg:#FAFAFA;--card:#FFF;--bd:#E0E0E0;--tx:#222;--mut:#666;
-    --primary:#1976d2;--ok:#2e7d32;--warn:#f9a825;--danger:#c62828;
+    --primary:#1976d2;--primary-ghost: color-mix(in srgb, var(--primary) 12%, #fff);
+    --ok:#2e7d32;--warn:#f9a825;--danger:#c62828;
     --stb:#3b82f6;--note:#34d399;--verb:#facc15;--avis:#a855f7;--alert:#ef4444;
     --h:38px;--r:12px;--fs:14px;
   }
@@ -31,15 +32,17 @@
   .panel{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
   .panel .head{display:flex;gap:6px;align-items:center;padding:8px;border-bottom:1px solid var(--bd)}
   .panel .body{padding:8px}
-  .left .row{display:grid;grid-template-columns:1fr 120px 70px;align-items:center;gap:8px;padding:6px;border-bottom:1px solid var(--bd);cursor:pointer}
+  .left .row{display:grid;grid-template-columns:1fr 120px 70px;align-items:center;gap:8px;padding:6px;border-bottom:1px solid var(--bd);cursor:pointer;border-left:3px solid transparent}
   .left .row:hover{background:#fafafa}
+  /* ⬇️ surlignage bleu quand sélectionné + focus */
+  .left .row.selected{background:var(--primary-ghost); border-left-color:var(--primary)}
+  .left .row:focus-visible{outline:2px solid color-mix(in srgb,var(--primary) 40%, transparent)}
   .chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border:1px solid var(--bd);border-radius:999px;cursor:pointer;font-size:12px}
   .chip.active{border-color:var(--primary);outline:2px solid color-mix(in srgb,var(--primary) 20%,transparent)}
   .search{height:36px;padding:0 10px;border:1px solid var(--bd);border-radius:10px;width:240px}
   .btn{height:36px;padding:0 12px;border:1px solid var(--bd);border-radius:10px;background:#fff;cursor:pointer}
-  .btn.primary{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,#fff)}
+  .btn.primary{border-color:var(--primary);background:var(--primary-ghost)}
   .list-acts{display:flex;flex-direction:column;gap:8px}
-  /* Activité: colonne consultant dédiée à gauche */
   .act{border:1px solid var(--bd);border-radius:10px;padding:8px;display:grid;grid-template-columns:220px 120px 1fr auto;gap:8px;align-items:start}
   @media(max-width:900px){.act{grid-template-columns:1fr}}
   .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--bd)}
@@ -108,7 +111,7 @@
     </div>
   </section>
 
-  <!-- PARAMÈTRES -->
+  <!-- PARAMÈTRES (sans import/export) -->
   <section id="parametres" class="view" hidden>
     <div class="card" style="margin-bottom:12px">
       <h3 style="margin:0 0 8px 0">🏷️ Tendances</h3>
@@ -117,7 +120,7 @@
         <button class="btn" id="btn-add-trend">+ Ajouter</button>
       </div>
     </div>
-    <div class="card" style="margin-bottom:12px">
+    <div class="card">
       <h3 style="margin:0 0 8px 0">⚖️ Seuils Dashboard (jours)</h3>
       <div class="grid g2">
         <div><label>Délai alerte</label><input type="number" id="set-delai" min="0"/></div>
@@ -130,26 +133,13 @@
         <button class="btn" id="btn-reset-settings">Réinitialiser</button>
       </div>
     </div>
-    <div class="card">
-      <h3 style="margin:0 0 8px 0">🗂️ Import / Export JSON</h3>
-      <div class="inline">
-        <button class="btn" id="btn-export">Exporter</button>
-        <input type="file" id="file-import" accept="application/json"/>
-        <select id="import-mode" title="Mode import">
-          <option value="merge">merge</option>
-          <option value="replace">replace</option>
-        </select>
-        <button class="btn" id="btn-import">Importer</button>
-      </div>
-      <p class="mut">Export = dump complet. Import = merge/replace sur la clé locale.</p>
-    </div>
   </section>
 
   <!-- SYNC -->
   <section id="sync" class="view" hidden>
     <div class="card">
-      <h3 style="margin:0 0 8px 0">🔁 Synchroniser toutes les données vers <code>quangfr/sherpa/data.json</code></h3>
-      <p class="mut">1) <b>Copier</b> le JSON ▶ 2) <b>Ouvrir l’issue [SYNC]</b> ▶ 3) <b>Coller</b> dans le bloc <code>```json</code> ▶ 4) <b>Submit</b>. L’Action remplace <code>data.json</code>.</p>
+      <h3 style="margin:0 0 8px 0">🔁 Synchroniser vers <code>quangfr/sherpa/data.json</code></h3>
+      <p class="mut">1) <b>Copier</b> ▶ 2) <b>Ouvrir l’issue [SYNC]</b> ▶ 3) <b>Coller</b> dans le bloc <code>```json</code> ▶ 4) <b>Submit</b>.</p>
       <div class="inline" style="margin-top:6px">
         <button class="btn primary" id="btn-copy-json">📋 Copier JSON</button>
         <button class="btn" id="btn-open-issue">🐙 Ouvrir l’issue [SYNC]</button>
@@ -257,11 +247,7 @@ const seedActivities=(cons, trends)=>{
 
 const Store={
   state:{consultants:[],activities:[],trends:[],settings:{}},
-  load(){
-    const raw=localStorage.getItem(KEY);
-    if(raw){ try{ this.state=JSON.parse(raw);}catch{ localStorage.removeItem(KEY); this.seed(); } }
-    else this.seed();
-  },
+  load(){ const raw=localStorage.getItem(KEY); if(raw){ try{ this.state=JSON.parse(raw);}catch{ localStorage.removeItem(KEY); this.seed(); } } else this.seed(); },
   seed(){
     const consultants=seedConsultants();
     const trends=structuredClone(DEF_TRENDS);
@@ -270,22 +256,6 @@ const Store={
     this.save();
   },
   save(){ localStorage.setItem(KEY,JSON.stringify(this.state)); },
-  export(){ return JSON.stringify(this.state,null,2) },
-  import(obj,mode="merge"){
-    if(mode==="replace"){ this.state=obj; }
-    else{
-      const byId=(arr)=>Object.fromEntries(arr.map(x=>[x.id,x]));
-      const cur=this.state;
-      const mergeArr=(curr,incoming)=>Object.values({...byId(curr),...byId(incoming||[])});
-      this.state={
-        consultants:mergeArr(cur.consultants,obj.consultants),
-        activities:mergeArr(cur.activities,obj.activities).sort((a,b)=>b.date_publication.localeCompare(a.date_publication)),
-        trends:mergeArr(cur.trends,obj.trends),
-        settings:{...cur.settings,...(obj.settings||{})}
-      }
-    }
-    this.save();
-  },
   upsertConsultant(c){
     if(!c.nom?.trim()) throw new Error("Nom requis");
     const i=this.state.consultants.findIndex(x=>x.id===c.id);
@@ -293,11 +263,7 @@ const Store={
     else this.state.consultants.push({...c,id:c.id||uuid(),created_at:new Date().toISOString(),updated_at:new Date().toISOString()});
     this.save();
   },
-  deleteConsultant(id){
-    this.state.consultants=this.state.consultants.filter(x=>x.id!==id);
-    this.state.activities=this.state.activities.filter(a=>a.consultant_id!==id);
-    this.save();
-  },
+  deleteConsultant(id){ this.state.consultants=this.state.consultants.filter(x=>x.id!==id); this.state.activities=this.state.activities.filter(a=>a.consultant_id!==id); this.save(); },
   upsertActivity(a){
     if(!a.consultant_id||!a.type||!a.date_publication||!a.description?.trim()) throw new Error("Champs requis manquants");
     if(a.type==="ACTION_ST_BERNARD" && (a.heures===undefined || a.heures===null || a.heures==="")) throw new Error("Heures requis pour STB");
@@ -307,12 +273,7 @@ const Store={
     this.save();
   },
   deleteActivity(id){ this.state.activities=this.state.activities.filter(x=>x.id!==id); this.save(); },
-  upsertTrend(t){
-    const i=this.state.trends.findIndex(x=>x.id===t.id);
-    if(i>=0)this.state.trends[i]={...this.state.trends[i],...t};
-    else this.state.trends.push({...t,id:t.id||uuid()});
-    this.save();
-  },
+  upsertTrend(t){ const i=this.state.trends.findIndex(x=>x.id===t.id); if(i>=0)this.state.trends[i]={...this.state.trends[i],...t}; else this.state.trends.push({...t,id:t.id||uuid()}); this.save(); },
   deleteTrend(id){ this.state.trends=this.state.trends.filter(x=>x.id!==id); this.save(); }
 };
 
@@ -357,7 +318,7 @@ function renderDashboard(){
   const fill=(id,list)=>{ const box=$(id+" .list"); box.innerHTML="";
     list.slice(0,50).forEach(c=>{ const div=document.createElement("div");
       div.className="consultant-card"; div.innerHTML=`<div class="l1">${esc(c.nom)}</div><div class="l2">${esc(c.titre_mission||"")}</div>`;
-      div.onclick=()=>{ $$("header .tab")[1].click(); UI.actFilters.consultantId=c.id; renderConsultantFilterHighlight(); renderActs(); };
+      div.onclick=()=>{ $$("header .tab")[1].click(); toggleConsultantFilter(c.id); };
       box.appendChild(div);
     });
   };
@@ -376,19 +337,19 @@ function renderConsultants(){
   arr.forEach(c=>{
     const remain = c.date_fin ? diffDays(parseISO(c.date_fin),parseISO(today())) : null;
     const dot = remain==null ? "dot-warn" : remain<0 ? "dot-bad" : remain<=7 ? "dot-warn" : "dot-ok";
-    const row=document.createElement("div"); row.className="row"; row.tabIndex=0;
+    const row=document.createElement("div"); row.className="row"; row.tabIndex=0; row.dataset.id=c.id;
     row.innerHTML=`
       <div><span class="state-dot ${dot}"></span><div class="l1">${esc(c.nom)}</div><div class="l2">${esc(c.titre_mission||"")}</div></div>
       <div>${esc(c.date_fin||"")}</div>
-      <div class="row-actions">
+      <div class="inline">
         <button class="icon-btn" title="URL">${c.url? "🔗":"⛓️"}</button>
         <button class="icon-btn" title="Éditer">✏️</button>
       </div>`;
     const [bUrl,bEdit]=row.querySelectorAll(".icon-btn");
     bUrl.onclick=(ev)=>{ev.stopPropagation(); if(c.url) window.open(c.url,"_blank")};
     bEdit.onclick=(ev)=>{ev.stopPropagation(); openConsultantModal(c)};
-    row.onclick=()=>{ UI.actFilters.consultantId=c.id; renderConsultantFilterHighlight(); renderActs(); };
-    row.onkeydown=(e)=>{ if(e.key==="Enter") row.click(); };
+    row.onclick=()=>toggleConsultantFilter(c.id);
+    row.onkeydown=(e)=>{ if(e.key==="Enter"||e.key===" ") {e.preventDefault(); row.click();} };
     cont.appendChild(row);
   });
   $$(".left .head .sortable").forEach(el=>{
@@ -396,13 +357,16 @@ function renderConsultants(){
   });
   renderConsultantFilterHighlight();
 }
+function toggleConsultantFilter(id){
+  // Re-clic = désélection
+  UI.actFilters.consultantId = (UI.actFilters.consultantId===id) ? null : id;
+  renderConsultantFilterHighlight(); renderActs();
+}
 function renderConsultantFilterHighlight(){
-  const id=UI.actFilters.consultantId;
-  [...$("#consultantsList").children].forEach(row=>row.style.outline="none");
-  if(!id) return;
-  // simple highlight by matching name text
-  const idx=Store.state.consultants.findIndex(c=>c.id===id);
-  if(idx>=0 && $("#consultantsList").children[idx]) $("#consultantsList").children[idx].style.outline="2px solid color-mix(in srgb,var(--primary) 40%,transparent)";
+  const sel=UI.actFilters.consultantId;
+  $$("#consultantsList .row").forEach(r=>{
+    r.classList.toggle("selected", r.dataset.id===sel);
+  });
 }
 
 /*** Activité – Right ***/
@@ -483,7 +447,6 @@ function renderSettings(){
   $("#set-fin").value=Store.state.settings.fin_mission_sous_jours||0;
   $("#set-stb").value=Store.state.settings.stb_recent_jours||0;
   $("#set-avis").value=Store.state.settings.avis_manquant_depuis_jours||0;
-  // Tendances
   const box=$("#trendsList"); box.innerHTML="";
   Store.state.trends.forEach(t=>{
     const row=document.createElement("div"); row.className="inline";
@@ -506,10 +469,10 @@ $("#btn-save-settings").onclick=()=>{ Store.state.settings={
 $("#btn-reset-settings").onclick=()=>{ Store.state.settings=structuredClone({delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60}); Store.save(); renderSettings(); toast("Réinitialisé ✅"); renderDashboard(); }
 
 /*** Sync tab ***/
-function renderSyncPreview(){ $("#sync-preview").textContent=Store.export(); }
-$("#btn-copy-json").onclick=async()=>{ await navigator.clipboard.writeText(Store.export()); toast("JSON copié ✅"); };
+function renderSyncPreview(){ $("#sync-preview").textContent=JSON.stringify(Store.state,null,2); }
+$("#btn-copy-json").onclick=async()=>{ await navigator.clipboard.writeText(JSON.stringify(Store.state,null,2)); toast("JSON copié ✅"); };
 $("#btn-download-json").onclick=()=>{
-  const blob=new Blob([Store.export()],{type:"application/json"}), a=document.createElement("a");
+  const blob=new Blob([JSON.stringify(Store.state,null,2)],{type:"application/json"}), a=document.createElement("a");
   a.href=URL.createObjectURL(blob); a.download="data.json"; a.click(); URL.revokeObjectURL(a.href);
 };
 const ISSUE_URL="https://github.com/quangfr/sherpa/issues/new?title=%5BSYNC%5D%20replace%20data.json&labels=sync&body=%60%60%60json%0A%7B%0A%20%20%22REPLACE_ME%22%3A%20%22Collez%20ici%20le%20JSON%20copi%C3%A9%20depuis%20l%27onglet%20Sync%22%0A%7D%0A%60%60%60";
