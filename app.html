@@ -45,7 +45,7 @@
   .btn.small{padding:4px 8px;font-size:12px}
   input,select,textarea{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 8px;font:inherit}
   textarea{width:100%;min-height:88px;resize:vertical}
-  .split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:10px} /* un peu plus large à gauche en full width */
+  .split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:10px}
   @media (max-width:980px){.split{grid-template-columns:1fr}}
   .table{width:100%;border-collapse:collapse}
   .table th,.table td{border-top:1px solid var(--border);padding:8px;vertical-align:top}
@@ -145,7 +145,7 @@
           </div>
         </div>
 
-        <!-- Colonnes demandées: Consultant | (Type+Date 2 lignes) | (Objectif+Description 2 lignes) | Actions -->
+        <!-- Colonnes demandées -->
         <table class="table" id="activities-table">
           <thead>
             <tr>
@@ -190,7 +190,6 @@
         </div>
         <div class="sub" style="margin-top:6px">Les titres du Dashboard se mettent à jour automatiquement.</div>
       </div>
-      <!-- plus de Tendances -->
     </div>
   </section>
 
@@ -203,6 +202,8 @@
           <button class="btn small" id="btn-copy-json">📋 Copier JSON</button>
           <button class="btn small" id="btn-open-issue">🐙 Ouvrir Issue [SYNC]</button>
           <button class="btn small" id="btn-download-json">⬇️ Télécharger data.json</button>
+          <!-- 🆕 Bouton Réinitialiser -->
+          <button class="btn small danger" id="btn-reset-storage">🐈‍⬛ Réinitialiser</button>
         </div>
       </div>
       <div class="sub" style="margin:6px 0">Copiez-collez ce JSON dans l’issue <b>[SYNC]</b> pour synchroniser le fichier du dépôt via GitHub Actions.</div>
@@ -211,6 +212,8 @@
         <label class="pill">Repo <input id="repo-fullname" placeholder="owner/repo" style="margin-left:6px;width:220px"/></label>
         <span class="sub">Ex: <code>quangfr/sherpa</code></span>
       </div>
+      <!-- 🆕 Input fichier caché (fallback) -->
+      <input id="file-import" type="file" accept="application/json,.json" class="hidden"/>
     </div>
   </section>
 </main>
@@ -327,7 +330,7 @@ function load(){
   localStorage.setItem(LS_KEY,JSON.stringify(s));
   return s;
 }
-function save(){ store.meta.updated_at=nowISO(); localStorage.setItem(LS_KEY,JSON.stringify(store)); refreshAll(); }
+function save(){ store.meta=store.meta||{}; store.meta.updated_at=nowISO(); localStorage.setItem(LS_KEY,JSON.stringify(store)); refreshAll(); }
 
 /* ===== NAV ===== */
 const TABS=[{id:'dashboard',label:'Dashboard'},{id:'activite',label:'Activité'},{id:'objectif',label:'Objectif'},{id:'parametres',label:'Paramètres'},{id:'sync',label:'Sync'}];
@@ -596,6 +599,56 @@ document.getElementById('btn-open-issue').onclick=()=>{
   window.open(url,'_blank');
 };
 document.getElementById('btn-download-json').onclick=()=>{ const blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.json'; a.click(); URL.revokeObjectURL(a.href); };
+
+/* 🆕 ===== RESET FROM data.json (avec fallback import) ===== */
+const fileInput=document.getElementById('file-import');
+document.getElementById('btn-reset-storage').onclick=resetFromDataJson;
+
+async function resetFromDataJson(){
+  try{
+    const base=new URL('.', location.href);
+    const url=new URL('data.json', base).href;
+    const resp=await fetch(url, {cache:'no-store'});
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    const data=await resp.json();
+    applyIncomingStore(data, /*source*/'data.json');
+  }catch(err){
+    // Fallback: ouvrir sélecteur de fichier local
+    console.warn('Échec fetch data.json → fallback file picker:', err);
+    alert("Impossible de charger 'data.json' depuis le répertoire courant.\nSélectionnez un fichier JSON local.");
+    fileInput.value='';
+    fileInput.click();
+  }
+}
+
+fileInput.addEventListener('change', async (e)=>{
+  const f=e.target.files?.[0];
+  if(!f) return;
+  try{
+    const text=await f.text();
+    const data=JSON.parse(text);
+    applyIncomingStore(data, /*source*/f.name);
+  }catch(err){
+    console.error('Import JSON invalide:', err);
+    alert('Fichier JSON invalide ❌');
+  }
+});
+
+function applyIncomingStore(incoming, sourceLabel){
+  // Validation très légère
+  if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
+  const required=['consultants','activities','objectifs','params'];
+  for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
+  // Assurer meta
+  incoming.meta = Object.assign({version:store?.meta?.version??4.1}, incoming.meta||{});
+  incoming.meta.updated_at = nowISO();
+  // Écrase localStorage
+  localStorage.setItem(LS_KEY, JSON.stringify(incoming));
+  // Recharge en mémoire + UI
+  store = incoming;
+  refreshAll();
+  alert(`LocalStorage réinitialisé depuis « ${sourceLabel} » ✅`);
+}
 
 /* ===== RENDER ALL ===== */
 function refreshAll(){
