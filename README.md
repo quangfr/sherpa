@@ -190,9 +190,9 @@ Explications sur les couleurs des pastille état consultant
 ---
 
 ## 12) Seed (exemple embarqué)
-- 3 consultants (ex. Livier, Samuel, Léonard)  
-- 1 objectif (“Lancer sprints MAESTRO”) avec 2 consultants  
-- 5 activités (dont 2 **STB**) datées du jour
+- 5 consultants (ex. Livier, Samuel, Léonard, Alain, Grimaud)  
+- 3 objectifs (“Go Roadmap”,"Protocop","Lancer Sprint MAESTRO") avec 1-3 consultants  
+- 30 activités (dont 20 **STB** entre 1 et 3h ) de tous les types sur les 60 derniers jours
 
 ---
 
