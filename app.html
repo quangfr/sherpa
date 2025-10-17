@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA — MVP v4.9</title>
+<title>SHERPA — MVP v4.9.1</title>
 <style>
   :root{
     --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
@@ -64,10 +64,19 @@
   .pane-header{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--border);padding:6px 0}
   .pane-body{min-height:0;overflow:auto}
 
-  /* Hover-only scrollbars */
-  .hover-scroll{overflow:auto;scrollbar-width:none;scrollbar-color:transparent transparent}
-  .hover-scroll:hover{scrollbar-width:thin;scrollbar-color:#c5c9d2 #eef1f6}
-  .hover-scroll::-webkit-scrollbar{width:8px;height:8px}
+  /* ===== Scrollbars invisibles au repos, visibles au survol, sans changer la mise en page ===== */
+  .hover-scroll{
+    overflow:auto;
+    scrollbar-gutter:stable both-edges;         /* réserve l’espace → pas de shift */
+    /* Firefox */
+    scrollbar-width:thin;
+    scrollbar-color:transparent transparent;    /* invisible par défaut */
+  }
+  .hover-scroll:hover{
+    scrollbar-color:#c5c9d2 #eef1f6;           /* visible au survol */
+  }
+  /* WebKit */
+  .hover-scroll::-webkit-scrollbar{width:8px;height:8px}         /* largeur toujours réservée */
   .hover-scroll::-webkit-scrollbar-thumb{background-color:transparent;border-radius:8px}
   .hover-scroll:hover::-webkit-scrollbar-thumb{background-color:#c5c9d2}
   .hover-scroll::-webkit-scrollbar-track{background:transparent}
@@ -303,7 +312,7 @@
         </div>
       </div>
       <div class="sub" style="margin:6px 0">Copiez-collez ce JSON dans l’issue <b>[SYNC]</b> pour synchroniser le fichier du dépôt via GitHub Actions.</div>
-      <pre id="json-preview" class="mono" style="max-height:400px;overflow:auto;border:1px solid var(--border);padding:10px;border-radius:10px"></pre>
+      <pre id="json-preview" class="mono hover-scroll" style="max-height:400px;overflow:auto;border:1px solid var(--border);padding:10px;border-radius:10px"></pre>
       <div class="row" style="margin-top:8px;gap:10px">
         <label class="pill">Repo <input id="repo-fullname" placeholder="owner/repo" style="margin-left:6px;width:220px"/></label>
         <span class="sub">Ex: <code>quangfr/sherpa</code></span>
@@ -350,7 +359,7 @@
   </form>
 </dialog>
 
-<!-- Objectif modal: description extensible 2e ligne, consultants scroll only -->
+<!-- Objectif modal -->
 <dialog id="dlg-objectif">
   <form method="dialog" class="modal" id="form-objectif">
     <h3>✏️ Objectif</h3>
