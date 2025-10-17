@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SHERPA — MVP v4.9.4</title>
+<title>SHERPA — MVP v4.9.5</title>
 <style>
   :root{
     --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
@@ -11,6 +11,10 @@
     --stb-f:#166534;--note-f:#3730a3;--verb-f:#9a3412;--avis-f:#075985;--alerte-f:#991b1b;
     --headH:44px; --hover:#f3f6ff;
     --stb:#e6f4ea;--note:#eef2ff;--verb:#fff7ed;--avis:#e0f2fe;--alerte:#fee2e2;
+    /* Barres de progression (claires) */
+    --bar-green:#e6f4ea;  /* vert clair */
+    --bar-yellow:#fff9db; /* jaune clair */
+    --bar-red:#ffe5e5;    /* rouge clair */
   }
 
   html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font:14px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
@@ -135,8 +139,10 @@
 
   #objectif-pane .pane-header{top:0}
 
-  /* Highlight ligne consultant filtré (onglet Objectifs) */
-  .hl{background:var(--hover);border-radius:8px;padding:2px 4px}
+  /* Lignes consultants dans cartes Objectifs avec barre de progression */
+  .cons-row{position:relative;border-radius:8px;overflow:hidden}
+  .cons-row .progbar{position:absolute;left:0;top:0;bottom:0;width:var(--w,0%);background:var(--bgc,#0000);z-index:0;transition:width .2s ease}
+  .cons-row .content{position:relative;z-index:1;padding:2px 4px}
 </style>
 </head>
 <body>
@@ -433,7 +439,7 @@ function load(){
     {id:uid(),consultant_id:c1.id,type:'NOTE',date_publication:today,description:'Préparer démo',created_at:nowISO(),updated_at:nowISO()}
   ];
   const params={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,github_repo_fullname:'quangfr/sherpa'};
-  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.94,updated_at:nowISO()}};
+  const s={consultants:[c1,c2,c3],activities:acts,objectifs:[obj1],params,meta:{version:4.95,updated_at:nowISO()}};
   localStorage.setItem(LS_KEY,JSON.stringify(s));
   return s;
 }
@@ -665,12 +671,16 @@ function hoursForObjective(objId, byConsultantId=null, recentDays=null){
   }).reduce((s,a)=>s+(Number(a.heures)||0),0);
 }
 
-/* Nouvel util: liste des consultants ayant au moins 1 STB sur l'objectif */
+/* Consultants ayant ≥1 STB pour l’objectif */
 function consultantsWithSTBForObjective(objId){
   const ids=new Set(store.activities
     .filter(a=>a.type==='ACTION_ST_BERNARD' && a.objectif_id===objId)
     .map(a=>a.consultant_id));
   return [...ids];
+}
+
+function barColor(pct){
+  return pct<30 ? 'var(--bar-red)' : (pct<70 ? 'var(--bar-yellow)' : 'var(--bar-green)');
 }
 
 function renderObjectifs(){
@@ -709,7 +719,7 @@ function renderObjectifs(){
         return {c,pct,t,r};
       }).sort((a,b)=> b.pct - a.pct || a.c.nom.localeCompare(b.c.nom));
 
-      // 🔎 Si filtre consultant actif : n’afficher que 3 lignes (top), en incluant le consultant filtré
+      // Si filtre consultant actif : top-3 incluant le consultant filtré
       let rows = rowsAll;
       if(onlyCid){
         const sel = rowsAll.find(x=>x.c?.id===onlyCid);
@@ -720,16 +730,20 @@ function renderObjectifs(){
       const card=document.createElement('div'); card.className='card';
       const consList = rows.map(row=>{
           const isSel = row.c?.id===onlyCid && Boolean(onlyCid);
+          const nameHtml = isSel ? `<b>${esc(row.c?.nom||'—')}</b>` : `${esc(row.c?.nom||'—')}`;
           return `
-          <div class="row space" style="margin:6px 0">
-            <div class="${isSel?'hl':''}">
-              <span class="nowrap" title="${row.pct}%">${progBadge(row.pct)}</span>
-              <span class="linklike" data-goto-c="${row.c?.id||''}" data-goto-o="${o.id}" style="margin-left:6px">${esc(row.c?.nom||'—')}</span>
-              <span class="sub">(${row.pct}%)</span>
-            </div>
-            <div class="nowrap">
-              <b>${row.t}h</b>
-              ${row.r>0 ? ` <span class="green">(+${row.r}h)</span>` : ``}
+          <div class="cons-row" style="--w:${row.pct}%; --bgc:${barColor(row.pct)}">
+            <div class="progbar"></div>
+            <div class="row space content" style="margin:6px 0">
+              <div>
+                <span class="nowrap" title="${row.pct}%">${progBadge(row.pct)}</span>
+                <span class="linklike" data-goto-c="${row.c?.id||''}" data-goto-o="${o.id}" style="margin-left:6px">${nameHtml}</span>
+                <span class="sub">(${row.pct}%)</span>
+              </div>
+              <div class="nowrap">
+                <b>${row.t}h</b>
+                ${row.r>0 ? ` <span class="green">(+${row.r}h)</span>` : ``}
+              </div>
             </div>
           </div>`;
       }).join('');
@@ -818,7 +832,7 @@ document.getElementById('form-activity').onsubmit=(e)=>{
   e.preventDefault();
   const data={ consultant_id:faConsult.value, type:faType.value, date_publication:document.getElementById('fa-date').value, description:faDesc.value.trim(), heures: faType.value==='ACTION_ST_BERNARD' ? Number(faHeures.value||1): undefined, objectif_id: faObj.value || undefined };
   const missing = !data.consultant_id || !data.type || !data.date_publication || !data.description || (data.type==='ACTION_ST_BERNARD' && !(data.heures>0));
-  if(!currentActivityId && missing){ dlgA.close('cancel'); return; } // ✅ annuler si nouveau + champs vides
+  if(!currentActivityId && missing){ dlgA.close('cancel'); return; } // annuler si création + champs vides
   if(missing){ alert('Champs requis manquants.'); return; }
   if(currentActivityId){ Object.assign(store.activities.find(x=>x.id===currentActivityId),data,{updated_at:nowISO()}); }else{ store.activities.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
   dlgA.close('ok'); save();
@@ -839,7 +853,6 @@ function openObjectifModal(id=null){
   const pane=document.getElementById('fo-consultants'); 
   pane.innerHTML='';
 
-  // ⚠️ Uniquement consultants avec ≥1 STB sur l’objectif
   const stbIds = consultantsWithSTBForObjective(o.id);
   if(stbIds.length===0){
     pane.innerHTML = `<div class="sub">Aucun consultant n'a encore de 🐕‍🦺 Action STB liée à cet objectif.</div>`;
@@ -884,7 +897,7 @@ document.getElementById('btn-new-objectif').onclick=()=>openObjectifModal();
 document.getElementById('form-objectif').onsubmit=(e)=>{
   e.preventDefault();
   const titre=document.getElementById('fo-titre').value.trim(); 
-  if(!currentObjectifId && !titre){ dlgO.close('cancel'); return; } // ✅ annuler si nouveau + vide
+  if(!currentObjectifId && !titre){ dlgO.close('cancel'); return; } // annuler si création + vide
   if(!titre){ alert('Titre requis.'); return; }
   const description=foDesc.value.trim()||undefined;
 
@@ -921,7 +934,7 @@ document.getElementById('btn-new-consultant').onclick=()=>openConsultantModal();
 document.getElementById('form-consultant').onsubmit=(e)=>{
   e.preventDefault();
   const data={ nom:document.getElementById('fc-nom').value.trim(), titre_mission:document.getElementById('fc-titre').value.trim()||undefined, date_fin:document.getElementById('fc-fin').value||undefined, url:document.getElementById('fc-url').value||undefined, description:document.getElementById('fc-desc').value.trim()||undefined };
-  if(!currentConsultantId && !data.nom){ dlgC.close('cancel'); return; } // ✅ annuler si nouveau + vide
+  if(!currentConsultantId && !data.nom){ dlgC.close('cancel'); return; } // annuler si création + vide
   if(!data.nom){ alert('Nom requis.'); return; }
   if(currentConsultantId){ Object.assign(store.consultants.find(x=>x.id===currentConsultantId),data,{updated_at:nowISO()}); }
   else{ store.consultants.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
@@ -977,7 +990,7 @@ function applyIncomingStore(incoming, sourceLabel){
   if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
   const required=['consultants','activities','objectifs','params'];
   for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
-  incoming.meta = Object.assign({version:store?.meta?.version??4.94}, incoming.meta||{});
+  incoming.meta = Object.assign({version:store?.meta?.version??4.95}, incoming.meta||{});
   incoming.meta.updated_at = nowISO();
   localStorage.setItem(LS_KEY, JSON.stringify(incoming));
   store = incoming;
