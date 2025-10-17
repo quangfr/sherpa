@@ -133,7 +133,7 @@ Explications sur les couleurs des pastille état consultant
   - **Total objectif** : `XXh (+Yh)` où **(+Yh)** = heures récentes **en vert**  
   - Liste des **consultants associés** :
     - **Pastille état (🟢/🟡/🔴) + Nom (cliquable)** → ouvre **Activité** filtrée **consultant + objectif**  
-    - **Progression** : “0️⃣0️⃣à9️⃣9️⃣et💯”  
+    - **Progression** : “0️⃣à9️⃣”  
     - **Heures** STB totales sur cet objectif : `12h`  
     - **Heures récentes** (sur `objectif_recent_jours`) : `(+4h)` **en vert**
 
@@ -146,7 +146,7 @@ Explications sur les couleurs des pastille état consultant
 ### 7.3 Interactions / CRUD
 - **Clic nom consultant** ⇒ Activité filtrée `consultant_id` + `objectif_id`  
 - **✏️** sur carte ⇒ modal d’édition de l’objectif :
-  - Titre, Description, associer/dissocier des consultants, **progression_pct (0-100)** par consultant  
+  - Titre, Description, associer/dissocier des consultants, **progression_pct (0-9)** par consultant  
 - **Créer / Modifier / Supprimer** objectifs
 
 ---
