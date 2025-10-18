@@ -90,11 +90,17 @@ dialog::backdrop{background:#0006}
 .clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .clamp-5{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.filters-carousel{display:flex;align-items:stretch;gap:8px;margin-top:6px}
+.filters-scroller{flex:1 1 auto;overflow:visible}
+.filters-carousel .filters-row{align-items:center;flex-wrap:wrap;gap:8px}
 #acts-pane .filters-row{align-items:center;flex-wrap:wrap}
 #acts-pane .filters-row > *{flex:1 1 auto}
 #acts-pane .filters-row .filter-field{min-width:140px}
 #acts-pane .filters-row label.filter-field{white-space:nowrap}
 #acts-pane .filters-row select.filter-field{display:inline-block;max-width:220px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.filters-nav{display:none}
+.hours-badge{display:inline-flex;align-items:center;gap:4px;padding:0 6px;border-radius:999px;background:var(--pill);color:var(--pill-f);font-size:12px;line-height:1.4;font-weight:600}
+.objective-line{display:flex;align-items:center;gap:6px}
 .mobile-desc{margin-top:4px;display:flex;flex-direction:column;gap:4px}
 .mobile-desc .text{word-break:break-word;overflow-wrap:anywhere}
 .mobile-desc.expanded .text{-webkit-line-clamp:unset;display:block;overflow:visible}
@@ -128,6 +134,8 @@ dialog::backdrop{background:#0006}
 .desktop-only{display:revert}
 .mobile-only{display:none}
 @media (max-width:520px){
+  main{height:auto;min-height:calc(100vh - var(--headH));overflow:visible}
+  .view{height:auto}
   .split{grid-template-columns:1fr}
   #cons-pane{display:none}
   #activities-table thead{display:none}
@@ -138,14 +146,28 @@ dialog::backdrop{background:#0006}
   #activities-table td.mobile-only{display:block!important}
   .mobile-only{display:block}
   .col-actions, #activities-table td.actions-cell{display:none!important}
-  #acts-pane .filters{position:sticky;top:36px;z-index:3;background:var(--bg);padding:6px 0;border-bottom:1px solid var(--border)}
-  #acts-pane .filters-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#c5c9d2 transparent;padding-bottom:6px}
-  #acts-pane .filters-row::-webkit-scrollbar{height:6px}
-  #acts-pane .filters-row::-webkit-scrollbar-thumb{background:#c5c9d2;border-radius:999px}
-  #acts-pane .filters-row::-webkit-scrollbar-track{background:transparent}
+  #view-activite{overflow:visible}
+  .pane{height:auto}
+  #acts-pane .pane-body{overflow:visible}
+  #acts-pane .filters{position:static;padding:6px 0 0;border-bottom:none}
+  .filters-carousel{position:relative;padding:0 28px}
+  .filters-scroller{overflow:hidden;scroll-behavior:smooth;padding:0 4px}
+  .filters-carousel .filters-row{flex-wrap:nowrap;padding-bottom:6px}
   #acts-pane .filters-row > *{flex:0 0 auto}
   #acts-pane .filters-row .filter-field{min-width:150px;max-width:200px}
   #acts-pane .filters-row select.filter-field{width:100%}
+  .filters-nav{display:none;position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:999px;background:var(--card);border:1px solid var(--border);align-items:center;justify-content:center;font-size:16px;color:var(--muted);box-shadow:0 2px 8px #0000001a;z-index:2}
+  .filters-nav.prev{left:0}
+  .filters-nav.next{right:0}
+  .filters-carousel::before,.filters-carousel::after{content:"";position:absolute;top:0;bottom:6px;width:22px;pointer-events:none;z-index:1;display:none}
+  .filters-carousel::before{left:28px;background:linear-gradient(90deg,var(--bg) 45%,transparent)}
+  .filters-carousel::after{right:28px;background:linear-gradient(270deg,var(--bg) 45%,transparent)}
+  .filters-carousel.is-scrollable::before,.filters-carousel.is-scrollable::after{display:block}
+  .filters-carousel.at-start::before{display:none}
+  .filters-carousel.at-end::after{display:none}
+  .filters-carousel.is-scrollable .filters-nav{display:flex}
+  .filters-carousel.at-start .filters-nav.prev,
+  .filters-carousel.at-end .filters-nav.next{opacity:.3;pointer-events:none}
 }
 @media (max-width:360px){
   #filters-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
@@ -206,17 +228,23 @@ dialog::backdrop{background:#0006}
             </select>
           </div>
           <div class="filters">
-            <div class="row filters-row" style="gap:8px;margin-top:6px">
-              <select class="filter-field" id="filter-type" title="Filtrer par type">
-                <option value="">🗂️ Tous les types</option>
-                <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
-                <option value="NOTE">📝 Note</option>
-                <option value="VERBATIM">💬 Verbatim</option>
-                <option value="AVIS">🗣️ Avis</option>
-                <option value="ALERTE">🚨 Alerte</option>
-              </select>
-              <select class="filter-field" id="filter-objectif" title="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
-              <label class="row filter-field" style="gap:6px">📅Avant <input type="date" id="filter-before"/></label>
+            <div id="filters-carousel" class="filters-carousel">
+              <button type="button" class="filters-nav prev" id="filters-prev" aria-label="Filtres précédents">‹</button>
+              <div class="filters-scroller" id="filters-scroller">
+                <div class="row filters-row">
+                  <select class="filter-field" id="filter-type" title="Filtrer par type">
+                    <option value="">🗂️ Tous les types</option>
+                    <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
+                    <option value="NOTE">📝 Note</option>
+                    <option value="VERBATIM">💬 Verbatim</option>
+                    <option value="AVIS">🗣️ Avis</option>
+                    <option value="ALERTE">🚨 Alerte</option>
+                  </select>
+                  <select class="filter-field" id="filter-objectif" title="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
+                  <label class="row filter-field" style="gap:6px">📅Avant <input type="date" id="filter-before"/></label>
+                </div>
+              </div>
+              <button type="button" class="filters-nav next" id="filters-next" aria-label="Filtres suivants">›</button>
             </div>
             <div id="filters-chips" class="mobile-only" aria-live="polite"></div>
           </div>
@@ -345,6 +373,7 @@ const isMobile=()=>window.innerWidth<=520;
 function progBadge(p){ const pct=Math.max(0,Math.min(100,Number(p)||0)); return pct<30?'🟥':(pct<70?'🟨':'🟩'); }
 function pctColorClass(p){ const v=Math.max(0,Math.min(100,Number(p)||0)); return v<30?'fill-r':(v<70?'fill-y':'fill-g'); }
 const clamp01=(v)=>Math.max(0,Math.min(100,Number(v)||0));
+const formatHours=(value)=>{ const num=Number(value); if(!Number.isFinite(num)) return '0'; return num.toString().replace('.',','); };
 function autoSizeKeepMax(el, bucket){ if(!el) return; el.style.height='auto'; const h=el.scrollHeight; bucket.value=Math.max(bucket.value||0,h); el.style.height=bucket.value+'px'; }
 let ACT_DESC_MAX={value:120}, CONS_DESC_MAX={value:120};
 
@@ -485,7 +514,33 @@ const selectObjectif=document.getElementById('filter-objectif');
 const badgeCount=document.getElementById('activities-count');
 const chips=document.getElementById('filters-chips');
 const selectConsultantMobile=document.getElementById('filter-consultant-mobile');
+const filtersCarousel=document.getElementById('filters-carousel');
+const filtersScroller=document.getElementById('filters-scroller');
+const filtersPrev=document.getElementById('filters-prev');
+const filtersNext=document.getElementById('filters-next');
 const expandedMobileActivities=new Set();
+function updateFiltersCarousel(){
+  if(!filtersCarousel || !filtersScroller) return;
+  const scrollable=filtersScroller.scrollWidth - filtersScroller.clientWidth > 4;
+  filtersCarousel.classList.toggle('is-scrollable',scrollable);
+  if(!scrollable){
+    filtersCarousel.classList.remove('at-start','at-end');
+    return;
+  }
+  const atStart=filtersScroller.scrollLeft<=4;
+  const atEnd=filtersScroller.scrollLeft >= filtersScroller.scrollWidth - filtersScroller.clientWidth - 4;
+  filtersCarousel.classList.toggle('at-start',atStart);
+  filtersCarousel.classList.toggle('at-end',atEnd);
+}
+function scrollFilters(dir){
+  if(!filtersScroller) return;
+  const delta=filtersScroller.clientWidth*0.75;
+  filtersScroller.scrollBy({left:dir*delta,behavior:'smooth'});
+  updateFiltersCarousel();
+}
+filtersPrev?.addEventListener('click',e=>{ e.preventDefault(); scrollFilters(-1); });
+filtersNext?.addEventListener('click',e=>{ e.preventDefault(); scrollFilters(1); });
+filtersScroller?.addEventListener('scroll',()=>updateFiltersCarousel());
 selectType.addEventListener('change',e=>{state.filters.type=e.target.value; renderActivities();});
 inputBefore.addEventListener('change',e=>{state.filters.before=e.target.value; renderActivities();});
 selectObjectif.addEventListener('change',e=>{state.filters.objectif_id=e.target.value; renderActivities();});
@@ -535,11 +590,17 @@ function renderActivities(){
     const c=store.consultants.find(x=>x.id===a.consultant_id);
     const o=a.objectif_id ? store.objectifs.find(x=>x.id===a.objectif_id):null;
     const meta=TYPE_META[a.type]||{emoji:'❓',pill:'',label:a.type};
-    const heuresTxt = a.type==='ACTION_ST_BERNARD' ? `<b>${a.heures??0}h</b>`:'';
+    const heuresBadge = a.type==='ACTION_ST_BERNARD' ? `<span class="hours-badge"><b>${esc(formatHours(a.heures??0))}h</b></span>`:'';
 
     const descText=a.description||'';
+    const descHtml=esc(descText);
     const isExpanded=expandedMobileActivities.has(a.id);
-    const descContent=`${o?`🎯 <b>${esc(o.titre)}</b> — `:''}${esc(descText)}`;
+    const objectiveHtml=o?`🎯 <b>${esc(o.titre)}</b>`:'';
+    const segments=[];
+    const headerSegment=heuresBadge || objectiveHtml ? `${[heuresBadge,objectiveHtml].filter(Boolean).join(' ')}` : '';
+    if(headerSegment || !descText) segments.push(headerSegment || '—');
+    if(descText) segments.push(descHtml);
+    const descContent=segments.join(' — ');
     const hasMobileContent=descContent.trim().length>0;
 
     const tr=document.createElement('tr'); tr.classList.add('clickable');
@@ -550,7 +611,6 @@ function renderActivities(){
     <span class="pill ${meta.pill}">${meta.emoji} ${meta.label}</span>
     <span class="linklike" data-cpop="${c?.id||''}"><b>${esc(c?.nom||'—')}</b></span>
     <span class="sub">· ${esc(a.date_publication||'')}</span>
-    <div style="margin-left:auto">${heuresTxt}</div>
   </div>
   <div class="mobile-desc${isExpanded?' expanded':''}" data-act="${a.id}">
     <div class="text clamp-5">${descContent}</div>
@@ -567,8 +627,8 @@ function renderActivities(){
   <div class="sub">${esc(c?.titre_mission||'—')}</div>
 </td>
 <td class="main desktop-only">
-  <div class="row space"><div class="clamp-1" title="${o?esc(o.titre):''}">${o?`🎯 <b>${esc(o.titre)}</b>`:'—'}</div><div>${heuresTxt}</div></div>
-  <div class="clamp-3" title="${esc(a.description||'')}">${esc(a.description||'')}</div>
+  <div class="clamp-1 objective-line" title="${o?esc(o.titre):''}">${headerSegment || '—'}</div>
+  <div class="clamp-3" title="${descHtml}">${descHtml}</div>
 </td>
 <td class="desktop-only nowrap actions-cell"><button class="btn small" data-edit="${a.id}" title="Éditer">✏️</button><button class="btn small danger" data-del="${a.id}" title="Supprimer">🗑️</button></td>`;
 
@@ -612,6 +672,7 @@ function renderActivities(){
   });
 
   renderFiltersChips();
+  updateFiltersCarousel();
 }
 window.addEventListener('resize',()=>renderActivities());
 
