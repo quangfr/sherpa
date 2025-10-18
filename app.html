@@ -1,974 +1,162 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>SHERPA — MVP v5.0.1</title><style>
-:root{
---bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
---accent:#2563eb;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--pill:#f1f5f9;--pill-fg:#0f172a;
---stb-f:#166534;--note-f:#3730a3;--verb-f:#9a3412;--avis-f:#075985;--alerte-f:#991b1b;
---headH:44px; --hover:#f3f6ff;
---stb:#e6f4ea;--note:#eef2ff;--verb:#fff7ed;--avis:#e0f2fe;--alerte:#fee2e2;
---bar-g:#dcfce7;--bar-y:#fef9c3;--bar-r:#fee2e2;
-}
-html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font:14px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
-*{box-sizing:border-box}
-a{color:var(--accent);text-decoration:none}
-header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);height:var(--headH)}
-.wrap{width:100%;max-width:none;margin:0;padding:6px 10px}
-main{height:calc(100vh - var(--headH)); overflow:hidden}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px}
-.tab{padding:6px 8px;border:1px solid var(--border);border-bottom-color:transparent;border-radius:10px 10px 0 0;background:var(--card);cursor:pointer;font-weight:700;font-size:13px;white-space:nowrap}
-.tab.active{background:var(--bg);border-color:var(--border);color:var(--accent)}
-.view{display:none;height:100%;overflow:auto;padding:8px 4px}
-.view.active{display:block}
-.grid{display:grid;gap:10px}
-.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
-@media (max-width:1300px){.g4{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:980px){.g4{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:660px){.g4{grid-template-columns:repeat(1,1fr)}}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;box-shadow:0 1px 0 #00000008}
-.title{font-weight:700}
-.sub{color:var(--muted);font-size:11px}
-.row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.row.space{justify-content:space-between}
-.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:3px 8px;font-size:12px}
-.pill.stb{background:var(--stb);border-color:var(--stb);color:var(--stb-f)}
-.pill.note{background:var(--note);border-color:var(--note);color:var(--note-f)}
-.pill.verb{background:var(--verb);border-color:var(--verb);color:var(--verb-f)}
-.pill.avis{background:var(--avis);border-color:var(--avis);color:var(--avis-f)}
-.pill.alerte{background:var(--alerte);border-color:var(--alerte);color:var(--alerte-f)}
-.btn{border:1px solid var(--border);background:var(--card);border-radius:8px;padding:5px 8px;cursor:pointer}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.ghost{background:transparent}
-.btn.danger{border-color:var(--red);color:var(--red)}
-.btn.small{padding:3px 7px;font-size:12px}
-input,select,textarea{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 8px;font:inherit}
-textarea{width:100%;resize:vertical}
-#fa-desc,#fc-desc{min-height:300px;resize:none;overflow:hidden}
-.split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:10px;height:100%}
-@media (max-width:980px){.split{grid-template-columns:1fr;height:auto}}
-.pane{display:flex;flex-direction:column;min-height:0;height:100%}
-.pane-header{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--border);padding:6px 0}
-.pane-body{min-height:0;overflow:auto}
-.hover-scroll{overflow:auto;scrollbar-gutter:stable both-edges;scrollbar-width:thin;scrollbar-color:transparent transparent}
-.hover-scroll:hover{ scrollbar-color:#c5c9d2 #eef1f6; }
-.hover-scroll::-webkit-scrollbar{width:8px;height:8px}
-.hover-scroll::-webkit-scrollbar-thumb{background-color:transparent;border-radius:8px}
-.hover-scroll:hover::-webkit-scrollbar-thumb{background-color:#c5c9d2}
-.hover-scroll::-webkit-scrollbar-track{background:transparent}
-.hover-scroll:hover::-webkit-scrollbar-track{background:#eef1f6}
-.table{width:100%;border-collapse:collapse;table-layout:fixed}
-.table th,.table td{border-top:1px solid var(--border);padding:6px 8px;vertical-align:top}
-.table th{font-size:12px;color:var(--muted);text-align:left;background:var(--card);position:sticky;top:0;z-index:1}
-.table tbody tr{transition:background-color .08s ease}
-.table tbody tr:hover{background:var(--hover)}
-.table tbody tr.clickable{cursor:pointer}
-.muted{color:var(--muted)}
-.dot{width:10px;height:10px;border-radius:50%}
-.dot.g{background:var(--green)} .dot.y{background:var(--yellow)} .dot.r{background:var(--red)}
-.green{color:var(--green);font-weight:700}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;white-space:pre-wrap}
-.hidden{display:none!important}
-.linklike{cursor:pointer;text-decoration:underline}
-.nowrap{white-space:nowrap}
-.bold{font-weight:700}
-dialog{border:none;border-radius:14px;box-shadow:0 10px 30px #0000002a;padding:0;max-width:820px;width:calc(100% - 24px)}
-dialog::backdrop{background:#0006}
-.modal{padding:14px}
-.modal h3{margin:0 0 6px}
-.modal .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-@media (max-width:700px){.modal .grid2{grid-template-columns:1fr}}
-.actions{display:flex;gap:8px;justify-content:flex-end;padding:10px;border-top:1px solid var(--border);background:var(--bg);border-radius:0 0 14px 14px}
-/* colonnes activités (date fusionnée dans Type) */
-.col-type{width:150px}
-.col-consultant{width:220px}
-.col-main{width:auto}
-.col-actions{width:84px}
-@media (max-width:900px){
-.col-consultant{width:180px}
-.col-type{width:140px}
-.col-actions{width:76px}
-}
-.clamp-1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.clamp-5{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
-.filters-carousel{display:flex;align-items:stretch;gap:8px;margin-top:6px}
-.filters-scroller{flex:1 1 auto;overflow:visible}
-.filters-carousel .filters-row{align-items:center;flex-wrap:wrap;gap:8px}
-#acts-pane .filters-row{align-items:center;flex-wrap:wrap}
-#acts-pane .filters-row > *{flex:1 1 auto}
-#acts-pane .filters-row .filter-field{min-width:140px}
-#acts-pane .filters-row label.filter-field{white-space:nowrap}
-#acts-pane .filters-row select.filter-field{display:inline-block;max-width:220px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
-.filters-nav{display:none}
-.hours-badge{display:inline-flex;align-items:center;gap:4px;padding:0 6px;border-radius:999px;background:var(--pill);color:var(--pill-f);font-size:12px;line-height:1.4;font-weight:600}
-.objective-line{display:flex;align-items:center;gap:6px}
-.mobile-desc{margin-top:4px;display:flex;flex-direction:column;gap:4px}
-.mobile-desc .text{word-break:break-word;overflow-wrap:anywhere}
-.mobile-desc.expanded .text{-webkit-line-clamp:unset;display:block;overflow:visible}
-.mobile-desc .toggle-more{align-self:flex-start;background:none;border:none;padding:0;color:var(--accent);font:inherit;cursor:pointer}
-.mobile-desc .toggle-more:focus{outline:2px solid var(--accent);outline-offset:2px}
-#activities-table td.main{word-break:break-word;overflow-wrap:anywhere}
-#activities-table td:last-child .btn.small{white-space:nowrap}
-.type-pill{display:inline-flex;align-items:center;gap:6px}
-/* — consultants table (col date supprimée) — */
-#consultants-table{table-layout:fixed}
-.col-c-name{width:auto}
-.col-c-actions{width:88px}
-@media (max-width:900px){.col-c-actions{width:78px}}
-#objectif-pane .pane-header{top:0}
-.rowline{position:relative;padding:2px 4px;border-radius:8px;overflow:hidden}
-.rowline .fill{position:absolute;inset:0 0 0 0;width:0;height:100%;z-index:0;opacity:.9}
-.rowline .content{position:relative;z-index:1;margin:6px 2px}
-.fill-g{background:var(--bar-g)} .fill-y{background:var(--bar-y)} .fill-r{background:var(--bar-r)}
-.cons-mini{font-size:12px;line-height:1.15}
-.cons-mini .sub{font-size:10px}
-.cons-mini .rowline{margin:2px 0;padding:1px 3px;border-radius:6px}
-.cons-mini .rowline .content{margin:3px 2px}
-.cons-mini .row.space{gap:4px}
-/* Dashboard list */
-.db-list{font:inherit;font-size:13px;line-height:1.6}
-.db-list .row{margin:3px 0}
-/* Réglages = Paramètres + Sync en 2 colonnes */
-.reglages-grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:10px}
-@media (max-width:900px){.reglages-grid{grid-template-columns:1fr}}
-/* 📱 mobile patch */
-.desktop-only{display:revert}
-.mobile-only{display:none}
-@media (max-width:520px){
-  main{height:auto;min-height:calc(100vh - var(--headH));overflow:visible}
-  .view{height:auto}
-  .split{grid-template-columns:1fr}
-  #cons-pane{display:none}
-  #activities-table thead{display:none}
-  #activities-table colgroup{display:none}
-  #activities-table tr{display:block;border:1px solid var(--border);border-radius:10px;margin:8px 0;background:var(--card);padding:8px}
-  #activities-table td{display:block;border-top:none;padding:2px 0}
-  #activities-table td.desktop-only{display:none!important}
-  #activities-table td.mobile-only{display:block!important}
-  .mobile-only{display:block}
-  .col-actions, #activities-table td.actions-cell{display:none!important}
-  #view-activite{overflow:visible}
-  .pane{height:auto}
-  #acts-pane .pane-body{overflow:visible}
-  #acts-pane .filters{position:static;padding:6px 0 0;border-bottom:none}
-  .filters-carousel{position:relative;padding:0 28px}
-  .filters-scroller{overflow:hidden;scroll-behavior:smooth;padding:0 4px}
-  .filters-carousel .filters-row{flex-wrap:nowrap;padding-bottom:6px}
-  #acts-pane .filters-row > *{flex:0 0 auto}
-  #acts-pane .filters-row .filter-field{min-width:150px;max-width:200px}
-  #acts-pane .filters-row select.filter-field{width:100%}
-  .filters-nav{display:none;position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:999px;background:var(--card);border:1px solid var(--border);align-items:center;justify-content:center;font-size:16px;color:var(--muted);box-shadow:0 2px 8px #0000001a;z-index:2}
-  .filters-nav.prev{left:0}
-  .filters-nav.next{right:0}
-  .filters-carousel::before,.filters-carousel::after{content:"";position:absolute;top:0;bottom:6px;width:22px;pointer-events:none;z-index:1;display:none}
-  .filters-carousel::before{left:28px;background:linear-gradient(90deg,var(--bg) 45%,transparent)}
-  .filters-carousel::after{right:28px;background:linear-gradient(270deg,var(--bg) 45%,transparent)}
-  .filters-carousel.is-scrollable::before,.filters-carousel.is-scrollable::after{display:block}
-  .filters-carousel.at-start::before{display:none}
-  .filters-carousel.at-end::after{display:none}
-  .filters-carousel.is-scrollable .filters-nav{display:flex}
-  .filters-carousel.at-start .filters-nav.prev,
-  .filters-carousel.at-end .filters-nav.next{opacity:.3;pointer-events:none}
-}
-@media (max-width:360px){
-  #filters-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-  #filters-chips .chip{font-size:11px;padding:2px 6px;border:1px solid var(--border);border-radius:999px;background:var(--pill)}
-}
-</style></head><body>
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>SHERPA — MVP v5.0.1</title><link rel="stylesheet" href="app.css"/></head><body>
 <header><div class="wrap"><nav class="tabs" id="tabs"></nav></div></header>
 <main class="wrap">
-  <!-- DASHBOARD -->
-  <section class="view" id="view-dashboard">
-    <div class="grid g4">
-      <div class="card"><div class="row space"><div class="title">🚨 En alerte &lt; <span id="db-fin-w"></span>j</div><div class="pill" id="db-alerte-title">0</div></div><div id="db-alerte-list" class="db-list"></div></div>
-      <div class="card"><div class="row space"><div class="title">⏳ Fin de mission &lt; <span id="db-fin-x"></span>j</div><div class="pill" id="db-fin-title">0</div></div><div id="db-fin-list" class="db-list"></div></div>
-      <div class="card"><div class="row space"><div class="title">🐕‍🦺 Action STB &gt; <span id="db-stb-y"></span>j</div><div class="pill" id="db-stb-title">0</div></div><div id="db-stb-list" class="db-list"></div></div>
-      <div class="card"><div class="row space"><div class="title">🗣️ Avis &gt; <span id="db-avis-z"></span>j</div><div class="pill" id="db-avis-title">0</div></div><div id="db-avis-list" class="db-list"></div></div>
-    </div>
-  </section>
-
-  <!-- ACTIVITÉ -->
-  <section class="view" id="view-activite" style="overflow:hidden">
-    <div class="split">
-      <div class="pane" id="cons-pane">
-        <div class="pane-header">
-          <div class="row space" style="margin-bottom:6px">
-            <div class="row" style="gap:8px">
-              <div class="title">👤 Consultants</div>
-              <div class="pill" id="consultants-count">0</div>
-              <button class="btn small" id="btn-new-consultant">+Ajouter un consultant</button>
-            </div>
-            <div class="row"><button class="btn small" id="btn-reset-filters-left">Réinitialiser</button></div>
-          </div>
-        </div>
-        <div class="pane-body hover-scroll">
-          <table class="table" id="consultants-table">
-            <!-- ⛏️ col date supprimée -->
-            <colgroup><col class="col-c-name"/><col class="col-c-actions"/></colgroup>
-            <thead><tr><th class="linklike" data-sort="nom">Nom ▲/▼</th><th>Act.</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="pane" id="acts-pane">
-        <div class="pane-header">
-          <div class="row space">
-            <div class="row" style="gap:10px">
-              <div class="title">🗂️ Activités</div>
-              <div class="pill" id="activities-count">0</div>
-            </div>
-            <div class="row" style="gap:6px;flex-wrap:nowrap">
-              <button class="btn small primary" id="btn-new-activity">+Ajouter une activité</button>
-              <button class="btn small" id="btn-reset-filters">Réinitialiser</button>
-            </div>
-          </div>
-          <div class="mobile-only" style="margin-top:6px">
-            <select id="filter-consultant-mobile" title="Filtrer par consultant" style="width:100%">
-              <option value="">👤 Tous les consultants</option>
-            </select>
-          </div>
-          <div class="filters">
-            <div id="filters-carousel" class="filters-carousel">
-              <button type="button" class="filters-nav prev" id="filters-prev" aria-label="Filtres précédents">‹</button>
-              <div class="filters-scroller" id="filters-scroller">
-                <div class="row filters-row">
-                  <select class="filter-field" id="filter-type" title="Filtrer par type">
-                    <option value="">🗂️ Tous les types</option>
-                    <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
-                    <option value="NOTE">📝 Note</option>
-                    <option value="VERBATIM">💬 Verbatim</option>
-                    <option value="AVIS">🗣️ Avis</option>
-                    <option value="ALERTE">🚨 Alerte</option>
-                  </select>
-                  <select class="filter-field" id="filter-objectif" title="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
-                  <label class="row filter-field" style="gap:6px">📅Avant <input type="date" id="filter-before"/></label>
-                </div>
-              </div>
-              <button type="button" class="filters-nav next" id="filters-next" aria-label="Filtres suivants">›</button>
-            </div>
-            <div id="filters-chips" class="mobile-only" aria-live="polite"></div>
-          </div>
-        </div>
-        <div class="pane-body hover-scroll">
-          <table class="table" id="activities-table">
-            <colgroup><col class="col-type"/><col class="col-consultant"/><col class="col-main"/><col class="col-actions"/></colgroup>
-            <thead><tr><th>Type</th><th>Consultant</th><th>Description + Objectif</th><th>Actions</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OBJECTIF -->
-  <section class="view" id="view-objectif">
-    <div class="pane" id="objectif-pane">
-      <div class="pane-header">
-        <div class="row space" style="margin-bottom:6px">
-          <div class="row" style="gap:8px">
-            <div class="title">🎯 Objectifs</div>
-            <button class="btn small primary" id="btn-new-objectif">+Ajouter un objectif</button>
-          </div>
-        </div>
-        <div class="row" style="gap:8px;margin-bottom:6px">
-          <button class="btn small" id="btn-reset-objectif-filters">Réinitialiser</button>
-          <select id="filter-objectif-consultant" title="Filtrer par consultant"><option value="">👤 Tous les consultants</option></select>
-        </div>
-      </div>
-      <div class="pane-body hover-scroll"><div class="grid g4" id="objectifs-grid"></div></div>
-    </div>
-  </section>
-
-  <!-- RÉGLAGES -->
-  <section class="view" id="view-reglages">
-    <div class="reglages-grid">
-      <div class="card">
-        <div class="title">⚙️ Paramètres</div>
-        <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px">
-          <label>delai_alerte_jours <input type="number" id="p-delai_alerte" min="1"/></label>
-          <label>fin_mission_sous_jours <input type="number" id="p-fin_mission_sous" min="1"/></label>
-          <label>stb_recent_jours <input type="number" id="p-stb_recent" min="1"/></label>
-          <label>avis_manquant_depuis_jours <input type="number" id="p-avis_manquant" min="1"/></label>
-          <label>objectif_recent_jours <input type="number" id="p-objectif_recent" min="1"/></label>
-          <label>objectif_bar_max_heures <input type="number" id="p-objectif_bar_max" min="1" step="1"/></label>
-        </div>
-        <div class="row" style="margin-top:8px"><button class="btn primary small" id="btn-save-params">Enregistrer</button></div>
-        <div class="sub" style="margin-top:6px">Les titres du Dashboard & l’affichage des barres se mettent à jour automatiquement.</div>
-      </div>
-      <div class="card">
-        <div class="row space">
-          <div class="title">🔃 Sync GitHub</div>
-          <div class="row">
-            <button class="btn small danger" id="btn-reset-storage">🐈‍⬛ Réinitialiser</button>
-            <button class="btn small" id="btn-copy-json">📋 Copier JSON</button>
-          </div>
-        </div>
-        <div class="sub" style="margin:6px 0">Aperçu de vos données (lecture seule) — vous pouvez copier le JSON.</div>
-        <pre id="json-preview" class="mono hover-scroll" style="max-height:400px;overflow:auto;border:1px solid var(--border);padding:10px;border-radius:10px"></pre>
-        <input id="file-import" type="file" accept="application/json,.json" class="hidden"/>
-      </div>
-    </div>
-  </section>
+<!-- DASHBOARD -->
+<section class="view" id="view-dashboard">
+<div class="grid g4">
+<div class="card"><div class="row space"><div class="title">🚨 En alerte &lt; <span id="db-fin-w"></span>j</div><div class="pill" id="db-alerte-title">0</div></div><div id="db-alerte-list" class="db-list"></div></div>
+<div class="card"><div class="row space"><div class="title">⏳ Fin de mission &lt; <span id="db-fin-x"></span>j</div><div class="pill" id="db-fin-title">0</div></div><div id="db-fin-list" class="db-list"></div></div>
+<div class="card"><div class="row space"><div class="title">🐕‍🦺 Action STB &gt; <span id="db-stb-y"></span>j</div><div class="pill" id="db-stb-title">0</div></div><div id="db-stb-list" class="db-list"></div></div>
+<div class="card"><div class="row space"><div class="title">🗣️ Avis &gt; <span id="db-avis-z"></span>j</div><div class="pill" id="db-avis-title">0</div></div><div id="db-avis-list" class="db-list"></div></div>
+</div>
+</section>
+<!-- ACTIVITÉ -->
+<section class="view" id="view-activite" style="overflow:hidden">
+<div class="pane" id="acts-pane">
+<div class="pane-header">
+<div class="row space">
+<div class="row" style="gap:10px">
+<div class="title">🗂️ Activités</div>
+<div class="pill" id="activities-count">0</div>
+</div>
+<div class="row" style="gap:6px;flex-wrap:nowrap">
+<button class="btn small primary" id="btn-new-activity">Ajouter</button>
+<button class="btn small" id="btn-reset-filters">Réinit</button>
+<button class="btn small" id="btn-new-consultant">+Consultant</button>
+</div>
+</div>
+<div class="filters">
+<div class="filters-grid">
+<label class="filter-item" data-filter="consultant">
+<span class="filter-label">👤 Cons.</span>
+<select id="filter-consultant" title="Filtrer par consultant" aria-label="Filtrer par consultant">
+<option value="">👤 Tous les consultants</option>
+</select>
+</label>
+<label class="filter-item" data-filter="type">
+<span class="filter-label">🗂️ Act.</span>
+<select id="filter-type" title="Filtrer par type" aria-label="Filtrer par type">
+<option value="">🗂️ Tous les types</option>
+<option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
+<option value="NOTE">📝 Note</option>
+<option value="VERBATIM">💬 Verbatim</option>
+<option value="AVIS">🗣️ Avis</option>
+<option value="ALERTE">🚨 Alerte</option>
+</select>
+</label>
+<label class="filter-item" data-filter="objectif">
+<span class="filter-label">🎯 Obj.</span>
+<select id="filter-objectif" title="Filtrer par objectif" aria-label="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
+</label>
+<label class="filter-item" data-filter="month">
+<span class="filter-label">📅 Dat.</span>
+<select id="filter-month" title="Filtrer par mois" aria-label="Filtrer par mois">
+<option value="">📅 Toutes les dates</option>
+</select>
+</label>
+</div>
+</div>
+</div>
+<div class="pane-body hover-scroll">
+<table class="table" id="activities-table">
+<colgroup><col class="col-type"/><col class="col-consultant"/><col class="col-main"/><col class="col-actions"/></colgroup>
+<thead><tr><th>Type</th><th>Consultant</th><th>Description + Objectif</th><th>Actions</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</section>
+<!-- OBJECTIF -->
+<section class="view" id="view-objectif">
+<div class="pane" id="objectif-pane">
+<div class="pane-header">
+<div class="row space" style="margin-bottom:6px">
+<div class="row" style="gap:8px">
+<div class="title">🎯 Objectifs</div>
+<button class="btn small primary" id="btn-new-objectif">+Ajouter un objectif</button>
+</div>
+</div>
+<div class="row" style="gap:8px;margin-bottom:6px">
+<button class="btn small" id="btn-reset-objectif-filters">Réinitialiser</button>
+<select id="filter-objectif-consultant" title="Filtrer par consultant"><option value="">👤 Tous les consultants</option></select>
+</div>
+</div>
+<div class="pane-body hover-scroll"><div class="grid g4" id="objectifs-grid"></div></div>
+</div>
+</section>
+<!-- RÉGLAGES -->
+<section class="view" id="view-reglages">
+<div class="reglages-grid">
+<div class="card">
+<div class="title">⚙️ Paramètres</div>
+<div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px">
+<label>delai_alerte_jours <input type="number" id="p-delai_alerte" min="1"/></label>
+<label>fin_mission_sous_jours <input type="number" id="p-fin_mission_sous" min="1"/></label>
+<label>stb_recent_jours <input type="number" id="p-stb_recent" min="1"/></label>
+<label>avis_manquant_depuis_jours <input type="number" id="p-avis_manquant" min="1"/></label>
+<label>objectif_recent_jours <input type="number" id="p-objectif_recent" min="1"/></label>
+<label>objectif_bar_max_heures <input type="number" id="p-objectif_bar_max" min="1" step="1"/></label>
+</div>
+<div class="row" style="margin-top:8px"><button class="btn primary small" id="btn-save-params">Enregistrer</button></div>
+<div class="sub" style="margin-top:6px">Les titres du Dashboard & l’affichage des barres se mettent à jour automatiquement.</div>
+</div>
+<div class="card">
+<div class="row space">
+<div class="title">🔃 Sync GitHub</div>
+<div class="row">
+<button class="btn small danger" id="btn-reset-storage">🐈‍⬛ Réinitialiser</button>
+<button class="btn small" id="btn-copy-json">📋 Copier JSON</button>
+</div>
+</div>
+<div class="sub" style="margin:6px 0">Aperçu de vos données (lecture seule) — vous pouvez copier le JSON.</div>
+<pre id="json-preview" class="mono hover-scroll" style="max-height:400px;overflow:auto;border:1px solid var(--border);padding:10px;border-radius:10px"></pre>
+<input id="file-import" type="file" accept="application/json,.json" class="hidden"/>
+</div>
+</div>
+</section>
 </main>
-
 <!-- MODALES -->
 <dialog id="dlg-activity"><form method="dialog" class="modal" id="form-activity">
-  <div class="row space" style="margin-bottom:8px">
-    <h3>✏️ Activité</h3>
-    <button type="button" class="btn small" id="fa-goto-consultant">👤Voir le consultant</button>
-  </div>
-  <div class="grid2">
-    <label>Consultant <select name="consultant_id" required id="fa-consultant"></select></label>
-    <label>Type <select name="type" required id="fa-type">
-      <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option><option value="NOTE">📝 Note</option>
-      <option value="VERBATIM">💬 Verbatim</option><option value="AVIS">🗣️ Avis</option><option value="ALERTE">🚨 Alerte</option>
-    </select></label>
-    <label>Date <input type="date" name="date_publication" required id="fa-date"/></label>
-    <label>Objectif <select name="objectif_id" id="fa-objectif"></select></label>
-    <label id="fa-heures-wrap" class="hidden">Heures (STB) <input type="number" min="0.25" step="0.25" name="heures" id="fa-heures"/></label>
-    <label style="grid-column:1/-1">Description <textarea name="description" required id="fa-desc" placeholder="Description…"></textarea></label>
-  </div>
-  <div class="actions"><button value="cancel" class="btn">Annuler</button><button value="ok" class="btn primary">Enregistrer</button></div>
-</form></dialog>
-
-<dialog id="dlg-objectif"><form method="dialog" class="modal" id="form-objectif"><h3>✏️ Objectif</h3>
-  <div class="grid2">
-    <label>Titre* <input name="titre" required id="fo-titre"/></label>
-    <label>Description <textarea id="fo-desc" name="description" placeholder="Description…" style="min-height:300px;resize:none;overflow:hidden"></textarea></label>
-    <div style="grid-column:1/-1">
-      <div class="sub">Progression (%) — consultants ayant au moins une 🐕‍🦺 Action STB sur cet objectif</div>
-      <div id="fo-consultants" class="hover-scroll" style="max-height:260px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:6px;margin-top:6px"></div>
-    </div>
-  </div>
-  <div class="actions"><button value="del" class="btn danger">Supprimer</button><button value="cancel" class="btn">Annuler</button><button value="ok" class="btn primary">Enregistrer</button></div>
-</form></dialog>
-
-<dialog id="dlg-consultant"><form method="dialog" class="modal" id="form-consultant">
-  <div class="row space" style="margin-bottom:8px">
-    <h3>✏️ Consultant</h3>
-    <button type="button" class="btn small" id="fc-goto-objectifs">🎯Voir ses objectifs</button>
-  </div>
-  <div class="grid2">
-    <label>Nom* <input name="nom" required id="fc-nom"/></label>
-    <label>Titre mission <input name="titre_mission" id="fc-titre"/></label>
-    <label>Date fin (dispo) <input type="date" name="date_fin" id="fc-fin"/></label>
-    <label>URL (fiche) <input name="url" id="fc-url" placeholder="https://…"/></label>
-    <label style="grid-column:1/-1">Description <textarea name="description" id="fc-desc" placeholder="Notes libres…"></textarea></label>
-  </div>
-  <div class="actions"><button value="del" class="btn danger">Supprimer</button><button value="cancel" class="btn">Annuler</button><button value="ok" class="btn primary">Enregistrer</button></div>
-</form></dialog>
-
-<script>
-/* KEYS & UTILS */
-const LS_KEY='SHERPA_STORE_V5';
-const TAB_KEY='SHERPA_ACTIVE_TAB';
-const nowISO=()=>new Date().toISOString();
-const todayStr=()=>new Date().toISOString().slice(0,10);
-const uid=()=>crypto.randomUUID?crypto.randomUUID():'id-'+Math.random().toString(36).slice(2);
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
-const parseDate=s=>s? new Date(s+'T00:00:00'):null;
-const daysDiff=(a,b)=>Math.round((a-b)/86400000);
-const addDays=(d,n)=>new Date(d.getTime()+n*86400000);
-const isMobile=()=>window.innerWidth<=520;
-function progBadge(p){ const pct=Math.max(0,Math.min(100,Number(p)||0)); return pct<30?'🟥':(pct<70?'🟨':'🟩'); }
-function pctColorClass(p){ const v=Math.max(0,Math.min(100,Number(p)||0)); return v<30?'fill-r':(v<70?'fill-y':'fill-g'); }
-const clamp01=(v)=>Math.max(0,Math.min(100,Number(v)||0));
-const formatHours=(value)=>{ const num=Number(value); if(!Number.isFinite(num)) return '0'; return num.toString().replace('.',','); };
-function autoSizeKeepMax(el, bucket){ if(!el) return; el.style.height='auto'; const h=el.scrollHeight; bucket.value=Math.max(bucket.value||0,h); el.style.height=bucket.value+'px'; }
-let ACT_DESC_MAX={value:120}, CONS_DESC_MAX={value:120};
-
-/* DEFAULT STORE */
-const DEFAULT_PARAMS={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,objectif_bar_max_heures:10};
-let store=load();
-
-/* LOAD / SAVE */
-function load(){
-  const raw=localStorage.getItem(LS_KEY);
-  if(raw){ try{ return JSON.parse(raw);}catch{ console.warn('LocalStorage invalide, on repart vide.'); } }
-  const empty={consultants:[],activities:[],objectifs:[],params:{...DEFAULT_PARAMS},meta:{version:5.01,updated_at:nowISO()}};
-  localStorage.setItem(LS_KEY, JSON.stringify(empty));
-  return empty;
-}
-function save(){ store.meta=store.meta||{}; store.meta.updated_at=nowISO(); localStorage.setItem(LS_KEY,JSON.stringify(store)); refreshAll(); }
-
-/* NAV TABS */
-const TABS=[
-  {id:'dashboard',labelFull:'🏠 Dashboard',labelShort:'🏠 Das.'},
-  {id:'activite',labelFull:'🗂️ Activités',labelShort:'🗂️ Act.'},
-  {id:'objectif',labelFull:'🎯 Objectifs',labelShort:'🎯 Obj.'},
-  {id:'reglages',labelFull:'⚙️ Paramètres',labelShort:'⚙️ Par.'}
-];
-const tabsEl=document.getElementById('tabs');
-TABS.forEach(t=>{
-  const b=document.createElement('button');
-  b.className='tab';
-  b.textContent=t.labelFull;
-  b.onclick=()=>openTab(t.id,true);
-  b.id='tab-'+t.id;
-  b.dataset.full=t.labelFull;
-  b.dataset.short=t.labelShort;
-  tabsEl.appendChild(b);
-});
-function applyTabLabels(){ const compact = window.innerWidth<=520; document.querySelectorAll('.tab').forEach(btn=>{ btn.textContent = compact ? btn.dataset.short : btn.dataset.full; }); }
-window.addEventListener('resize',applyTabLabels); applyTabLabels();
-function openTab(id, persist=false){
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  const tabBtn=document.querySelector('#tab-'+id); if(tabBtn) tabBtn.classList.add('active');
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const view=document.querySelector('#view-'+id); if(view) view.classList.add('active');
-  if(persist) localStorage.setItem(TAB_KEY,id);
-  if(id==='reglages') updateSyncPreview();
-}
-openTab(localStorage.getItem(TAB_KEY)||'activite');
-
-/* DASHBOARD (inchangé) */
-function dashboard(){
-  const p=store.params||DEFAULT_PARAMS, today=new Date();
-  const hasRecent=(cid,type,days)=>store.activities.some(a=>a.consultant_id===cid && a.type===type && parseDate(a.date_publication)>=addDays(today,-days));
-  const alerteCut=addDays(today,-p.delai_alerte_jours);
-  const alerteList = store.consultants.filter(c => store.activities.some(a=>a.consultant_id===c.id && a.type==='ALERTE' && parseDate(a.date_publication)>=alerteCut));
-  const finList = store.consultants.filter(c=> c.date_fin && ((d=>d>=0 && d<=p.fin_mission_sous_jours)(daysDiff(parseDate(c.date_fin),today))));
-  const stbList = store.consultants.filter(c=>!hasRecent(c.id,'ACTION_ST_BERNARD',p.stb_recent_jours));
-  const avisList = store.consultants.filter(c=>!hasRecent(c.id,'AVIS',p.avis_manquant_depuis_jours));
-  document.getElementById('db-fin-w').textContent=p.delai_alerte_jours;
-  document.getElementById('db-fin-x').textContent=p.fin_mission_sous_jours;
-  document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
-  document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
-  const fmt=(arr,box,title)=>{
-    const out=document.getElementById(box); out.innerHTML='';
-    arr.forEach(c=>{
-      const d=document.createElement('div');
-      d.className='row';
-      d.innerHTML = `<span class="dot ${statusOf(c)}" title="état"></span><span class="linklike">${esc(c.nom)}</span><span class="sub">/ ${esc(c.titre_mission||'—')}</span>`;
-      d.querySelector('.linklike').onclick=()=>{ openTab('activite',true); setConsultantFilter(c.id); };
-      out.appendChild(d);
-    });
-    document.getElementById(title).textContent=arr.length;
-  };
-  fmt(alerteList,'db-alerte-list','db-alerte-title');
-  fmt(finList,'db-fin-list','db-fin-title');
-  fmt(stbList,'db-stb-list','db-stb-title');
-  fmt(avisList,'db-avis-list','db-avis-title');
-}
-
-/* STATE */
-let state={sortCol:'nom',sortDir:1,filters:{consultant_id:'',type:'',before:'',objectif_id:''},objectifs_consultant_id:''};
-
-/* CONSULTANTS LIST (col date supprimée) */
-const consTBody=document.querySelector('#consultants-table tbody');
-document.querySelectorAll('#consultants-table thead th[data-sort]').forEach(th=>th.onclick=()=>{state.sortCol=th.dataset.sort;state.sortDir*=-1;renderConsultants();});
-function statusOf(c){
-  const p=store.params||DEFAULT_PARAMS, today=new Date();
-  const hasSTBRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='ACTION_ST_BERNARD' && parseDate(a.date_publication)>=addDays(today,-p.stb_recent_jours));
-  const hasAvisRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='AVIS' && parseDate(a.date_publication)>=addDays(today,-p.avis_manquant_depuis_jours));
-  const hasAlerteRecent = store.activities.some(a=>a.consultant_id===c.id && a.type==='ALERTE' && parseDate(a.date_publication)>=addDays(today,-p.delai_alerte_jours));
-  const past = c.date_fin? (daysDiff(parseDate(c.date_fin),today)<0):false;
-  if(past || hasAlerteRecent) return 'r';
-  return (hasSTBRecent || hasAvisRecent) ? 'g' : 'y';
-}
-function renderConsultants(){
-  const rows=[...store.consultants].sort((a,b)=> state.sortCol==='nom'
-    ? state.sortDir * a.nom.localeCompare(b.nom)
-    : state.sortDir * (a.date_fin||'').localeCompare(b.date_fin||'')
-  );
-  document.getElementById('consultants-count').textContent=rows.length;
-  consTBody.innerHTML='';
-  const options=['<option value="">👤 Tous les consultants</option>'];
-  rows.forEach(c=>{
-    const tr=document.createElement('tr'); tr.classList.add('clickable');
-    tr.innerHTML=`
-<td>
-  <div class="row"><span class="dot ${statusOf(c)}"></span><b>${esc(c.nom)}</b></div>
-  <div class="sub">${esc(c.titre_mission||'—')}</div>
-</td>
-<td class="nowrap">
-  ${c.url?`<a class="btn small" href="${esc(c.url)}" target="_blank" title="Fiche">🔗</a>`:''}
-  <button class="btn small" data-edit="${c.id}" title="Éditer">✏️</button>
-  <button class="btn small" data-goto-obj="${c.id}" title="Voir ses objectifs">🎯</button>
-</td>`;
-    tr.addEventListener('click',(e)=>{ if(e.target.closest('button, a')) return; setConsultantFilter(c.id); openTab('activite',true); });
-    tr.querySelector('[data-edit]').onclick=(e)=>{ e.stopPropagation(); openConsultantModal(c.id); };
-    tr.querySelector('[data-goto-obj]').onclick=(e)=>{ e.stopPropagation(); gotoConsultantObjectives(c.id); };
-    consTBody.appendChild(tr);
-    options.push(`<option value="${esc(c.id)}">${esc(c.nom)}</option>`);
-  });
-  if(selectConsultantMobile){
-    const current=state.filters.consultant_id||'';
-    selectConsultantMobile.innerHTML=options.join('');
-    if([...selectConsultantMobile.options].some(o=>o.value===current)) selectConsultantMobile.value=current;
-    else selectConsultantMobile.value='';
-  }
-}
-function setConsultantFilter(cid){ state.filters.consultant_id=cid; if(selectConsultantMobile) selectConsultantMobile.value=cid||''; renderActivities(); }
-function gotoConsultantObjectives(cid){
-  state.objectifs_consultant_id=cid;
-  document.getElementById('filter-objectif-consultant').value=cid;
-  openTab('objectif',true); renderObjectifs();
-}
-
-/* ACTIVITIES */
-const actTBody=document.querySelector('#activities-table tbody');
-const selectType=document.getElementById('filter-type');
-const inputBefore=document.getElementById('filter-before');
-const selectObjectif=document.getElementById('filter-objectif');
-const badgeCount=document.getElementById('activities-count');
-const chips=document.getElementById('filters-chips');
-const selectConsultantMobile=document.getElementById('filter-consultant-mobile');
-const filtersCarousel=document.getElementById('filters-carousel');
-const filtersScroller=document.getElementById('filters-scroller');
-const filtersPrev=document.getElementById('filters-prev');
-const filtersNext=document.getElementById('filters-next');
-const expandedMobileActivities=new Set();
-function updateFiltersCarousel(){
-  if(!filtersCarousel || !filtersScroller) return;
-  const scrollable=filtersScroller.scrollWidth - filtersScroller.clientWidth > 4;
-  filtersCarousel.classList.toggle('is-scrollable',scrollable);
-  if(!scrollable){
-    filtersCarousel.classList.remove('at-start','at-end');
-    return;
-  }
-  const atStart=filtersScroller.scrollLeft<=4;
-  const atEnd=filtersScroller.scrollLeft >= filtersScroller.scrollWidth - filtersScroller.clientWidth - 4;
-  filtersCarousel.classList.toggle('at-start',atStart);
-  filtersCarousel.classList.toggle('at-end',atEnd);
-}
-function scrollFilters(dir){
-  if(!filtersScroller) return;
-  const delta=filtersScroller.clientWidth*0.75;
-  filtersScroller.scrollBy({left:dir*delta,behavior:'smooth'});
-  updateFiltersCarousel();
-}
-filtersPrev?.addEventListener('click',e=>{ e.preventDefault(); scrollFilters(-1); });
-filtersNext?.addEventListener('click',e=>{ e.preventDefault(); scrollFilters(1); });
-filtersScroller?.addEventListener('scroll',()=>updateFiltersCarousel());
-selectType.addEventListener('change',e=>{state.filters.type=e.target.value; renderActivities();});
-inputBefore.addEventListener('change',e=>{state.filters.before=e.target.value; renderActivities();});
-selectObjectif.addEventListener('change',e=>{state.filters.objectif_id=e.target.value; renderActivities();});
-document.getElementById('btn-reset-filters').onclick=()=>{ state.filters={consultant_id:'',type:'',before:'',objectif_id:''}; selectType.value=''; inputBefore.value=''; selectObjectif.value=''; if(selectConsultantMobile) selectConsultantMobile.value=''; renderActivities(); };
-document.getElementById('btn-reset-filters-left').onclick=()=>{ state.filters.consultant_id=''; if(selectConsultantMobile) selectConsultantMobile.value=''; renderConsultants(); renderActivities(); };
-selectConsultantMobile?.addEventListener('change',e=>{ setConsultantFilter(e.target.value||''); });
-
-const TYPE_META={
-  ACTION_ST_BERNARD:{emoji:'🐕‍🦺', pill:'stb', label:'Action STB'},
-  NOTE:{emoji:'📝', pill:'note', label:'Note'},
-  VERBATIM:{emoji:'💬', pill:'verb', label:'Verbatim'},
-  AVIS:{emoji:'🗣️', pill:'avis', label:'Avis'},
-  ALERTE:{emoji:'🚨', pill:'alerte', label:'Alerte'}
-};
-
-function renderFiltersChips(){
-  if(!chips) return;
-  chips.innerHTML='';
-  const items=[];
-  if(state.filters.type) items.push(`${TYPE_META[state.filters.type]?.emoji||'🗂️'} ${TYPE_META[state.filters.type]?.label||state.filters.type}`);
-  if(state.filters.objectif_id){
-    const o=store.objectifs.find(x=>x.id===state.filters.objectif_id);
-    if(o) items.push(`🎯 ${o.titre}`);
-  }
-  if(state.filters.before) items.push(`📅 ≤ ${state.filters.before}`);
-  if(state.filters.consultant_id){
-    const c=store.consultants.find(x=>x.id===state.filters.consultant_id);
-    if(c) items.push(`👤 ${c.nom}`);
-  }
-  chips.innerHTML = items.map(t=>`<span class="chip">${esc(t)}</span>`).join('') || '';
-}
-
-function renderActivities(){
-  const {consultant_id,type,before,objectif_id}=state.filters;
-  const beforeDate = before ? parseDate(before) : null;
-  const list= store.activities
-    .filter(a=>!consultant_id || a.consultant_id===consultant_id)
-    .filter(a=>!type || a.type===type)
-    .filter(a=>!objectif_id || (a.objectif_id||'')===objectif_id)
-    .filter(a=>!beforeDate || (parseDate(a.date_publication) && parseDate(a.date_publication) <= beforeDate))
-    .sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
-
-  badgeCount.textContent=list.length;
-  actTBody.innerHTML='';
-  const mobile = isMobile();
-  list.forEach(a=>{
-    const c=store.consultants.find(x=>x.id===a.consultant_id);
-    const o=a.objectif_id ? store.objectifs.find(x=>x.id===a.objectif_id):null;
-    const meta=TYPE_META[a.type]||{emoji:'❓',pill:'',label:a.type};
-    const heuresBadge = a.type==='ACTION_ST_BERNARD' ? `<span class="hours-badge"><b>${esc(formatHours(a.heures??0))}h</b></span>`:'';
-
-    const descText=a.description||'';
-    const descHtml=esc(descText);
-    const isExpanded=expandedMobileActivities.has(a.id);
-    const objectiveHtml=o?`🎯 <b>${esc(o.titre)}</b>`:'';
-    const segments=[];
-    const headerSegment=heuresBadge || objectiveHtml ? `${[heuresBadge,objectiveHtml].filter(Boolean).join(' ')}` : '';
-    if(headerSegment || !descText) segments.push(headerSegment || '—');
-    if(descText) segments.push(descHtml);
-    const descContent=segments.join(' — ');
-    const hasMobileContent=descContent.trim().length>0;
-
-    const tr=document.createElement('tr'); tr.classList.add('clickable');
-    tr.innerHTML = mobile
-    ? `
-<td class="mobile-only">
-  <div class="row" style="gap:8px">
-    <span class="pill ${meta.pill}">${meta.emoji} ${meta.label}</span>
-    <span class="linklike" data-cpop="${c?.id||''}"><b>${esc(c?.nom||'—')}</b></span>
-    <span class="sub">· ${esc(a.date_publication||'')}</span>
-  </div>
-  <div class="mobile-desc${isExpanded?' expanded':''}" data-act="${a.id}">
-    <div class="text clamp-5">${descContent}</div>
-    ${hasMobileContent?`<button type="button" class="toggle-more" data-expand="${a.id}">${isExpanded?'Réduire':'Tout afficher'}</button>`:''}
-  </div>
-</td>`
-    : `
-<td class="desktop-only">
-  <div><span class="pill ${meta.pill} type-pill">${meta.emoji} ${meta.label}</span></div>
-  <div class="sub">${esc(a.date_publication||'')}</div>
-</td>
-<td class="desktop-only">
-  <span class="linklike" data-cpop="${c?.id||''}"><b>${esc(c?.nom||'—')}</b></span>
-  <div class="sub">${esc(c?.titre_mission||'—')}</div>
-</td>
-<td class="main desktop-only">
-  <div class="clamp-1 objective-line" title="${o?esc(o.titre):''}">${headerSegment || '—'}</div>
-  <div class="clamp-3" title="${descHtml}">${descHtml}</div>
-</td>
-<td class="desktop-only nowrap actions-cell"><button class="btn small" data-edit="${a.id}" title="Éditer">✏️</button><button class="btn small danger" data-del="${a.id}" title="Supprimer">🗑️</button></td>`;
-
-    tr.addEventListener('click',(e)=>{ if(e.target.closest('button,[data-cpop]')) return; openActivityModal(a.id); });
-    tr.querySelectorAll('[data-cpop]')?.forEach(el=>el.addEventListener('click',(e)=>{ e.stopPropagation(); const cid=e.currentTarget.dataset.cpop; if(cid) openConsultantModal(cid); }));
-    if(!mobile){
-      tr.querySelector('[data-edit]')?.addEventListener('click',(e)=>{ e.stopPropagation(); openActivityModal(a.id); });
-      tr.querySelector('[data-del]')?.addEventListener('click',(e)=>{ e.stopPropagation(); if(confirm('Supprimer cette activité ?')){ store.activities=store.activities.filter(x=>x.id!==a.id); save(); } });
-    }else{
-      const descWrap=tr.querySelector('.mobile-desc');
-      const toggleBtn=descWrap?.querySelector('[data-expand]');
-      const textEl=descWrap?.querySelector('.text');
-      if(toggleBtn && textEl){
-        const wasExpanded=descWrap.classList.contains('expanded');
-        if(wasExpanded) descWrap.classList.remove('expanded');
-        const collapsedHeight=textEl.clientHeight;
-        textEl.classList.remove('clamp-5');
-        const fullHeight=textEl.scrollHeight;
-        textEl.classList.add('clamp-5');
-        if(wasExpanded) descWrap.classList.add('expanded');
-        const needsToggle=fullHeight>collapsedHeight+1;
-        if(!needsToggle){
-          toggleBtn.remove();
-          expandedMobileActivities.delete(a.id);
-          descWrap.classList.remove('expanded');
-        }else{
-          toggleBtn.addEventListener('click',(e)=>{
-            e.stopPropagation();
-            const targetId=e.currentTarget.dataset.expand;
-            if(expandedMobileActivities.has(targetId)){
-              expandedMobileActivities.delete(targetId);
-            }else{
-              expandedMobileActivities.add(targetId);
-            }
-            renderActivities();
-          });
-        }
-      }
-    }
-    actTBody.appendChild(tr);
-  });
-
-  renderFiltersChips();
-  updateFiltersCarousel();
-}
-window.addEventListener('resize',()=>renderActivities());
-
-/* OBJECTIFS GRID */
-const selectObjConsult=document.getElementById('filter-objectif-consultant');
-selectObjConsult.addEventListener('change',e=>{ state.objectifs_consultant_id=e.target.value; renderObjectifs(); });
-document.getElementById('btn-reset-objectif-filters').onclick=()=>{ state.objectifs_consultant_id=''; document.getElementById('filter-objectif-consultant').value=''; renderObjectifs(); };
-
-function hoursForObjective(objId, byConsultantId=null, recentDays=null){
-  const acts=store.activities.filter(a=>a.type==='ACTION_ST_BERNARD' && a.objectif_id===objId);
-  const now=new Date();
-  return acts.filter(a=>{
-    if(byConsultantId && a.consultant_id!==byConsultantId) return false;
-    if(recentDays!=null && parseDate(a.date_publication) < addDays(now,-recentDays)) return false;
-    return true;
-  }).reduce((s,a)=>s+(Number(a.heures)||0),0);
-}
-function consultantsWithSTBForObjective(objId){
-  const ids=new Set(store.activities.filter(a=>a.type==='ACTION_ST_BERNARD' && a.objectif_id===objId).map(a=>a.consultant_id));
-  return [...ids];
-}
-function renderObjectifs(){
-  const keep=selectObjConsult.value;
-  selectObjConsult.innerHTML = '<option value="">👤 Tous les consultants</option>' + store.consultants.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join('');
-  if(keep) selectObjConsult.value=keep;
-
-  const grid=document.getElementById('objectifs-grid'); grid.innerHTML='';
-  const p=store.params||DEFAULT_PARAMS; const onlyCid=state.objectifs_consultant_id; const barMax = Number(p.objectif_bar_max_heures||10);
-  store.objectifs.forEach(o=>{
-    if(onlyCid && !consultantsWithSTBForObjective(o.id).includes(onlyCid)) return;
-    const total=hoursForObjective(o.id,null,null);
-    const recent=hoursForObjective(o.id,null,p.objectif_recent_jours);
-    const stbIds = consultantsWithSTBForObjective(o.id);
-    const rowsAll = stbIds.map(cid=>{
-      const c = store.consultants.find(x=>x.id===cid);
-      const link = (o.consultants||[]).find(x=>x.consultant_id===cid);
-      const pct = clamp01(link?.progression_pct ?? 0);
-      const t = hoursForObjective(o.id,c?.id,null);
-      const r = hoursForObjective(o.id,c?.id,p.objectif_recent_jours);
-      return {c,pct,t,r};
-    }).sort((a,b)=> b.pct - a.pct || a.c.nom.localeCompare(b.c.nom));
-
-    let rows = rowsAll;
-    if(onlyCid){
-      const sel = rowsAll.find(x=>x.c?.id===onlyCid);
-      const others = rowsAll.filter(x=>x.c?.id!==onlyCid);
-      rows = sel ? [sel, ...others.slice(0,2)] : others.slice(0,3);
-    }
-    const card=document.createElement('div'); card.className='card';
-    const consList = rows.map(row=>{
-      const isSel = row.c?.id===onlyCid && Boolean(onlyCid);
-      const widthPct = Math.max(0, Math.min(100, barMax>0 ? (row.t/barMax)*100 : 0));
-      const fillClass = pctColorClass(row.pct);
-      return `
-<div class="rowline" title="${row.t}h / ${barMax}h">
-  <div class="fill ${fillClass}" style="width:${widthPct}%;"></div>
-  <div class="row space content">
-    <div><span class="nowrap" title="${row.pct}%">${progBadge(row.pct)}</span>
-      <span class="linklike ${isSel?'bold':''}" data-goto-c="${row.c?.id||''}" data-goto-o="${o.id}" style="margin-left:6px">${esc(row.c?.nom||'—')}</span>
-      <span class="sub">(${row.pct}%)</span></div>
-    <div class="nowrap"><b>${row.t}h</b>${row.r>0 ? ` <span class="green">(+${row.r}h)</span>` : ``}</div>
-  </div>
-</div>`;
-    }).join('');
-    card.innerHTML=`
-<div class="row space">
-  <div class="title linklike" data-goto-oid="${o.id}" title="Voir les activités liées">${esc(o.titre)} <span class="sub">(${stbIds.length})</span></div>
-  <button class="btn small" data-edit="${o.id}">✏️</button>
+<div class="row space" style="margin-bottom:8px">
+<h3>✏️ Activité</h3>
+<button type="button" class="btn small" id="fa-goto-consultant">👤Voir le consultant</button>
 </div>
-<div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
-<div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> ${recent>0 ? `<span class="green">(+${recent}h)</span>`:''}</div>
-<div class="cons-list cons-mini">${consList || '<span class="muted">Aucun consultant avec 🐕‍🦺 Action STB pour cet objectif</span>'}</div>`;
-    card.querySelector('[data-goto-oid]').addEventListener('click',e=>{
-      const oid=e.currentTarget.dataset.gotoOid;
-      openTab('activite',true);
-      state.filters.objectif_id=oid;
-      const sel=document.getElementById('filter-objectif');
-      if(sel) sel.value=oid;
-      renderActivities();
-    });
-    card.querySelectorAll('[data-goto-c]').forEach(a=>a.addEventListener('click',()=>{
-      const cid=a.dataset.gotoC, oid=a.dataset.gotoO;
-      openTab('activite',true);
-      state.filters.consultant_id=cid;
-      state.filters.objectif_id=oid;
-      const sel=document.getElementById('filter-objectif');
-      if(sel){ sel.value=oid; }
-      renderActivities();
-    }));
-    card.querySelector('[data-edit]').onclick=()=>openObjectifModal(o.id);
-    grid.appendChild(card);
-  });
-}
-
-/* PARAMS */
-function renderParams(){
-  const p=store.params||DEFAULT_PARAMS;
-  document.getElementById('p-delai_alerte').value=p.delai_alerte_jours;
-  document.getElementById('p-fin_mission_sous').value=p.fin_mission_sous_jours;
-  document.getElementById('p-stb_recent').value=p.stb_recent_jours;
-  document.getElementById('p-avis_manquant').value=p.avis_manquant_depuis_jours;
-  document.getElementById('p-objectif_recent').value=p.objectif_recent_jours;
-  document.getElementById('p-objectif_bar_max').value=p.objectif_bar_max_heures ?? 10;
-}
-document.getElementById('btn-save-params').onclick=()=>{
-  const p=store.params||(store.params={...DEFAULT_PARAMS});
-  p.delai_alerte_jours=Number(document.getElementById('p-delai_alerte').value||7);
-  p.fin_mission_sous_jours=Number(document.getElementById('p-fin_mission_sous').value||60);
-  p.stb_recent_jours=Number(document.getElementById('p-stb_recent').value||30);
-  p.avis_manquant_depuis_jours=Number(document.getElementById('p-avis_manquant').value||60);
-  p.objectif_recent_jours=Number(document.getElementById('p-objectif_recent').value||15);
-  p.objectif_bar_max_heures=Math.max(1, Number(document.getElementById('p-objectif_bar_max').value||10));
-  save(); alert('Paramètres enregistrés.');
-};
-
-/* MODALS (ACTIVITÉ) */
-const dlgA=document.getElementById('dlg-activity');
-const faType=document.getElementById('fa-type');
-const faHeuresWrap=document.getElementById('fa-heures-wrap');
-const faHeures=document.getElementById('fa-heures');
-const faConsult=document.getElementById('fa-consultant');
-const faObj=document.getElementById('fa-objectif');
-const faDesc=document.getElementById('fa-desc');
-const btnFaGoto=document.getElementById('fa-goto-consultant');
-
-faType.onchange=()=>{const isSTB=faType.value==='ACTION_ST_BERNARD'; faHeuresWrap.classList.toggle('hidden',!isSTB); if(isSTB && !faHeures.value) faHeures.value=1; updateFaObjOptions();};
-faConsult.onchange=updateFaObjOptions;
-btnFaGoto.onclick=()=>{ const cid=faConsult.value; if(cid){ dlgA.close(); openConsultantModal(cid); } };
-
-function updateFaObjOptions(){
-  const selected=faObj.value;
-  faObj.innerHTML='<option value="">(aucun)</option>'+store.objectifs.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
-  if([...faObj.options].some(o=>o.value===selected)) faObj.value=selected;
-}
-document.getElementById('btn-new-activity').onclick=()=>openActivityModal();
-let currentActivityId=null;
-function openActivityModal(id=null){
-  currentActivityId=id;
-  faConsult.innerHTML=store.consultants.map(c=>`<option value="${c.id}">${esc(c.nom)}</option>`).join('');
-  document.getElementById('fa-date').value=todayStr();
-  faDesc.value='';
-  faType.value='ACTION_ST_BERNARD'; faHeuresWrap.classList.remove('hidden'); faHeures.value=1;
-  faObj.innerHTML='<option value="">(aucun)</option>';
-  if(id){
-    const a=store.activities.find(x=>x.id===id); if(!a) return;
-    faConsult.value=a.consultant_id; faType.value=a.type; document.getElementById('fa-date').value=a.date_publication||''; faDesc.value=a.description||''; faHeures.value=a.heures||1; updateFaObjOptions(); faObj.value=a.objectif_id||''; faType.onchange();
-  }else{ updateFaObjOptions(); }
-  autoSizeKeepMax(faDesc, ACT_DESC_MAX);
-  faDesc.addEventListener('input',()=>autoSizeKeepMax(faDesc, ACT_DESC_MAX),{once:false});
-  dlgA.showModal();
-}
-document.getElementById('form-activity').onsubmit=(e)=>{
-  e.preventDefault();
-  const data={ consultant_id:faConsult.value, type:faType.value, date_publication:document.getElementById('fa-date').value, description:faDesc.value.trim(), heures: faType.value==='ACTION_ST_BERNARD' ? Number(faHeures.value||1): undefined, objectif_id: faObj.value || undefined };
-  const missing = !data.consultant_id || !data.type || !data.date_publication || !data.description || (data.type==='ACTION_ST_BERNARD' && !(data.heures>0));
-  if(!currentActivityId && missing){ dlgA.close('cancel'); return; }
-  if(missing){ alert('Champs requis manquants.'); return; }
-  if(currentActivityId){ Object.assign(store.activities.find(x=>x.id===currentActivityId),data,{updated_at:nowISO()}); }else{ store.activities.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
-  dlgA.close('ok'); save();
-};
-
-/* MODALS (OBJECTIF) */
-const dlgO=document.getElementById('dlg-objectif'); let currentObjectifId=null;
-const foDesc=document.getElementById('fo-desc');
-function openObjectifModal(id=null){
-  currentObjectifId=id;
-  const o=id? store.objectifs.find(x=>x.id===id) : {id:uid(),titre:'',description:'',consultants:[],created_at:nowISO(),updated_at:nowISO()};
-  document.getElementById('fo-titre').value=o.titre||'';
-  foDesc.value=o.description||'';
-  autoSizeKeepMax(foDesc, {value:foDesc.scrollHeight});
-  foDesc.addEventListener('input',()=>autoSizeKeepMax(foDesc,{value:foDesc.scrollHeight}),{once:false});
-  const pane=document.getElementById('fo-consultants');
-  pane.innerHTML='';
-  const stbIds = consultantsWithSTBForObjective(o.id);
-  if(stbIds.length===0){
-    pane.innerHTML = `<div class="sub">Aucun consultant n'a encore de 🐕‍🦺 Action STB liée à cet objectif.</div>`;
-  }else{
-    const rows = stbIds.map(cid=>{
-      const c=store.consultants.find(x=>x.id===cid);
-      const link=(o.consultants||[]).find(x=>x.consultant_id===cid);
-      const pct=clamp01(link?.progression_pct ?? 0);
-      return {c,pct};
-    }).sort((a,b)=> b.pct - a.pct || a.c.nom.localeCompare(b.c.nom));
-    rows.forEach(({c,pct})=>{
-      const color = pct<30?'var(--red)':(pct<70?'var(--yellow)':'var(--green)');
-      const row=document.createElement('div');
-      row.className='row space';
-      row.style.margin='6px 0';
-      row.innerHTML=`
-<div>${esc(c.nom)}</div>
-<label class="row" style="gap:6px">Progression
-  <input type="number" min="0" max="100" step="1" value="${pct}" data-pct="${c.id}" style="width:80px;color:${color};font-weight:700"/>
-  <span class="sub">%</span>
-</label>`;
-      pane.appendChild(row);
-    });
-    pane.addEventListener('input',(e)=>{
-      const el=e.target.closest('input[type="number"][data-pct]'); if(!el) return;
-      const v=clamp01(el.value); el.value=v; el.style.color = v<30?'var(--red)':(v<70?'var(--yellow)':'var(--green)'); el.style.fontWeight='700';
-    }, {once:false});
-  }
-  dlgO.showModal();
-}
-document.getElementById('btn-new-objectif').onclick=()=>openObjectifModal();
-document.getElementById('form-objectif').onsubmit=(e)=>{
-  e.preventDefault();
-  const titre=document.getElementById('fo-titre').value.trim();
-  if(!currentObjectifId && !titre){ dlgO.close('cancel'); return; }
-  if(!titre){ alert('Titre requis.'); return; }
-  const description=foDesc.value.trim()||undefined;
-  const entries=[...document.querySelectorAll('#fo-consultants input[data-pct]')].map(el=>({consultant_id:el.dataset.pct, progression_pct:clamp01(el.value)}));
-  const payload={titre,description,consultants:entries,updated_at:nowISO()};
-  if(currentObjectifId){ Object.assign(store.objectifs.find(x=>x.id===currentObjectifId),payload); }
-  else{ store.objectifs.push({id:uid(),...payload,created_at:nowISO()}); }
-  dlgO.close('ok'); save();
-};
-document.querySelector('#dlg-objectif .actions [value="del"]').onclick=(e)=>{ e.preventDefault(); if(!currentObjectifId){ dlgO.close(); return; } if(confirm('Supprimer cet objectif ?')){ store.objectifs=store.objectifs.filter(o=>o.id!==currentObjectifId); dlgO.close('del'); save(); } };
-
-/* MODALS (CONSULTANT) */
-const dlgC=document.getElementById('dlg-consultant');
-let currentConsultantId=null;
-const fcDesc=document.getElementById('fc-desc');
-const btnFcGoto=document.getElementById('fc-goto-objectifs');
-
-function openConsultantModal(id=null){
-  currentConsultantId=id;
-  const c=id? store.consultants.find(x=>x.id===id) : {nom:'',titre_mission:'',date_fin:'',url:'',description:''};
-  document.getElementById('fc-nom').value=c?.nom||''; document.getElementById('fc-titre').value=c?.titre_mission||''; document.getElementById('fc-fin').value=c?.date_fin||''; document.getElementById('fc-url').value=c?.url||''; fcDesc.value=c?.description||'';
-  autoSizeKeepMax(fcDesc, CONS_DESC_MAX);
-  fcDesc.addEventListener('input',()=>autoSizeKeepMax(fcDesc, CONS_DESC_MAX),{once:false});
-  dlgC.showModal();
-}
-btnFcGoto.onclick=()=>{ if(currentConsultantId){ dlgC.close(); gotoConsultantObjectives(currentConsultantId); } };
-document.getElementById('btn-new-consultant').onclick=()=>openConsultantModal();
-document.getElementById('form-consultant').onsubmit=(e)=>{
-  e.preventDefault();
-  const data={ nom:document.getElementById('fc-nom').value.trim(), titre_mission:document.getElementById('fc-titre').value.trim()||undefined, date_fin:document.getElementById('fc-fin').value||undefined, url:document.getElementById('fc-url').value||undefined, description:fcDesc.value.trim()||undefined };
-  if(!currentConsultantId && !data.nom){ dlgC.close('cancel'); return; }
-  if(!data.nom){ alert('Nom requis.'); return; }
-  if(currentConsultantId){ Object.assign(store.consultants.find(x=>x.id===currentConsultantId),data,{updated_at:nowISO()}); }
-  else{ store.consultants.push({id:uid(),...data,created_at:nowISO(),updated_at:nowISO()}); }
-  dlgC.close('ok'); save();
-};
-document.querySelector('#dlg-consultant .actions [value="del"]').onclick=(e)=>{ e.preventDefault(); if(!currentConsultantId){ dlgC.close(); return; } if(confirm('Supprimer ce consultant (et garder ses activités) ?')){ store.consultants=store.consultants.filter(c=>c.id!==currentConsultantId); dlgC.close('del'); save(); } };
-
-/* SYNC */
-function updateSyncPreview(){ const el=document.getElementById('json-preview'); if(el) el.textContent=JSON.stringify(store,null,2); }
-document.getElementById('btn-copy-json').onclick=async()=>{ await navigator.clipboard.writeText(JSON.stringify(store,null,2)); alert('JSON copié ✅'); };
-const fileInput=document.getElementById('file-import');
-document.getElementById('btn-reset-storage').onclick=resetFromDataJson;
-
-async function resetFromDataJson(){
-  try{
-    const base=new URL('.', location.href);
-    const url=new URL('data.json', base).href;
-    const resp=await fetch(url, {cache:'no-store'});
-    if(!resp.ok) throw new Error('HTTP '+resp.status);
-    const data=await resp.json();
-    applyIncomingStore(data, 'data.json');
-  }catch(err){
-    console.warn('Échec fetch data.json → fallback file picker:', err);
-    alert("Impossible de charger 'data.json' depuis le répertoire courant.\nSélectionnez un fichier JSON local.");
-    fileInput.value=''; fileInput.click();
-  }
-}
-fileInput.addEventListener('change', async (e)=>{
-  const f=e.target.files?.[0]; if(!f) return;
-  try{ const text=await f.text(); const data=JSON.parse(text); applyIncomingStore(data, f.name); }
-  catch(err){ console.error('Import JSON invalide:', err); alert('Fichier JSON invalide ❌'); }
-});
-function applyIncomingStore(incoming, sourceLabel){
-  if(!incoming || typeof incoming!=='object') throw new Error('Format vide');
-  const required=['consultants','activities','objectifs','params'];
-  for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
-  incoming.params = Object.assign({...DEFAULT_PARAMS}, incoming.params||{});
-  incoming.meta = Object.assign({version:store?.meta?.version??5.01}, incoming.meta||{});
-  incoming.meta.updated_at = nowISO();
-  localStorage.setItem(LS_KEY, JSON.stringify(incoming)); store = incoming; refreshAll();
-  alert(`LocalStorage réinitialisé depuis « ${sourceLabel} » ✅`);
-}
-
-/* INIT & RENDER */
-function renderActivityFiltersOptions(){
-  const curr = selectObjectif.value;
-  selectObjectif.innerHTML = '<option value="">🎯 Tous les objectifs</option>' + store.objectifs.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
-  if([...selectObjectif.options].some(o=>o.value===curr)) selectObjectif.value=curr;
-}
-function refreshAll(){ renderConsultants(); renderActivityFiltersOptions(); renderActivities(); renderObjectifs(); renderParams(); dashboard(); updateSyncPreview(); }
-
-/* Auto-bootstrap si vide */
-(function autoBootstrapIfEmpty(){
-  const hadData = (()=>{ try{ const obj=JSON.parse(localStorage.getItem(LS_KEY)||'null'); return obj && (obj.consultants||[]).length + (obj.activities||[]).length + (obj.objectifs||[]).length > 0; }catch{return false;} })();
-  if(!hadData){ resetFromDataJson(); }
-})();
-
-/* Premier rendu */
-refreshAll();
-</script>
+<div class="grid2">
+<label>Consultant <select name="consultant_id" required id="fa-consultant"></select></label>
+<label>Type <select name="type" required id="fa-type">
+<option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option><option value="NOTE">📝 Note</option>
+<option value="VERBATIM">💬 Verbatim</option><option value="AVIS">🗣️ Avis</option><option value="ALERTE">🚨 Alerte</option>
+</select></label>
+<label>Date <input type="date" name="date_publication" required id="fa-date"/></label>
+<label>Objectif <select name="objectif_id" id="fa-objectif"></select></label>
+<label id="fa-heures-wrap" class="hidden">Heures (STB) <input type="number" min="0.25" step="0.25" name="heures" id="fa-heures"/></label>
+<label style="grid-column:1/-1">Description <textarea name="description" required id="fa-desc" placeholder="Description…"></textarea></label>
+</div>
+<div class="actions"><button value="del" class="btn danger">Supprimer</button><button value="cancel" class="btn">Annuler</button><button value="ok" class="btn primary">Enregistrer</button></div>
+</form></dialog>
+<dialog id="dlg-objectif"><form method="dialog" class="modal" id="form-objectif"><h3>✏️ Objectif</h3>
+<div class="grid2">
+<label>Titre* <input name="titre" required id="fo-titre"/></label>
+<label>Description <textarea id="fo-desc" name="description" placeholder="Description…" style="min-height:300px;resize:none;overflow:hidden"></textarea></label>
+<div style="grid-column:1/-1">
+<div class="sub">Progression (%) — consultants ayant au moins une 🐕‍🦺 Action STB sur cet objectif</div>
+<div id="fo-consultants" class="hover-scroll" style="max-height:260px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:6px;margin-top:6px"></div>
+</div>
+</div>
+<div class="actions"><button value="del" class="btn danger">Supprimer</button><button value="cancel" class="btn">Annuler</button><button value="ok" class="btn primary">Enregistrer</button></div>
+</form></dialog>
+<dialog id="dlg-consultant"><form method="dialog" class="modal" id="form-consultant">
+<div class="row space" style="margin-bottom:8px">
+<h3>✏️ Consultant</h3>
+<button type="button" class="btn small" id="fc-goto-objectifs">🎯Voir ses objectifs</button>
+</div>
+<div class="grid2">
+<label>Nom* <input name="nom" required id="fc-nom"/></label>
+<label>Titre mission <input name="titre_mission" id="fc-titre"/></label>
+<label>Date fin (dispo) <input type="date" name="date_fin" id="fc-fin"/></label>
+<label>URL (fiche) <input name="url" id="fc-url" placeholder="https://…"/></label>
+<label style="grid-column:1/-1">Description <textarea name="description" id="fc-desc" placeholder="Notes libres…"></textarea></label>
+</div>
+<div class="actions"><button value="del" class="btn danger">Supprimer</button><button value="cancel" class="btn">Annuler</button><button value="ok" class="btn primary">Enregistrer</button></div>
+</form></dialog>
+<script src="app.js" defer></script>
 </body></html>
