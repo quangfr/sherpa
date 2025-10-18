@@ -89,6 +89,17 @@ dialog::backdrop{background:#0006}
 .clamp-1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.clamp-5{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+#acts-pane .filters-row{align-items:center;flex-wrap:wrap}
+#acts-pane .filters-row > *{flex:1 1 auto}
+#acts-pane .filters-row .filter-field{min-width:140px}
+#acts-pane .filters-row label.filter-field{white-space:nowrap}
+#acts-pane .filters-row select.filter-field{display:inline-block;max-width:220px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.mobile-desc{margin-top:4px;display:flex;flex-direction:column;gap:4px}
+.mobile-desc .text{word-break:break-word;overflow-wrap:anywhere}
+.mobile-desc.expanded .text{-webkit-line-clamp:unset;display:block;overflow:visible}
+.mobile-desc .toggle-more{align-self:flex-start;background:none;border:none;padding:0;color:var(--accent);font:inherit;cursor:pointer}
+.mobile-desc .toggle-more:focus{outline:2px solid var(--accent);outline-offset:2px}
 #activities-table td.main{word-break:break-word;overflow-wrap:anywhere}
 #activities-table td:last-child .btn.small{white-space:nowrap}
 .type-pill{display:inline-flex;align-items:center;gap:6px}
@@ -118,14 +129,23 @@ dialog::backdrop{background:#0006}
 .mobile-only{display:none}
 @media (max-width:520px){
   .split{grid-template-columns:1fr}
+  #cons-pane{display:none}
   #activities-table thead{display:none}
   #activities-table colgroup{display:none}
   #activities-table tr{display:block;border:1px solid var(--border);border-radius:10px;margin:8px 0;background:var(--card);padding:8px}
   #activities-table td{display:block;border-top:none;padding:2px 0}
-  #activities-table td.desktop-only{display:none}
+  #activities-table td.desktop-only{display:none!important}
+  #activities-table td.mobile-only{display:block!important}
   .mobile-only{display:block}
-  .col-actions, #activities-table td:last-child{display:none!important}
+  .col-actions, #activities-table td.actions-cell{display:none!important}
   #acts-pane .filters{position:sticky;top:36px;z-index:3;background:var(--bg);padding:6px 0;border-bottom:1px solid var(--border)}
+  #acts-pane .filters-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#c5c9d2 transparent;padding-bottom:6px}
+  #acts-pane .filters-row::-webkit-scrollbar{height:6px}
+  #acts-pane .filters-row::-webkit-scrollbar-thumb{background:#c5c9d2;border-radius:999px}
+  #acts-pane .filters-row::-webkit-scrollbar-track{background:transparent}
+  #acts-pane .filters-row > *{flex:0 0 auto}
+  #acts-pane .filters-row .filter-field{min-width:150px;max-width:200px}
+  #acts-pane .filters-row select.filter-field{width:100%}
 }
 @media (max-width:360px){
   #filters-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
@@ -174,13 +194,20 @@ dialog::backdrop{background:#0006}
             <div class="row" style="gap:10px">
               <div class="title">🗂️ Activités</div>
               <div class="pill" id="activities-count">0</div>
+            </div>
+            <div class="row" style="gap:6px;flex-wrap:nowrap">
               <button class="btn small primary" id="btn-new-activity">+Ajouter une activité</button>
+              <button class="btn small" id="btn-reset-filters">Réinitialiser</button>
             </div>
           </div>
+          <div class="mobile-only" style="margin-top:6px">
+            <select id="filter-consultant-mobile" title="Filtrer par consultant" style="width:100%">
+              <option value="">👤 Tous les consultants</option>
+            </select>
+          </div>
           <div class="filters">
-            <div class="row" style="gap:8px;margin-top:6px">
-              <button class="btn small" id="btn-reset-filters">Réinitialiser</button>
-              <select id="filter-type" title="Filtrer par type">
+            <div class="row filters-row" style="gap:8px;margin-top:6px">
+              <select class="filter-field" id="filter-type" title="Filtrer par type">
                 <option value="">🗂️ Tous les types</option>
                 <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
                 <option value="NOTE">📝 Note</option>
@@ -188,8 +215,8 @@ dialog::backdrop{background:#0006}
                 <option value="AVIS">🗣️ Avis</option>
                 <option value="ALERTE">🚨 Alerte</option>
               </select>
-              <select id="filter-objectif" title="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
-              <label class="row" style="gap:6px">📅Avant <input type="date" id="filter-before"/></label>
+              <select class="filter-field" id="filter-objectif" title="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
+              <label class="row filter-field" style="gap:6px">📅Avant <input type="date" id="filter-before"/></label>
             </div>
             <div id="filters-chips" class="mobile-only" aria-live="polite"></div>
           </div>
@@ -417,6 +444,7 @@ function renderConsultants(){
   );
   document.getElementById('consultants-count').textContent=rows.length;
   consTBody.innerHTML='';
+  const options=['<option value="">👤 Tous les consultants</option>'];
   rows.forEach(c=>{
     const tr=document.createElement('tr'); tr.classList.add('clickable');
     tr.innerHTML=`
@@ -433,9 +461,16 @@ function renderConsultants(){
     tr.querySelector('[data-edit]').onclick=(e)=>{ e.stopPropagation(); openConsultantModal(c.id); };
     tr.querySelector('[data-goto-obj]').onclick=(e)=>{ e.stopPropagation(); gotoConsultantObjectives(c.id); };
     consTBody.appendChild(tr);
+    options.push(`<option value="${esc(c.id)}">${esc(c.nom)}</option>`);
   });
+  if(selectConsultantMobile){
+    const current=state.filters.consultant_id||'';
+    selectConsultantMobile.innerHTML=options.join('');
+    if([...selectConsultantMobile.options].some(o=>o.value===current)) selectConsultantMobile.value=current;
+    else selectConsultantMobile.value='';
+  }
 }
-function setConsultantFilter(cid){ state.filters.consultant_id=cid; renderActivities(); }
+function setConsultantFilter(cid){ state.filters.consultant_id=cid; if(selectConsultantMobile) selectConsultantMobile.value=cid||''; renderActivities(); }
 function gotoConsultantObjectives(cid){
   state.objectifs_consultant_id=cid;
   document.getElementById('filter-objectif-consultant').value=cid;
@@ -449,11 +484,14 @@ const inputBefore=document.getElementById('filter-before');
 const selectObjectif=document.getElementById('filter-objectif');
 const badgeCount=document.getElementById('activities-count');
 const chips=document.getElementById('filters-chips');
+const selectConsultantMobile=document.getElementById('filter-consultant-mobile');
+const expandedMobileActivities=new Set();
 selectType.addEventListener('change',e=>{state.filters.type=e.target.value; renderActivities();});
 inputBefore.addEventListener('change',e=>{state.filters.before=e.target.value; renderActivities();});
 selectObjectif.addEventListener('change',e=>{state.filters.objectif_id=e.target.value; renderActivities();});
-document.getElementById('btn-reset-filters').onclick=()=>{ state.filters={consultant_id:'',type:'',before:'',objectif_id:''}; selectType.value=''; inputBefore.value=''; selectObjectif.value=''; renderActivities(); };
-document.getElementById('btn-reset-filters-left').onclick=()=>{ state.filters.consultant_id=''; renderConsultants(); renderActivities(); };
+document.getElementById('btn-reset-filters').onclick=()=>{ state.filters={consultant_id:'',type:'',before:'',objectif_id:''}; selectType.value=''; inputBefore.value=''; selectObjectif.value=''; if(selectConsultantMobile) selectConsultantMobile.value=''; renderActivities(); };
+document.getElementById('btn-reset-filters-left').onclick=()=>{ state.filters.consultant_id=''; if(selectConsultantMobile) selectConsultantMobile.value=''; renderConsultants(); renderActivities(); };
+selectConsultantMobile?.addEventListener('change',e=>{ setConsultantFilter(e.target.value||''); });
 
 const TYPE_META={
   ACTION_ST_BERNARD:{emoji:'🐕‍🦺', pill:'stb', label:'Action STB'},
@@ -499,6 +537,11 @@ function renderActivities(){
     const meta=TYPE_META[a.type]||{emoji:'❓',pill:'',label:a.type};
     const heuresTxt = a.type==='ACTION_ST_BERNARD' ? `<b>${a.heures??0}h</b>`:'';
 
+    const descText=a.description||'';
+    const isExpanded=expandedMobileActivities.has(a.id);
+    const descContent=`${o?`🎯 <b>${esc(o.titre)}</b> — `:''}${esc(descText)}`;
+    const hasMobileContent=descContent.trim().length>0;
+
     const tr=document.createElement('tr'); tr.classList.add('clickable');
     tr.innerHTML = mobile
     ? `
@@ -509,7 +552,10 @@ function renderActivities(){
     <span class="sub">· ${esc(a.date_publication||'')}</span>
     <div style="margin-left:auto">${heuresTxt}</div>
   </div>
-  <div class="clamp-2" style="margin-top:2px">${o?`🎯 <b>${esc(o.titre)}</b> — `:''}${esc(a.description||'')}</div>
+  <div class="mobile-desc${isExpanded?' expanded':''}" data-act="${a.id}">
+    <div class="text clamp-5">${descContent}</div>
+    ${hasMobileContent?`<button type="button" class="toggle-more" data-expand="${a.id}">${isExpanded?'Réduire':'Tout afficher'}</button>`:''}
+  </div>
 </td>`
     : `
 <td class="desktop-only">
@@ -524,13 +570,43 @@ function renderActivities(){
   <div class="row space"><div class="clamp-1" title="${o?esc(o.titre):''}">${o?`🎯 <b>${esc(o.titre)}</b>`:'—'}</div><div>${heuresTxt}</div></div>
   <div class="clamp-3" title="${esc(a.description||'')}">${esc(a.description||'')}</div>
 </td>
-<td class="desktop-only nowrap"><button class="btn small" data-edit="${a.id}" title="Éditer">✏️</button><button class="btn small danger" data-del="${a.id}" title="Supprimer">🗑️</button></td>`;
+<td class="desktop-only nowrap actions-cell"><button class="btn small" data-edit="${a.id}" title="Éditer">✏️</button><button class="btn small danger" data-del="${a.id}" title="Supprimer">🗑️</button></td>`;
 
     tr.addEventListener('click',(e)=>{ if(e.target.closest('button,[data-cpop]')) return; openActivityModal(a.id); });
     tr.querySelectorAll('[data-cpop]')?.forEach(el=>el.addEventListener('click',(e)=>{ e.stopPropagation(); const cid=e.currentTarget.dataset.cpop; if(cid) openConsultantModal(cid); }));
     if(!mobile){
       tr.querySelector('[data-edit]')?.addEventListener('click',(e)=>{ e.stopPropagation(); openActivityModal(a.id); });
       tr.querySelector('[data-del]')?.addEventListener('click',(e)=>{ e.stopPropagation(); if(confirm('Supprimer cette activité ?')){ store.activities=store.activities.filter(x=>x.id!==a.id); save(); } });
+    }else{
+      const descWrap=tr.querySelector('.mobile-desc');
+      const toggleBtn=descWrap?.querySelector('[data-expand]');
+      const textEl=descWrap?.querySelector('.text');
+      if(toggleBtn && textEl){
+        const wasExpanded=descWrap.classList.contains('expanded');
+        if(wasExpanded) descWrap.classList.remove('expanded');
+        const collapsedHeight=textEl.clientHeight;
+        textEl.classList.remove('clamp-5');
+        const fullHeight=textEl.scrollHeight;
+        textEl.classList.add('clamp-5');
+        if(wasExpanded) descWrap.classList.add('expanded');
+        const needsToggle=fullHeight>collapsedHeight+1;
+        if(!needsToggle){
+          toggleBtn.remove();
+          expandedMobileActivities.delete(a.id);
+          descWrap.classList.remove('expanded');
+        }else{
+          toggleBtn.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            const targetId=e.currentTarget.dataset.expand;
+            if(expandedMobileActivities.has(targetId)){
+              expandedMobileActivities.delete(targetId);
+            }else{
+              expandedMobileActivities.add(targetId);
+            }
+            renderActivities();
+          });
+        }
+      }
     }
     actTBody.appendChild(tr);
   });
