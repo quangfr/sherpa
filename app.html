@@ -111,16 +111,20 @@ dialog::backdrop{background:#0006}
 .cons-mini .rowline{margin:2px 0;padding:1px 3px;border-radius:6px}
 .cons-mini .rowline .content{margin:3px 2px}
 .cons-mini .row.space{gap:4px}
+
+/* 🆕 Dashboard: police "texte normal" + espacement lignes amélioré */
+.db-list{font:inherit;font-size:13px;line-height:1.6}
+.db-list .row{margin:3px 0}
 </style></head><body>
 <header><div class="wrap"><nav class="tabs" id="tabs"></nav></div></header>
 <main class="wrap">
   <!-- DASHBOARD -->
   <section class="view" id="view-dashboard">
     <div class="grid g4">
-      <div class="card"><div class="row space"><div class="title">🚨 En alerte</div><div class="pill" id="db-alerte-title">0</div></div><div id="db-alerte-list" class="mono"></div></div>
-      <div class="card"><div class="row space"><div class="title">⏳ Fin de mission &lt; <span id="db-fin-x"></span>j</div><div class="pill" id="db-fin-title">0</div></div><div id="db-fin-list" class="mono"></div></div>
-      <div class="card"><div class="row space"><div class="title">🐕‍🦺 Action STB &gt; <span id="db-stb-y"></span>j</div><div class="pill" id="db-stb-title">0</div></div><div id="db-stb-list" class="mono"></div></div>
-      <div class="card"><div class="row space"><div class="title">🗣️ Avis &gt; <span id="db-avis-z"></span>j</div><div class="pill" id="db-avis-title">0</div></div><div id="db-avis-list" class="mono"></div></div>
+      <div class="card"><div class="row space"><div class="title">🚨 En alerte &lt; <span id="db-fin-w"></span>j</div><div class="pill" id="db-alerte-title">0</div></div><div id="db-alerte-list" class="db-list"></div></div>
+      <div class="card"><div class="row space"><div class="title">⏳ Fin de mission &lt; <span id="db-fin-x"></span>j</div><div class="pill" id="db-fin-title">0</div></div><div id="db-fin-list" class="db-list"></div></div>
+      <div class="card"><div class="row space"><div class="title">🐕‍🦺 Action STB &gt; <span id="db-stb-y"></span>j</div><div class="pill" id="db-stb-title">0</div></div><div id="db-stb-list" class="db-list"></div></div>
+      <div class="card"><div class="row space"><div class="title">🗣️ Avis &gt; <span id="db-avis-z"></span>j</div><div class="pill" id="db-avis-title">0</div></div><div id="db-avis-list" class="db-list"></div></div>
     </div>
   </section>
 
@@ -336,6 +340,7 @@ function dashboard(){
   const finList = store.consultants.filter(c=> c.date_fin && ((d=>d>=0 && d<=p.fin_mission_sous_jours)(daysDiff(parseDate(c.date_fin),today))));
   const stbList = store.consultants.filter(c=>!hasRecent(c.id,'ACTION_ST_BERNARD',p.stb_recent_jours));
   const avisList = store.consultants.filter(c=>!hasRecent(c.id,'AVIS',p.avis_manquant_depuis_jours));
+    document.getElementById('db-fin-w').textContent=p.delai_alerte_jours;
   document.getElementById('db-fin-x').textContent=p.fin_mission_sous_jours;
   document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
   document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
