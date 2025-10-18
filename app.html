@@ -41,7 +41,7 @@ main{height:calc(100vh - var(--headH)); overflow:hidden}
 .btn.small{padding:3px 7px;font-size:12px}
 input,select,textarea{border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 8px;font:inherit}
 textarea{width:100%;resize:vertical}
-#fa-desc,#fc-desc{min-height:200px;resize:none;overflow:hidden}
+#fa-desc,#fc-desc{min-height:350px;resize:none;overflow:hidden}
 .split{display:grid;grid-template-columns:360px minmax(0,1fr);gap:10px;height:100%}
 @media (max-width:980px){.split{grid-template-columns:1fr;height:auto}}
 .pane{display:flex;flex-direction:column;min-height:0;height:100%}
@@ -259,7 +259,7 @@ dialog::backdrop{background:#0006}
 <dialog id="dlg-objectif"><form method="dialog" class="modal" id="form-objectif"><h3>✏️ Objectif</h3>
   <div class="grid2">
     <label>Titre* <input name="titre" required id="fo-titre"/></label>
-    <label>Description <textarea id="fo-desc" name="description" placeholder="Description…" style="min-height:200px;resize:none;overflow:hidden"></textarea></label>
+    <label>Description <textarea id="fo-desc" name="description" placeholder="Description…" style="min-height:350px;resize:none;overflow:hidden"></textarea></label>
     <div style="grid-column:1/-1">
       <div class="sub">Progression (%) — consultants ayant au moins une 🐕‍🦺 Action STB sur cet objectif</div>
       <div id="fo-consultants" class="hover-scroll" style="max-height:260px;overflow:auto;border:1px solid var(--border);border-radius:8px;padding:6px;margin-top:6px"></div>
