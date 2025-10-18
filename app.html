@@ -45,32 +45,32 @@
 <button class="btn small" id="btn-reset-filters">Réinitialiser</button>
 </div>
 </div>
-<div class="filters">
-<div class="row filters-row">
-<label class="mobile-only" data-filter-icon="consultant" data-icon="👤">
-<select id="filter-consultant-mobile" title="Filtrer par consultant" aria-label="Filtrer par consultant">
-<option value="">👤 Tous les consultants</option>
-</select>
-</label>
-<label data-filter-icon="type" data-icon="🗂️">
-<select id="filter-type" title="Filtrer par type" aria-label="Filtrer par type">
-<option value="">🗂️ Tous les types</option>
-<option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
-<option value="NOTE">📝 Note</option>
-<option value="VERBATIM">💬 Verbatim</option>
-<option value="AVIS">🗣️ Avis</option>
-<option value="ALERTE">🚨 Alerte</option>
-</select>
-</label>
-<label data-filter-icon="objectif" data-icon="🎯">
-<select id="filter-objectif" title="Filtrer par objectif" aria-label="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
-</label>
-<label data-filter-icon="before" data-icon="📅">
-<input type="date" id="filter-before" title="Filtrer avant cette date" aria-label="Filtrer avant cette date"/>
-</label>
-</div>
+            <div class="filters">
+              <div class="row filters-row">
+                <label class="mobile-only" data-filter-icon="consultant" data-icon="👤" data-label="Cons.">
+                  <select id="filter-consultant-mobile" title="Filtrer par consultant" aria-label="Filtrer par consultant">
+                    <option value="">👤 Tous les consultants</option>
+                  </select>
+                </label>
+                <label data-filter-icon="type" data-icon="🗂️" data-label="Act.">
+                  <select id="filter-type" title="Filtrer par type" aria-label="Filtrer par type">
+                    <option value="">🗂️ Tous les types</option>
+                    <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
+                    <option value="NOTE">📝 Note</option>
+                    <option value="VERBATIM">💬 Verbatim</option>
+                    <option value="AVIS">🗣️ Avis</option>
+                    <option value="ALERTE">🚨 Alerte</option>
+                  </select>
+                </label>
+                <label data-filter-icon="objectif" data-icon="🎯" data-label="Obj.">
+                  <select id="filter-objectif" title="Filtrer par objectif" aria-label="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
+                </label>
+                <label data-filter-icon="before" data-icon="📅" data-label="Dat.">
+                  <input type="date" id="filter-before" title="Filtrer avant cette date" aria-label="Filtrer avant cette date"/>
+                </label>
+              </div>
 
-</div>
+            </div>
 </div>
 <div class="pane-body hover-scroll">
 <table class="table" id="activities-table">

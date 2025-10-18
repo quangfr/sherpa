@@ -94,7 +94,7 @@ dialog::backdrop{background:#0006}
 #acts-pane .filters-row [data-filter-icon]{flex:1 1 160px}
 [data-filter-icon]{display:flex;align-items:center;gap:6px;position:relative}
 [data-filter-icon] select,[data-filter-icon] input{flex:1 1 auto;width:100%}
-[data-filter-icon]::before{display:none}
+[data-filter-icon]::before,[data-filter-icon]::after{display:none}
 
 .hours-badge{display:inline-flex;align-items:center;gap:4px;padding:0 6px;border-radius:999px;background:var(--pill);color:var(--pill-f);font-size:12px;line-height:1.4;font-weight:600}
 .objective-line{display:flex;align-items:center;gap:6px}
@@ -146,10 +146,13 @@ main{height:auto;min-height:calc(100vh - var(--headH));overflow:visible}
 #view-activite{overflow:visible}
 .pane{height:auto}
 #acts-pane .pane-body{overflow:visible}
-#acts-pane .filters{position:static;padding:6px 0 0;border-bottom:none}
-#acts-pane .filters-row{flex-wrap:nowrap;gap:10px}
-[data-filter-icon]{flex:0 0 44px;min-width:44px;max-width:44px;height:44px;padding:0;border:1px solid var(--border);border-radius:12px;justify-content:center;background:var(--card);box-shadow:0 1px 0 #00000008}
-[data-filter-icon]::before{display:flex;content:attr(data-icon);align-items:center;justify-content:center;width:100%;height:100%;font-size:18px}
+#acts-pane .pane-header{top:calc(var(--headH));padding-bottom:6px}
+#acts-pane .filters{position:sticky;top:calc(var(--headH));z-index:5;padding:6px 2px 8px;margin:0 -2px;background:var(--bg);border-bottom:1px solid var(--border)}
+#acts-pane .filters-row{flex-wrap:nowrap;gap:6px;overflow-x:auto;padding-bottom:2px}
+#acts-pane .filters-row::-webkit-scrollbar{display:none}
+[data-filter-icon]{flex:1 1 68px;min-width:60px;height:34px;padding:0 10px;border:1px solid var(--border);border-radius:999px;justify-content:center;gap:6px;background:var(--card);box-shadow:0 1px 0 #00000008;font-size:12px;font-weight:600;text-transform:none;position:relative}
+[data-filter-icon]::before{display:inline-flex;content:attr(data-icon);align-items:center;justify-content:center;font-size:16px}
+[data-filter-icon]::after{display:inline-block;content:attr(data-label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:48px}
 [data-filter-icon] select,[data-filter-icon] input{position:absolute;inset:0;margin:0;border:0;padding:0;opacity:0;width:100%;height:100%;cursor:pointer;background:none;-webkit-appearance:none;appearance:none}
 [data-filter-icon].active{border-color:var(--accent);color:var(--accent);background:var(--hover)}
 [data-filter-icon].mobile-only{display:flex}
