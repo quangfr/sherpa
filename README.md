@@ -1,253 +1,258 @@
-# Spécification fonctionnelle & technique — **SHERPA — MVP v4.9.3**
-*(Contexte • Données • Interface • Règles/Logique • Technique/Implémentation)*
+# SHERPA — MVP v4.9.8 • Spécification fonctionnelle (sans code)
+
+> Objectif : permettre à **une nouvelle session ChatGPT** de **régénérer à l’identique** le prototype mono-fichier HTML/CSS/JS décrit ici.  
+> Format : **plein écran** (full-width), **thème clair**, **UI compacte**, **stockage localStorage**, **sync manuelle via data.json**.
 
 ---
 
-## 1) 🎯 Contexte & objectifs
-- **But** : mono-fichier **HTML/CSS/JS vanilla** pour piloter un portefeuille de **Consultants**, **Activités**, **Objectifs**, avec 5 onglets : **Dashboard / Activités / Objectifs / Paramètres / Sync**.
-- **Stockage** : **localStorage** (clé `SHERPA_STORE_V4`) + import/export **data.json** (GitHub Actions via issue).
-- **Périmètre v4.9.3** :
-  - Scrollbars **invisibles au repos / visibles au survol**, sans décalage de layout.
-  - **Activités** : filtres (type, objectif, **date “Avant le”**, recherche texte) + **badge compteur**.
-  - **Objectifs** : cartes par objectif, **consultants affichés uniquement s’ils ont ≥1 🐕‍🦺 Action STB liée** ; **tri par progression décroissante** ; édition progression **0–100** (sans checkbox) ; clic consultant ⇒ onglet **Activités** filtré (consultant + objectif).
-  - **Dashboard** : 4 indicateurs paramétrables (délais en jours) reflétant les **Paramètres**.
-  - **Sync** : copier JSON, ouvrir issue **[SYNC]**, télécharger, réinitialiser depuis `data.json` ou fichier local.
+## 1) Contexte & Périmètre
+- **Public** : pilotage d’un portefeuille de consultants, suivi d’activités horodatées, consolidation par objectifs.
+- **Usage** : application **front-only** (aucun backend), données persistées côté navigateur (**localStorage**) avec **réinitialisation/seed** via un fichier **data.json** situé au même niveau que l’HTML.
+- **Navigation** par **5 onglets** (persistence de l’onglet courant) :
+  - Dashboard
+  - 🗂️ Activités
+  - 🎯 Objectifs
+  - ⚙️ Paramètres
+  - 🔃 Sync
+- **Accents UX** :
+  - Tables lisibles, colonnes fixes sur les identifiants, colonnes **Objectif + Description** plus larges.
+  - **Pills colorés** par type d’activité (STB/Note/Verbatim/Avis/Alerte) + émojis.
+  - **Barres de remplissage** (fond clair) sur les lignes consultants d’un objectif, **dimensionnées par heures**.
+  - **Scrollbars masquées au repos** et visibles au survol (sans décalage de layout).
+  - **Modales** pour créer/éditer Activité, Objectif, Consultant (avec règles d’annulation si champs requis vides).
 
 ---
 
-## 2) 📦 Données (modèle & contraintes)
+## 2) Données (modèle & règles)
 
-### 2.1 Schéma `store`
-Objet racine persisté dans `localStorage` :
-- `consultants`: `Consultant[]`
-- `activities`: `Activity[]`
-- `objectifs`: `Objectif[]`
-- `params`: `Params`
-- `meta`: `{ version:number, updated_at:ISO8601 }`
+### 2.1 Entités
+- **Consultant**
+  - `id` (uuid)
+  - `nom` *(requis)*
+  - `titre_mission` *(optionnel)*
+  - `date_fin` *(optionnel, YYYY-MM-DD ; “disponible après”)*
+  - `url` *(optionnel, lien fiche)*
+  - `description` *(optionnel)*
+  - `created_at`, `updated_at` (ISO)
+- **Activité**
+  - `id` (uuid)
+  - `consultant_id` *(requis)*
+  - `type` *(requis)* ∈ `ACTION_ST_BERNARD` | `NOTE` | `VERBATIM` | `AVIS` | `ALERTE`
+  - `date_publication` *(requis, YYYY-MM-DD)*
+  - `description` *(requis)*
+  - `objectif_id` *(optionnel)*
+  - `heures` *(optionnel, **uniquement** si `type = ACTION_ST_BERNARD`; nombre > 0, pas de négatif)*
+  - `created_at`, `updated_at` (ISO)
+- **Objectif**
+  - `id` (uuid)
+  - `titre` *(requis)*
+  - `description` *(optionnel)*
+  - `consultants` : liste d’objets `{ consultant_id, progression_pct }`
+    - `progression_pct` ∈ [0..100] (entier, arrondi si besoin)
+  - `created_at`, `updated_at` (ISO)
+- **Params** (avec valeurs par défaut)
+  - `delai_alerte_jours` (7)
+  - `fin_mission_sous_jours` (60)
+  - `stb_recent_jours` (30)
+  - `avis_manquant_depuis_jours` (60)
+  - `objectif_recent_jours` (15)
+  - `objectif_bar_max_heures` (10)
 
-**Consultant**
-- `id`: `uuid` (obligatoire)
-- `nom`: `string` (obligatoire)
-- `titre_mission`?: `string`
-- `date_fin`?: `YYYY-MM-DD`
-- `url`?: `string (https)`
-- `description`?: `string`
-- `created_at`, `updated_at`: `ISO8601`
-
-**Activity**
-- `id`: `uuid` (obligatoire)
-- `consultant_id`: `uuid` (FK Consultant)
-- `type`: `enum` ∈ {`ACTION_ST_BERNARD`,`NOTE`,`VERBATIM`,`AVIS`,`ALERTE`} (obligatoire)
-- `date_publication`: `YYYY-MM-DD` (obligatoire)
-- `description`: `string` (obligatoire)
-- `heures`?: `number` — **requis** si `type="ACTION_ST_BERNARD"` (min 0.25)
-- `objectif_id`?: `uuid` (FK Objectif)
-- `created_at`, `updated_at`: `ISO8601`
-
-**Objectif**
-- `id`: `uuid` (obligatoire)
-- `titre`: `string` (obligatoire)
-- `description`?: `string`
-- `consultants`: `{ consultant_id:uuid, progression_pct:0..100 }[]`
-- `created_at`, `updated_at`: `ISO8601`
-
-**Params**
-- `delai_alerte_jours`: `int` > 0
-- `fin_mission_sous_jours`: `int` > 0
-- `stb_recent_jours`: `int` > 0
-- `avis_manquant_depuis_jours`: `int` > 0
-- `objectif_recent_jours`: `int` > 0
-- `github_repo_fullname`?: `owner/repo`
-
-**Meta / Seed**
-- Si `store` absent/non JSON, seed minimal : 3 consultants, 5 activités (variées), 1 objectif, `params` par défaut :
-  - `{ delai_alerte_jours:7, fin_mission_sous_jours:60, stb_recent_jours:30, avis_manquant_depuis_jours:60, objectif_recent_jours:15, github_repo_fullname:'quangfr/sherpa' }`
-  - `meta.version = 4.93`, `meta.updated_at = nowISO()`.
-
----
-
-## 3) 🖥️ Interface (UX/UI)
-
-### 3.1 Layout & style
-- **Full-width** (`max-width:none`), thème clair, compact.
-- **Header sticky** (44px) + **tabs** en haut.
-- **Views** : une seule `.view.active` visible à la fois.
-- **Grid g4** : 4/3/2/1 colonnes selon largeur.
-- **Scrollbars** : `.hover-scroll` (invisible au repos, visibles au survol, `scrollbar-gutter: stable both-edges`).
-
-### 3.2 Onglet **Dashboard**
-4 cartes avec compteur + liste :
-- **🚨 En alerte** : consultants ayant une `ALERTE` récente (`≤ delai_alerte_jours`).
-- **⏳ Fin de mission < Xj** : 0 ≤ `date_fin - today` ≤ `fin_mission_sous_jours`.
-- **🐕‍🦺 Action STB > Yj** : consultants **sans** STB récente (`stb_recent_jours`).
-- **🗣️ Avis > Zj** : consultants **sans** AVIS récent (`avis_manquant_depuis_jours`).
-Affichage d’une ligne : pastille **état** (`g/y/r`) + **Nom** (cliquable) + **Mission** (gris).
-Clic **Nom** ⇒ onglet **Activités** filtré par consultant.
-
-### 3.3 Onglet **Activités**
-**Split 2 panneaux** :
-
-**Gauche — Consultants**
-- Header : **+ Consultant** / **Réinitialiser**, recherche (nom + titre mission).
-- Tableau :
-  - Col 1 : **Nom** (ligne primaire) + **Titre mission** (sous-ligne), pastille état.
-  - Col 2 : **Date fin** (small/grey).
-  - Col 3 : Actions : `🔗` (URL si dispo), `✏️` (éditer), `🎯` (voir objectifs du consultant).
-- **Tri** : clic entête **Nom** ou **Fin** (toggle asc/desc).
-- Clic ligne (hors boutons) ⇒ applique filtre `consultant_id` et ouvre **Activités**.
-
-**Droite — Activités**
-- Barre : Titre + **badge compteur**, **Recherche texte**, **Filtre type**, **Filtre objectif**, **“Avant le” (date)**, **+ Nouvelle activité**, **Réinitialiser**.
-- Tableau :
-  - **Type** : pill colorée + émoji.
-  - **Consultant** : nom + mission.
-  - **Date** : `YYYY-MM-DD`.
-  - **Description + Objectif** :
-    - Ligne 1 : `🎯 <titre objectif>` (clamp 1 ligne) à gauche, **heures** à droite si STB (gras).
-    - Ligne 2 : description (clamp 3 lignes).
-  - **Actions** : `✏️` / `🗑️`.
-
-### 3.4 Onglet **Objectifs**
-- Barre : **Recherche** (titre + description), **Filtre consultant** (limite aux objectifs où ce consultant a **≥1 STB liée**), **+ Nouvel objectif**.
-- Cartes :
-  - Header : **Titre** + `✏️`.
-  - Description (gris).
-  - **Total objectif** : somme heures STB **toutes personnes** + **(+heures récentes)** en **vert** (`objectif_recent_jours`).
-  - **Consultants listés** : **uniquement** ceux ayant **au moins une STB liée** à l’objectif ; **tri par progression décroissante** puis nom A→Z.
-    - Affichage par ligne : **badge progression** (🟥 <30 / 🟨 30–69 / 🟩 ≥70), **Nom (lien)**, `(x%)` ; à droite : **Total heures** et **(+récents)** en **vert**.
-  - Clic **Nom** ⇒ onglet **Activités** avec filtres `consultant_id` + `objectif_id` appliqués.
-
-### 3.5 Onglet **Paramètres**
-- Champs numériques (jours) : `delai_alerte_jours`, `fin_mission_sous_jours`, `stb_recent_jours`, `avis_manquant_depuis_jours`, `objectif_recent_jours`.
-- Champ repo : `github_repo_fullname` (aussi éditable en **Sync**).
-- Bouton **Enregistrer** : met à jour `params`, `meta.updated_at`, rafraîchit les vues (les titres Dashboard X/Y/Z reflètent immédiatement les valeurs).
-
-### 3.6 Onglet **Sync**
-- Actions : **📋 Copier JSON**, **🐙 Ouvrir Issue [SYNC]**, **⬇️ Télécharger data.json**, **🐈‍⬛ Réinitialiser**.
-- Zone **prévisualisation JSON** (read-only, scrollable).
-- **Repo** : champ `owner/repo` (utilisé par “Ouvrir Issue” si vide dans `params`).
-- **Réinitialiser** : tente `fetch('./data.json')` ; en cas d’échec → file picker local (validation JSON).
-
-### 3.7 Modales
-**Activité**
-- `Consultant` (select, requis), `Type` (select, requis), `Date`, `Objectif` (optionnel), `Heures (STB)` (visible uniquement si `Type="ACTION_ST_BERNARD"`, min 0.25, défaut 1), `Description` (textarea auto-resize, requis).
-- Soumission : crée/édite l’activité → `save()` ; suppression via bouton `🗑️` dans tableau.
-
-**Objectif**
-- `Titre` (requis), `Description` (textarea auto-resize).
-- **Bloc progression** : **affiche uniquement** les consultants ayant **≥1 STB liée** ; pour chacun : input `number` **0..100** (coloration rouge/jaune/vert dynamique). **Aucune checkbox.**
-- Actions : **Supprimer** (confirm), **Annuler**, **Enregistrer**.
-
-**Consultant**
-- `Nom` (requis), `Titre mission`, `Date fin`, `URL`, `Description`.
-- Actions : **Supprimer** (ne supprime **pas** ses activités), **Annuler**, **Enregistrer**.
+### 2.2 Dérivés & Règles de calcul
+- **Statut consultant** (pastille verte/jaune/rouge) :
+  - Rouge si `date_fin` < aujourd’hui **ou** s’il existe une **ALERTE** récente (≤ `delai_alerte_jours`).
+  - Vert si présence **STB** récente (≤ `stb_recent_jours`) **ou** **AVIS** récent (≤ `avis_manquant_depuis_jours`) et pas de condition rouge.
+  - Jaune sinon.
+- **Dashboard (4 cartes)** :
+  - 🚨 **En alerte** : consultants avec **ALERTE** récente (≤ `delai_alerte_jours`).
+  - ⏳ **Fin de mission < X j** : `0 ≤ (date_fin - aujourd’hui) ≤ fin_mission_sous_jours`.
+  - 🐕‍🦺 **Action STB > Y j** : **absence** d’Action STB depuis `stb_recent_jours`.
+  - 🗣️ **Avis > Z j** : **absence** d’AVIS depuis `avis_manquant_depuis_jours`.
+  - Chaque carte affiche **compteur** et **liste cliquable** (navigue vers Activités filtrées).
+- **Objectifs (heures & progression)** :
+  - **Heures totales** d’un objectif = somme des `heures` sur `ACTION_ST_BERNARD` rattachées à l’objectif.
+  - **Heures récentes** = somme des mêmes `heures` restreinte à `objectif_recent_jours`.
+  - **Affichage par consultant** dans une carte objectif :
+    - **Barre de fond** (clair, largeur **proportionnelle** à `heures` du consultant **vs** `objectif_bar_max_heures`).
+    - Badge progression (🟥 <30%, 🟨 30–69%, 🟩 ≥70%) + libellé `(% progression)`.
+    - Totaux : `Xh` et `(+Yh)` en **vert** si Y > 0.
 
 ---
 
-## 4) 🧠 Règles métiers & logique
+## 3) Interface & Comportements
 
-### 4.1 Statut consultant (`statusOf`)
-- **Rouge (`r`)** si `date_fin` passée **ou** présence d’une `ALERTE` récente (`≤ delai_alerte_jours`).
-- Sinon **Vert (`g`)** si **au moins une** `ACTION_ST_BERNARD` **ou** un `AVIS` récent (fenêtres `stb_recent_jours` / `avis_manquant_depuis_jours`).
-- Sinon **Jaune (`y`)**.
+### 3.1 Disposition générale
+- **Header sticky** (hauteur constante), onglets en **pills**.
+- **Main** : hauteur `100vh - header`, chaque onglet est une **view** (display toggle).  
+- **Grilles** :
+  - Dashboard : **4 cartes** en grille responsive (4→3→2→1 colonnes).
+  - Objectifs : **cartes** en grille responsive idem (id `objectifs-grid`).
 
-### 4.2 Filtres Activités (ET logique)
-- `consultant_id` (panneau gauche / carte Objectif).
-- `q` (texte) : recherche **dans `description`** (case-insensitive).
-- `type` : égalité stricte.
-- `objectif_id` : égalité stricte.
-- `before` : inclut `date_publication` **≤** date choisie.
-- **Tri** par défaut : `date_publication` décroissante (comparaison string `YYYY-MM-DD`).
+### 3.2 Onglet 🗂️ Activités
+- **Split view** 2 colonnes :
+  1) **Pane gauche – Consultants**
+     - En-tête sticky + bouton **+Ajouter un consultant** + bouton **Réinitialiser** (filtre consultant).
+     - **Table triable** sur `Nom` et `Fin` (clic entête alterne ▲/▼).
+     - Ligne consultant :
+       - Ligne primaire : pastille **statut** + **Nom** (gras).
+       - Ligne secondaire : **Titre mission** (gris).
+       - Colonne **Fin** (format texte YYYY-MM-DD ou —).
+       - Colonne actions : **🔗** (URL si existante), **✏️** (éditer), **🎯** (voir ses objectifs).
+       - **Clic ligne** (hors boutons) ⇒ **filtrer** les activités par ce consultant + focus onglet Activités.
+  2) **Pane droite – Activités**
+     - En-tête sticky avec :
+       - Titre + badge **compteur** + bouton **+Ajouter une activité**.
+       - Barre de filtres : **Réinitialiser**, **Type**, **Objectif**, **Date (Avant le)**.
+     - **Table** colonnes : Type | Consultant | Date | Description + Objectif | Actions
+       - **Type** : pill + émoji (STB/Note/Verbatim/Avis/Alerte).
+       - **Consultant** : Nom (gras) + mission (gris, seconde ligne).
+       - **Date** : texte seul.
+       - **Description + Objectif** :
+         - Ligne 1 : `🎯 <Titre objectif>` (gras) à gauche + `heures` (gras, seulement si STB) à droite.
+         - Ligne 2 : **Description** clampée (3 lignes max), *title* au survol = texte complet.
+       - **Actions** : **✏️** (éditer), **🗑️** (supprimer avec confirmation).
+       - **Clic ligne** (hors boutons) ⇒ ouvrir la **modale Activité** en édition.
 
-### 4.3 Objectifs — agrégations
-- **Heures totales** d’un objectif = somme `heures` des **activités `ACTION_ST_BERNARD`** avec `objectif_id` égal.
-- **Heures récentes** : même somme sur fenêtre `objectif_recent_jours`.
-- **Consultants affichés** = ensemble des `consultant_id` **trouvés dans les STB liées** à l’objectif (indépendant de `objectif.consultants`).
-- **Progression affichée** : si entrée dans `objectif.consultants` ⇒ `progression_pct`, sinon `0`.
-- **Tri** : `progression_pct` décroissant, puis `nom` A→Z.
+### 3.3 Onglet 🎯 Objectifs
+- **Filtre consultant** (select) + bouton **Réinitialiser**.
+- **Cartes Objectif** (ordre des consultants **triés par progression décroissante**, puis nom) :
+  - En-tête : **Titre** (cliquable ⇒ ouvre Activités filtrées sur cet objectif) + bouton **✏️** (éditer objectif).
+  - **Description** (gris).
+  - **Récap** : `Total objectif : Xh (+Yh)` en **vert** si Y>0 + rappel `Barre max : Nh`.
+  - **Liste des consultants** (seulement **ceux qui ont au moins une STB** sur cet objectif) :
+    - **Barre de fond** proportionnelle à `heures / objectif_bar_max_heures`, **couleur** de fond en fonction de `progression_pct` (vert/jaune/rouge clair).
+    - Libellé : **badge** progression (🟥/🟨/🟩) + **Nom** (souligné cliquable) + `(% progression)`.
+    - Totaux à droite : `Xh` et `(+Yh)` en vert si Y>0.
+    - **Clic sur Nom** ⇒ onglet Activités filtré par **consultant + objectif**.
+- **Filtre “👤 Tous les consultants”** : si un consultant est sélectionné, n’afficher que les objectifs où **ce consultant** a au moins une STB et **réduire** la liste affichée à **3 entrées max** : le consultant sélectionné (surligné en gras dans la carte) + les **2 suivants** par progression.
 
-### 4.4 Validation & sécurité
-- **Activité STB** : `heures` > 0 **requis**.
-- **Progression** : clamp **0..100**, coloration (rouge/jaune/vert).
-- **Escaping** : `esc()` sur toute donnée utilisateur injectée dans le DOM.
-- **Suppressions** : `confirm()` (activité/objectif/consultant).
-- **Consultant supprimé** : **les activités restent**.
+### 3.4 Onglet ⚙️ Paramètres
+- Champs numériques pour tous les paramètres.
+- Bouton **Enregistrer** ⇒ met à jour `store.params`, recalcul immédiat du Dashboard, barres, titres ; **toast/alert** de confirmation.
 
-### 4.5 Dashboard — fenêtres
-- **Alerte** : existe une `ALERTE` avec `date_publication` ≥ `today - delai_alerte_jours`.
-- **Fin de mission < Xj** : `0 ≤ daysDiff(date_fin, today) ≤ fin_mission_sous_jours`.
-- **STB > Yj** : **aucune** STB récente.
-- **Avis > Zj** : **aucun** AVIS récent.
+### 3.5 Onglet 🔃 Sync
+- Boutons : **🐈‍⬛ Réinitialiser** (à gauche), **📋 Copier JSON** (copie `store` formaté).
+- **Aperçu JSON** en lecture seule (scrollable).
+- **Import JSON local** :
+  - Si le **fetch** de `data.json` échoue : **fallback** en ouvrant un **file picker**.
+  - En cas d’import local : **remplace intégralement** le store (avec normalisation Params & Meta), affiche un **message de succès**.
+- **Réinitialisation** : charge `data.json` depuis le même répertoire (no-store), sinon fallback file picker.
 
----
-
-## 5) 🛠️ Technique & implémentation
-
-### 5.1 Tech stack & organisation
-- **Mono-fichier** : balises `<style>` et `<script>` intégrées, aucune dépendance externe.
-- **Utils** : `nowISO()`, `todayStr()`, `uid()`, `esc()`, `parseDate()`, `daysDiff()`, `addDays()`, `clamp01()`, `progBadge()`, `autoSize()`.
-
-### 5.2 État & rendu
-```js
-state = {
-  sortCol: 'nom',
-  sortDir: 1,
-  filters: { q:'', consultant_id:'', type:'', before:'', objectif_id:'' },
-  consultants_q: '',
-  objectifs_q: '',
-  objectifs_consultant_id: ''
-}
-```
-- **Rendu** orchestré par `refreshAll()` : `renderConsultants()`, `renderActivityFiltersOptions()`, `renderActivities()`, `renderObjectifs()`, `renderParams()`, `dashboard()`.
-- **Navigation** : `TABS[]` → boutons ; `openTab(id)` applique `.active` et rafraîchit la preview Sync si besoin.
-- **Init** : `openTab('dashboard')` puis `refreshAll()`.
-
-### 5.3 Persistance
-- **load()** : lit `localStorage[LS_KEY]`, sinon **seed** (§2).
-- **save()** : met `store.meta.updated_at`, persiste, puis `refreshAll()`.
-- **applyIncomingStore(incoming, sourceLabel)** :
-  - Vérifie les clés requises : `consultants`, `activities`, `objectifs`, `params`.
-  - Conserve `meta.version` (sinon `4.93`), met `meta.updated_at = nowISO()`.
-  - Remplace `store`, persiste, `refreshAll()`.
-
-### 5.4 Sync GitHub
-- **Copier JSON** : `navigator.clipboard.writeText(JSON.stringify(store, null, 2))`.
-- **Ouvrir Issue [SYNC]** :
-  - URL : `https://github.com/${repo}/issues/new?title=[SYNC] data.json&body=```json\n<store>\n````
-- **Télécharger** : Blob → `a.download = 'data.json'`.
-- **Réinitialiser** :
-  - `fetch('./data.json', { cache:'no-store' })` ; si échec ⇒ file picker.
-  - Validation JSON avec `try/catch`.
-
-### 5.5 Accessibilité & responsive
-- **Header sticky**, tailles lisibles, `title` descriptifs sur boutons.
-- **Colonnes fixes** (Activités/Consultants) pour stabilité.
-- **Clamp** : `.clamp-1` (objectif), `.clamp-3` (description).
-- **Textareas** auto-resize (`autoSize()`).
-
-### 5.6 Styles (design tokens)
-- Variables CSS : `--bg`, `--fg`, `--muted`, `--card`, `--border`, `--accent`, `--green`, `--yellow`, `--red`, `--hover`, ainsi que `--stb`, `--note`, `--verb`, `--avis`, `--alerte` et leurs variantes `*-f`.
-- **Pills** par type : `.pill.stb|note|verb|avis|alerte` avec émojis.
-
-### 5.7 Algorithmes clés (résumé)
-- `statusOf(c)` : calcule `g/y/r` selon dates et activités récentes (cf. §4.1).
-- `hoursForObjective(objId, byConsultantId?, recentDays?)` : somme `heures` sur `ACTION_ST_BERNARD` filtrées.
-- `consultantsWithSTBForObjective(objId)` : ensemble des `consultant_id` avec au moins 1 STB liée.
-- Tri des consultants dans une carte Objectif : `desc(progression_pct)` puis `asc(nom)`.
-
-### 5.8 Sécurité & robustesse
-- **Échappement** systématique (`esc`) de tout texte utilisateur.
-- **Validations** : champs requis, bornes numériques (0..100), `heures` STB > 0.
-- **UUID** : fallback `Math.random` si `crypto.randomUUID` indisponible.
-- Cibles : navigateurs modernes (Chrome/Edge/Firefox).
+### 3.6 Modales (création/édition)
+- **Activité** :
+  - Champs : Consultant (select), Type (select), Date (date), Objectif (select), Heures (numérique **visible seulement** si STB, défaut 1), Description (textarea auto-hauteur, mémoire de hauteur max).
+  - **Annulation automatique** : si **nouvelle** activité et **un champ requis** est vide ⇒ fermer sur “Annuler” (pas d’alerte).  
+    En **édition**, si requis manquants ⇒ **alerte** bloque la sauvegarde.
+- **Objectif** :
+  - Champs : Titre (requis), Description (textarea auto-hauteur).
+  - Bloc **“Progression (%) — consultants ayant au moins une 🐕‍🦺 STB”** :
+    - Liste **auto-générée** des consultants éligibles (triée par progression décroissante).
+    - Chaque ligne : nom + input numérique **0..100** (coloration rouge/jaune/vert selon la valeur).
+  - Boutons : **Supprimer**, **Annuler**, **Enregistrer**.
+- **Consultant** :
+  - Champs : Nom (requis), Titre mission, Date fin, URL, Description (textarea auto-hauteur).
+  - Boutons : **Supprimer** (supprime le consultant **sans** supprimer ses activités), **Annuler**, **Enregistrer**.
+- Les **textareas** “Description” d’activité & consultant conservent la **plus grande hauteur** atteinte durant la session (auto-resize avec “mémoire”).
 
 ---
 
-## 6) ✅ Critères d’acceptation (exemples)
-- Scrollbars au survol : **aucun shift** de layout.
-- Dans **Objectifs**, un consultant **sans STB liée** à l’objectif **n’apparaît pas** (ni carte, ni modale progression).
-- Progression **sans checkbox**, éditable **0..100**, coloration dynamique.
-- Clic **Nom** d’une carte Objectif ⇒ **Activités** filtrées (consultant + objectif).
-- **Dashboard** reflète les valeurs de **Paramètres**.
-- Bouton **Réinitialiser** des Activités **vide tous les filtres** (type, objectif, date, texte).
-- **Sync** “Ouvrir Issue” préremplit le corps avec le JSON encodé.
+## 4) Règles de navigation & filtres
+- **Persistance onglet** : clé `TAB_KEY = 'SHERPA_ACTIVE_TAB'` (valeur = id onglet) dans `localStorage`.
+- **Ouverture par défaut** : **Activités** (si aucune persistance).
+- **Clics contextuels** :
+  - Dashboard → Activités filtrées (type/consultant selon carte).
+  - Objectif (titre) → Activités filtrées par **objectif**.
+  - Objectif (nom consultant) → Activités filtrées par **consultant + objectif**.
+  - Liste Consultants (clic ligne) → Activités filtrées par **consultant**.
+- **Réinitialiser filtres** :
+  - Dans **Activités** : efface `consultant_id`, `type`, `before`, `objectif_id` + réinitialise les selects/inputs.
+  - Dans **Consultants (gauche)** : réinitialise **uniquement** le filtre consultant actif.
+  - Dans **Objectifs** : efface le select consultant.
+
+---
+
+## 5) Technique & stockage
+
+### 5.1 Stockage & clés
+- **Clé principale** : `LS_KEY = 'SHERPA_STORE_V4'`.
+- **Structure `store`** :
+  - `consultants: []`, `activities: []`, `objectifs: []`,
+  - `params: { ...DEFAULT_PARAMS }`,
+  - `meta: { version: 4.98, updated_at: <ISO> }`
+- **Chargement initial** :
+  - Au tout premier démarrage : si `LS_KEY` vide, **créer un store vide** puis **auto-bootstrap** :
+    - Tente `fetch('./data.json', { cache: 'no-store' })`.
+    - Si échec : **file picker** (JSON local).
+- **Sauvegarde** : `updated_at` rafraîchi, re-rendu complet (consultants, filtres, activités, objectifs, params, dashboard, preview JSON).
+
+### 5.2 Performances & UX
+- **Tri** côté client, filtres en chaîne (consultant → type → objectif → date).
+- **Clamp** texte (Description) : 3 lignes max avec *title* au survol (pour lecture complète).
+- **Scrollbars** :
+  - Invisibles au repos, visibles au **hover**, sans modifier la largeur des colonnes.
+  - Utiliser `scrollbar-gutter: stable both-edges` pour éviter le “layout shift”.
+- **Tables** : `table-layout: fixed` + `colgroup` pour **largeurs stables** :
+  - Activités : `Type` (≈130px), `Consultant` (≈200px), `Date` (≈110px), `Description+Objectif` (flex), `Actions` (≈84px).
+  - Consultants : `Nom` (flex), `Fin` (≈86px), `Act.` (≈78px).
+- **Responsive** :
+  - Grilles : 4→3 (≤1300px) →2 (≤980px) →1 (≤660px).
+  - Split view : passe en **stack** (1 colonne) ≤980px.
+
+### 5.3 Conventions UI
+- **Type → émoji + pill** :
+  - STB 🐕‍🦺 (fond vert clair), NOTE 📝 (violet clair), VERBATIM 💬 (orange clair), AVIS 🗣️ (bleu clair), ALERTE 🚨 (rouge clair).
+- **Badges progression** : 🟥 <30, 🟨 30–69, 🟩 ≥70.
+- **Couleurs barres** :
+  - Fond de barre **proportion** aux **heures** (vs `objectif_bar_max_heures`).
+  - Teinte du fond selon progression (vert/jaune/rouge clair).
+- **Actions standardisées** : ✏️ éditer, 🗑️ supprimer (confirm), 🔗 lien externe, 🎯 focus objectifs.
+- **Toasts/alerts** minimalistes : confirmations (params sauvegardés, reset OK, import OK) et erreurs (JSON invalide).
+
+---
+
+## 6) États limites & Validations
+- **Création** :
+  - Activité/Consultant/Objectif : si **nouvelle** entité **et** champ(s) requis manquant(s) ⇒ **fermeture silencieuse** (Annuler).
+- **Édition** :
+  - Si requis manquants ⇒ **alerte** et **blocage** de la sauvegarde.
+- **Suppression** :
+  - Consultant : supprime **uniquement** la fiche consultant (les activités **restent**).
+  - Objectif/Activité : suppression **définitive** après confirmation.
+- **Import** :
+  - Doit contenir **toutes** les clés `consultants`, `activities`, `objectifs`, `params` (sinon erreur).
+  - `params` fusionnés avec **DEFAULTS** ; `meta.version` conservée/normalisée ; `meta.updated_at` rafraîchi.
+
+---
+
+## 7) Accessibilité & Micro-interactions
+- Taille de police **compacte** (~14px) avec contrastes **suffisants**.
+- **Focus** clavier sur boutons/inputs/selects ; éléments cliquables ont un **curseur main** et un *hover state*.
+- **Titles** sur contenus clampés (Descriptions, Objectifs) pour lecture complète.
+- **Boutons** “Réinitialiser” **visibles** près des filtres concernés.
+
+---
+
+## 8) Critères d’acceptation (extraits)
+1) Changer `stb_recent_jours` en Paramètres **modifie immédiatement** le compteur “Action STB > Yj” du Dashboard.  
+2) Clic sur “🎯 Objectif A” dans une carte ⇒ onglet Activités s’ouvre avec filtre **Objectif A** actif.  
+3) Dans **Objectifs**, sélectionner **Consultant X** ⇒ n’afficher que les objectifs où X a des STB et, pour chaque carte, **3 lignes max** (X en premier, en gras).  
+4) Nouvelle activité **STB** sans heures ⇒ **bloquée** en édition (alerte) / **annulée** en création si requis manquants.  
+5) **Reset** charge `data.json` si disponible ; sinon propose un **fichier local** ; après import, le JSON **aperçu** reflète les nouvelles données.
+
+---
+
+## 9) Paramétrage par défaut (rappel)
+- `delai_alerte_jours = 7`
+- `fin_mission_sous_jours = 60`
+- `stb_recent_jours = 30`
+- `avis_manquant_depuis_jours = 60`
+- `objectif_recent_jours = 15`
+- `objectif_bar_max_heures = 10`
+
+---
+
+## 10) Glossaire rapides 🧭
+- **STB** = “Action Saint-Bernard” (action d’aide/relance mesurée en **heures**).
+- **Heures récentes** = somme des heures STB ≤ `objectif_recent_jours`.
+- **Barre max heures** = seuil visuel de 100% pour la largeur de barre.
+
