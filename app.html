@@ -137,10 +137,10 @@ dialog::backdrop{background:#0006}
   <!-- DASHBOARD -->
   <section class="view" id="view-dashboard">
     <div class="grid g4">
-      <div class="card"><div class="row space"><div class="title">🚨 En alerte &lt; <span id="db-fin-w"></span>j</div><div class="pill" id="db-alerte-title">0</div></div><div id="db-alerte-list" class="db-list"></div></div>
-      <div class="card"><div class="row space"><div class="title">⏳ Fin de mission &lt; <span id="db-fin-x"></span>j</div><div class="pill" id="db-fin-title">0</div></div><div id="db-fin-list" class="db-list"></div></div>
-      <div class="card"><div class="row space"><div class="title">🐕‍🦺 Action STB &gt; <span id="db-stb-y"></span>j</div><div class="pill" id="db-stb-title">0</div></div><div id="db-stb-list" class="db-list"></div></div>
-      <div class="card"><div class="row space"><div class="title">🗣️ Avis &gt; <span id="db-avis-z"></span>j</div><div class="pill" id="db-avis-title">0</div></div><div id="db-avis-list" class="db-list"></div></div>
+      <div class="card"><div class="row space"><div class="title">🚨 En alerte &lt; <span id="db-fin-w"></span>j</div></div><div id="db-alerte-list" class="db-list"></div></div>
+      <div class="card"><div class="row space"><div class="title">⏳ Fin de mission &lt; <span id="db-fin-x"></span>j</div></div><div id="db-fin-list" class="db-list"></div></div>
+      <div class="card"><div class="row space"><div class="title">🐕‍🦺 Action STB &gt; <span id="db-stb-y"></span>j</div></div><div id="db-stb-list" class="db-list"></div></div>
+      <div class="card"><div class="row space"><div class="title">🗣️ Avis &gt; <span id="db-avis-z"></span>j</div></div><div id="db-avis-list" class="db-list"></div></div>
     </div>
   </section>
 
@@ -152,7 +152,6 @@ dialog::backdrop{background:#0006}
           <div class="row space" style="margin-bottom:6px">
             <div class="row" style="gap:8px">
               <div class="title">👤 Consultants</div>
-              <div class="pill" id="consultants-count">0</div>
               <button class="btn small" id="btn-new-consultant">+Ajouter un consultant</button>
             </div>
             <div class="row"><button class="btn small" id="btn-reset-filters-left">Réinitialiser</button></div>
@@ -173,7 +172,6 @@ dialog::backdrop{background:#0006}
           <div class="row space">
             <div class="row" style="gap:10px">
               <div class="title">🗂️ Activités</div>
-              <div class="pill" id="activities-count">0</div>
               <button class="btn small primary" id="btn-new-activity">+Ajouter une activité</button>
             </div>
           </div>
@@ -378,7 +376,7 @@ function dashboard(){
   document.getElementById('db-fin-x').textContent=p.fin_mission_sous_jours;
   document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
   document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
-  const fmt=(arr,box,title)=>{
+  const fmt=(arr,box)=>{
     const out=document.getElementById(box); out.innerHTML='';
     arr.forEach(c=>{
       const d=document.createElement('div');
@@ -387,12 +385,11 @@ function dashboard(){
       d.querySelector('.linklike').onclick=()=>{ openTab('activite',true); setConsultantFilter(c.id); };
       out.appendChild(d);
     });
-    document.getElementById(title).textContent=arr.length;
   };
-  fmt(alerteList,'db-alerte-list','db-alerte-title');
-  fmt(finList,'db-fin-list','db-fin-title');
-  fmt(stbList,'db-stb-list','db-stb-title');
-  fmt(avisList,'db-avis-list','db-avis-title');
+  fmt(alerteList,'db-alerte-list');
+  fmt(finList,'db-fin-list');
+  fmt(stbList,'db-stb-list');
+  fmt(avisList,'db-avis-list');
 }
 
 /* STATE */
@@ -415,7 +412,6 @@ function renderConsultants(){
     ? state.sortDir * a.nom.localeCompare(b.nom)
     : state.sortDir * (a.date_fin||'').localeCompare(b.date_fin||'')
   );
-  document.getElementById('consultants-count').textContent=rows.length;
   consTBody.innerHTML='';
   rows.forEach(c=>{
     const tr=document.createElement('tr'); tr.classList.add('clickable');
@@ -447,7 +443,6 @@ const actTBody=document.querySelector('#activities-table tbody');
 const selectType=document.getElementById('filter-type');
 const inputBefore=document.getElementById('filter-before');
 const selectObjectif=document.getElementById('filter-objectif');
-const badgeCount=document.getElementById('activities-count');
 const chips=document.getElementById('filters-chips');
 selectType.addEventListener('change',e=>{state.filters.type=e.target.value; renderActivities();});
 inputBefore.addEventListener('change',e=>{state.filters.before=e.target.value; renderActivities();});
@@ -490,7 +485,6 @@ function renderActivities(){
     .filter(a=>!beforeDate || (parseDate(a.date_publication) && parseDate(a.date_publication) <= beforeDate))
     .sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
 
-  badgeCount.textContent=list.length;
   actTBody.innerHTML='';
   const mobile = isMobile();
   list.forEach(a=>{
@@ -566,8 +560,6 @@ function renderObjectifs(){
   const p=store.params||DEFAULT_PARAMS; const onlyCid=state.objectifs_consultant_id; const barMax = Number(p.objectif_bar_max_heures||10);
   store.objectifs.forEach(o=>{
     if(onlyCid && !consultantsWithSTBForObjective(o.id).includes(onlyCid)) return;
-    const total=hoursForObjective(o.id,null,null);
-    const recent=hoursForObjective(o.id,null,p.objectif_recent_jours);
     const stbIds = consultantsWithSTBForObjective(o.id);
     const rowsAll = stbIds.map(cid=>{
       const c = store.consultants.find(x=>x.id===cid);
@@ -602,11 +594,10 @@ function renderObjectifs(){
     }).join('');
     card.innerHTML=`
 <div class="row space">
-  <div class="title linklike" data-goto-oid="${o.id}" title="Voir les activités liées">${esc(o.titre)} <span class="sub">(${stbIds.length})</span></div>
+  <div class="title linklike" data-goto-oid="${o.id}" title="Voir les activités liées">${esc(o.titre)}</div>
   <button class="btn small" data-edit="${o.id}">✏️</button>
 </div>
 <div class="sub" style="margin:4px 0 8px">${esc(o.description||'—')}</div>
-<div class="sub" style="margin-bottom:6px">Total objectif : <b>${total}h</b> ${recent>0 ? `<span class="green">(+${recent}h)</span>`:''}</div>
 <div class="cons-list cons-mini">${consList || '<span class="muted">Aucun consultant avec 🐕‍🦺 Action STB pour cet objectif</span>'}</div>`;
     card.querySelector('[data-goto-oid]').addEventListener('click',e=>{
       const oid=e.currentTarget.dataset.gotoOid;
