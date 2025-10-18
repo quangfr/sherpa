@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>SHERPA — MVP v4.9.8</title><style>
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>SHERPA — MVP v5.0.1</title><style>
 :root{
 --bg:#fafafa;--fg:#1c1c1c;--muted:#666;--muted2:#999;--card:#fff;--border:#e8e8e8;
 --accent:#2563eb;--green:#16a34a;--yellow:#ca8a04;--red:#dc2626;--pill:#f1f5f9;--pill-fg:#0f172a;
@@ -14,7 +14,7 @@ header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px s
 .wrap{width:100%;max-width:none;margin:0;padding:6px 10px}
 main{height:calc(100vh - var(--headH)); overflow:hidden}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px}
-.tab{padding:6px 8px;border:1px solid var(--border);border-bottom-color:transparent;border-radius:10px 10px 0 0;background:var(--card);cursor:pointer;font-weight:700;font-size:13px}
+.tab{padding:6px 8px;border:1px solid var(--border);border-bottom-color:transparent;border-radius:10px 10px 0 0;background:var(--card);cursor:pointer;font-weight:700;font-size:13px;white-space:nowrap}
 .tab.active{background:var(--bg);border-color:var(--border);color:var(--accent)}
 .view{display:none;height:100%;overflow:auto;padding:8px 4px}
 .view.active{display:block}
@@ -76,31 +76,27 @@ dialog::backdrop{background:#0006}
 .modal .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media (max-width:700px){.modal .grid2{grid-template-columns:1fr}}
 .actions{display:flex;gap:8px;justify-content:flex-end;padding:10px;border-top:1px solid var(--border);background:var(--bg);border-radius:0 0 14px 14px}
-.col-type{width:130px}
-.col-consultant{width:200px}
-.col-date{width:110px}
+/* colonnes activités (date fusionnée dans Type) */
+.col-type{width:150px}
+.col-consultant{width:220px}
 .col-main{width:auto}
 .col-actions{width:84px}
 @media (max-width:900px){
-.col-consultant{width:160px}
-.col-type{width:120px}
-.col-date{width:96px}
+.col-consultant{width:180px}
+.col-type{width:140px}
 .col-actions{width:76px}
 }
 .clamp-1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 #activities-table td.main{word-break:break-word;overflow-wrap:anywhere}
 #activities-table td:last-child .btn.small{white-space:nowrap}
 .type-pill{display:inline-flex;align-items:center;gap:6px}
+/* — consultants table (col date supprimée) — */
 #consultants-table{table-layout:fixed}
 .col-c-name{width:auto}
-.col-c-date{width:86px}
-.col-c-actions{width:78px}
-#consultants-table td.col-date{font-size:11px;color:var(--muted)}
-@media (max-width:900px){
-.col-c-date{width:76px}
-.col-c-actions{width:72px}
-}
+.col-c-actions{width:88px}
+@media (max-width:900px){.col-c-actions{width:78px}}
 #objectif-pane .pane-header{top:0}
 .rowline{position:relative;padding:2px 4px;border-radius:8px;overflow:hidden}
 .rowline .fill{position:absolute;inset:0 0 0 0;width:0;height:100%;z-index:0;opacity:.9}
@@ -111,10 +107,30 @@ dialog::backdrop{background:#0006}
 .cons-mini .rowline{margin:2px 0;padding:1px 3px;border-radius:6px}
 .cons-mini .rowline .content{margin:3px 2px}
 .cons-mini .row.space{gap:4px}
-
-/* 🆕 Dashboard: police "texte normal" + espacement lignes amélioré */
+/* Dashboard list */
 .db-list{font:inherit;font-size:13px;line-height:1.6}
 .db-list .row{margin:3px 0}
+/* Réglages = Paramètres + Sync en 2 colonnes */
+.reglages-grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:10px}
+@media (max-width:900px){.reglages-grid{grid-template-columns:1fr}}
+/* 📱 mobile patch */
+.desktop-only{display:revert}
+.mobile-only{display:none}
+@media (max-width:520px){
+  .split{grid-template-columns:1fr}
+  #activities-table thead{display:none}
+  #activities-table colgroup{display:none}
+  #activities-table tr{display:block;border:1px solid var(--border);border-radius:10px;margin:8px 0;background:var(--card);padding:8px}
+  #activities-table td{display:block;border-top:none;padding:2px 0}
+  #activities-table td.desktop-only{display:none}
+  .mobile-only{display:block}
+  .col-actions, #activities-table td:last-child{display:none!important}
+  #acts-pane .filters{position:sticky;top:36px;z-index:3;background:var(--bg);padding:6px 0;border-bottom:1px solid var(--border)}
+}
+@media (max-width:360px){
+  #filters-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  #filters-chips .chip{font-size:11px;padding:2px 6px;border:1px solid var(--border);border-radius:999px;background:var(--pill)}
+}
 </style></head><body>
 <header><div class="wrap"><nav class="tabs" id="tabs"></nav></div></header>
 <main class="wrap">
@@ -144,8 +160,9 @@ dialog::backdrop{background:#0006}
         </div>
         <div class="pane-body hover-scroll">
           <table class="table" id="consultants-table">
-            <colgroup><col class="col-c-name"/><col class="col-c-date"/><col class="col-c-actions"/></colgroup>
-            <thead><tr><th class="linklike" data-sort="nom">Nom ▲/▼</th><th class="linklike nowrap" data-sort="date_fin">Fin</th><th>Act.</th></tr></thead>
+            <!-- ⛏️ col date supprimée -->
+            <colgroup><col class="col-c-name"/><col class="col-c-actions"/></colgroup>
+            <thead><tr><th class="linklike" data-sort="nom">Nom ▲/▼</th><th>Act.</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -160,24 +177,27 @@ dialog::backdrop{background:#0006}
               <button class="btn small primary" id="btn-new-activity">+Ajouter une activité</button>
             </div>
           </div>
-          <div class="row" style="gap:8px;margin-top:6px">
-            <button class="btn small" id="btn-reset-filters">Réinitialiser</button>
-            <select id="filter-type" title="Filtrer par type">
-              <option value="">🗂️ Tous les types</option>
-              <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
-              <option value="NOTE">📝 Note</option>
-              <option value="VERBATIM">💬 Verbatim</option>
-              <option value="AVIS">🗣️ Avis</option>
-              <option value="ALERTE">🚨 Alerte</option>
-            </select>
-            <select id="filter-objectif" title="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
-            <label class="row" style="gap:6px">📅Date <input type="date" id="filter-before"/></label>
+          <div class="filters">
+            <div class="row" style="gap:8px;margin-top:6px">
+              <button class="btn small" id="btn-reset-filters">Réinitialiser</button>
+              <select id="filter-type" title="Filtrer par type">
+                <option value="">🗂️ Tous les types</option>
+                <option value="ACTION_ST_BERNARD">🐕‍🦺 Action STB</option>
+                <option value="NOTE">📝 Note</option>
+                <option value="VERBATIM">💬 Verbatim</option>
+                <option value="AVIS">🗣️ Avis</option>
+                <option value="ALERTE">🚨 Alerte</option>
+              </select>
+              <select id="filter-objectif" title="Filtrer par objectif"><option value="">🎯 Tous les objectifs</option></select>
+              <label class="row" style="gap:6px">📅Avant <input type="date" id="filter-before"/></label>
+            </div>
+            <div id="filters-chips" class="mobile-only" aria-live="polite"></div>
           </div>
         </div>
         <div class="pane-body hover-scroll">
           <table class="table" id="activities-table">
-            <colgroup><col class="col-type"/><col class="col-consultant"/><col class="col-date"/><col class="col-main"/><col class="col-actions"/></colgroup>
-            <thead><tr><th>Type</th><th>Consultant</th><th>Date</th><th>Description + Objectif</th><th>Actions</th></tr></thead>
+            <colgroup><col class="col-type"/><col class="col-consultant"/><col class="col-main"/><col class="col-actions"/></colgroup>
+            <thead><tr><th>Type</th><th>Consultant</th><th>Description + Objectif</th><th>Actions</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -204,11 +224,11 @@ dialog::backdrop{background:#0006}
     </div>
   </section>
 
-  <!-- PARAMÈTRES -->
-  <section class="view" id="view-parametres">
-    <div class="grid g4">
+  <!-- RÉGLAGES -->
+  <section class="view" id="view-reglages">
+    <div class="reglages-grid">
       <div class="card">
-        <div class="title">⚙️ Délais & Affichage</div>
+        <div class="title">⚙️ Paramètres</div>
         <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px">
           <label>delai_alerte_jours <input type="number" id="p-delai_alerte" min="1"/></label>
           <label>fin_mission_sous_jours <input type="number" id="p-fin_mission_sous" min="1"/></label>
@@ -220,28 +240,28 @@ dialog::backdrop{background:#0006}
         <div class="row" style="margin-top:8px"><button class="btn primary small" id="btn-save-params">Enregistrer</button></div>
         <div class="sub" style="margin-top:6px">Les titres du Dashboard & l’affichage des barres se mettent à jour automatiquement.</div>
       </div>
-    </div>
-  </section>
-
-  <!-- SYNC -->
-  <section class="view" id="view-sync">
-    <div class="card">
-      <div class="row space">
-        <div class="title">🔁 Sync GitHub</div>
-        <div class="row">
-          <button class="btn small danger" id="btn-reset-storage">🐈‍⬛ Réinitialiser</button>
-          <button class="btn small" id="btn-copy-json">📋 Copier JSON</button>
+      <div class="card">
+        <div class="row space">
+          <div class="title">🔃 Sync GitHub</div>
+          <div class="row">
+            <button class="btn small danger" id="btn-reset-storage">🐈‍⬛ Réinitialiser</button>
+            <button class="btn small" id="btn-copy-json">📋 Copier JSON</button>
+          </div>
         </div>
+        <div class="sub" style="margin:6px 0">Aperçu de vos données (lecture seule) — vous pouvez copier le JSON.</div>
+        <pre id="json-preview" class="mono hover-scroll" style="max-height:400px;overflow:auto;border:1px solid var(--border);padding:10px;border-radius:10px"></pre>
+        <input id="file-import" type="file" accept="application/json,.json" class="hidden"/>
       </div>
-      <div class="sub" style="margin:6px 0">Aperçu de vos données (lecture seule) — vous pouvez copier le JSON.</div>
-      <pre id="json-preview" class="mono hover-scroll" style="max-height:400px;overflow:auto;border:1px solid var(--border);padding:10px;border-radius:10px"></pre>
-      <input id="file-import" type="file" accept="application/json,.json" class="hidden"/>
     </div>
   </section>
 </main>
 
 <!-- MODALES -->
-<dialog id="dlg-activity"><form method="dialog" class="modal" id="form-activity"><h3>✏️ Activité</h3>
+<dialog id="dlg-activity"><form method="dialog" class="modal" id="form-activity">
+  <div class="row space" style="margin-bottom:8px">
+    <h3>✏️ Activité</h3>
+    <button type="button" class="btn small" id="fa-goto-consultant">👤Voir le consultant</button>
+  </div>
   <div class="grid2">
     <label>Consultant <select name="consultant_id" required id="fa-consultant"></select></label>
     <label>Type <select name="type" required id="fa-type">
@@ -268,7 +288,11 @@ dialog::backdrop{background:#0006}
   <div class="actions"><button value="del" class="btn danger">Supprimer</button><button value="cancel" class="btn">Annuler</button><button value="ok" class="btn primary">Enregistrer</button></div>
 </form></dialog>
 
-<dialog id="dlg-consultant"><form method="dialog" class="modal" id="form-consultant"><h3>✏️ Consultant</h3>
+<dialog id="dlg-consultant"><form method="dialog" class="modal" id="form-consultant">
+  <div class="row space" style="margin-bottom:8px">
+    <h3>✏️ Consultant</h3>
+    <button type="button" class="btn small" id="fc-goto-objectifs">🎯Voir ses objectifs</button>
+  </div>
   <div class="grid2">
     <label>Nom* <input name="nom" required id="fc-nom"/></label>
     <label>Titre mission <input name="titre_mission" id="fc-titre"/></label>
@@ -281,7 +305,7 @@ dialog::backdrop{background:#0006}
 
 <script>
 /* KEYS & UTILS */
-const LS_KEY='SHERPA_STORE_V4';
+const LS_KEY='SHERPA_STORE_V5';
 const TAB_KEY='SHERPA_ACTIVE_TAB';
 const nowISO=()=>new Date().toISOString();
 const todayStr=()=>new Date().toISOString().slice(0,10);
@@ -290,13 +314,14 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'
 const parseDate=s=>s? new Date(s+'T00:00:00'):null;
 const daysDiff=(a,b)=>Math.round((a-b)/86400000);
 const addDays=(d,n)=>new Date(d.getTime()+n*86400000);
+const isMobile=()=>window.innerWidth<=520;
 function progBadge(p){ const pct=Math.max(0,Math.min(100,Number(p)||0)); return pct<30?'🟥':(pct<70?'🟨':'🟩'); }
 function pctColorClass(p){ const v=Math.max(0,Math.min(100,Number(p)||0)); return v<30?'fill-r':(v<70?'fill-y':'fill-g'); }
 const clamp01=(v)=>Math.max(0,Math.min(100,Number(v)||0));
 function autoSizeKeepMax(el, bucket){ if(!el) return; el.style.height='auto'; const h=el.scrollHeight; bucket.value=Math.max(bucket.value||0,h); el.style.height=bucket.value+'px'; }
 let ACT_DESC_MAX={value:120}, CONS_DESC_MAX={value:120};
 
-/* DEFAULT STORE (no seed) */
+/* DEFAULT STORE */
 const DEFAULT_PARAMS={delai_alerte_jours:7,fin_mission_sous_jours:60,stb_recent_jours:30,avis_manquant_depuis_jours:60,objectif_recent_jours:15,objectif_bar_max_heures:10};
 let store=load();
 
@@ -304,8 +329,7 @@ let store=load();
 function load(){
   const raw=localStorage.getItem(LS_KEY);
   if(raw){ try{ return JSON.parse(raw);}catch{ console.warn('LocalStorage invalide, on repart vide.'); } }
-  // No seeding here; start empty, then auto-bootstrap from data.json (same as Reset)
-  const empty={consultants:[],activities:[],objectifs:[],params:{...DEFAULT_PARAMS},meta:{version:4.98,updated_at:nowISO()}};
+  const empty={consultants:[],activities:[],objectifs:[],params:{...DEFAULT_PARAMS},meta:{version:5.01,updated_at:nowISO()}};
   localStorage.setItem(LS_KEY, JSON.stringify(empty));
   return empty;
 }
@@ -313,25 +337,35 @@ function save(){ store.meta=store.meta||{}; store.meta.updated_at=nowISO(); loca
 
 /* NAV TABS */
 const TABS=[
-  {id:'dashboard',label:'Dashboard'},
-  {id:'activite',label:'🗂️Activités'},
-  {id:'objectif',label:'🎯Objectifs'},
-  {id:'parametres',label:'⚙️Paramètres'},
-  {id:'sync',label:'🔃Sync'}
+  {id:'dashboard',labelFull:'🏠 Dashboard',labelShort:'🏠 Das.'},
+  {id:'activite',labelFull:'🗂️ Activités',labelShort:'🗂️ Act.'},
+  {id:'objectif',labelFull:'🎯 Objectifs',labelShort:'🎯 Obj.'},
+  {id:'reglages',labelFull:'⚙️ Paramètres',labelShort:'⚙️ Par.'}
 ];
 const tabsEl=document.getElementById('tabs');
-TABS.forEach(t=>{ const b=document.createElement('button'); b.className='tab'; b.textContent=' '+t.label+' '; b.onclick=()=>openTab(t.id,true); b.id='tab-'+t.id; tabsEl.appendChild(b); });
+TABS.forEach(t=>{
+  const b=document.createElement('button');
+  b.className='tab';
+  b.textContent=t.labelFull;
+  b.onclick=()=>openTab(t.id,true);
+  b.id='tab-'+t.id;
+  b.dataset.full=t.labelFull;
+  b.dataset.short=t.labelShort;
+  tabsEl.appendChild(b);
+});
+function applyTabLabels(){ const compact = window.innerWidth<=520; document.querySelectorAll('.tab').forEach(btn=>{ btn.textContent = compact ? btn.dataset.short : btn.dataset.full; }); }
+window.addEventListener('resize',applyTabLabels); applyTabLabels();
 function openTab(id, persist=false){
   document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  document.querySelector('#tab-'+id).classList.add('active');
+  const tabBtn=document.querySelector('#tab-'+id); if(tabBtn) tabBtn.classList.add('active');
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.querySelector('#view-'+id).classList.add('active');
+  const view=document.querySelector('#view-'+id); if(view) view.classList.add('active');
   if(persist) localStorage.setItem(TAB_KEY,id);
-  if(id==='sync') updateSyncPreview();
+  if(id==='reglages') updateSyncPreview();
 }
 openTab(localStorage.getItem(TAB_KEY)||'activite');
 
-/* DASHBOARD */
+/* DASHBOARD (inchangé) */
 function dashboard(){
   const p=store.params||DEFAULT_PARAMS, today=new Date();
   const hasRecent=(cid,type,days)=>store.activities.some(a=>a.consultant_id===cid && a.type===type && parseDate(a.date_publication)>=addDays(today,-days));
@@ -340,7 +374,7 @@ function dashboard(){
   const finList = store.consultants.filter(c=> c.date_fin && ((d=>d>=0 && d<=p.fin_mission_sous_jours)(daysDiff(parseDate(c.date_fin),today))));
   const stbList = store.consultants.filter(c=>!hasRecent(c.id,'ACTION_ST_BERNARD',p.stb_recent_jours));
   const avisList = store.consultants.filter(c=>!hasRecent(c.id,'AVIS',p.avis_manquant_depuis_jours));
-    document.getElementById('db-fin-w').textContent=p.delai_alerte_jours;
+  document.getElementById('db-fin-w').textContent=p.delai_alerte_jours;
   document.getElementById('db-fin-x').textContent=p.fin_mission_sous_jours;
   document.getElementById('db-stb-y').textContent=p.stb_recent_jours;
   document.getElementById('db-avis-z').textContent=p.avis_manquant_depuis_jours;
@@ -364,7 +398,7 @@ function dashboard(){
 /* STATE */
 let state={sortCol:'nom',sortDir:1,filters:{consultant_id:'',type:'',before:'',objectif_id:''},objectifs_consultant_id:''};
 
-/* CONSULTANTS LIST */
+/* CONSULTANTS LIST (col date supprimée) */
 const consTBody=document.querySelector('#consultants-table tbody');
 document.querySelectorAll('#consultants-table thead th[data-sort]').forEach(th=>th.onclick=()=>{state.sortCol=th.dataset.sort;state.sortDir*=-1;renderConsultants();});
 function statusOf(c){
@@ -386,8 +420,10 @@ function renderConsultants(){
   rows.forEach(c=>{
     const tr=document.createElement('tr'); tr.classList.add('clickable');
     tr.innerHTML=`
-<td><div class="row"><span class="dot ${statusOf(c)}"></span><b>${esc(c.nom)}</b></div><div class="sub">${esc(c.titre_mission||'—')}</div></td>
-<td class="col-date">${esc(c.date_fin||'—')}</td>
+<td>
+  <div class="row"><span class="dot ${statusOf(c)}"></span><b>${esc(c.nom)}</b></div>
+  <div class="sub">${esc(c.titre_mission||'—')}</div>
+</td>
 <td class="nowrap">
   ${c.url?`<a class="btn small" href="${esc(c.url)}" target="_blank" title="Fiche">🔗</a>`:''}
   <button class="btn small" data-edit="${c.id}" title="Éditer">✏️</button>
@@ -395,12 +431,16 @@ function renderConsultants(){
 </td>`;
     tr.addEventListener('click',(e)=>{ if(e.target.closest('button, a')) return; setConsultantFilter(c.id); openTab('activite',true); });
     tr.querySelector('[data-edit]').onclick=(e)=>{ e.stopPropagation(); openConsultantModal(c.id); };
-    tr.querySelector('[data-goto-obj]').onclick=(e)=>{ e.stopPropagation(); state.objectifs_consultant_id=c.id; document.getElementById('filter-objectif-consultant').value=c.id; openTab('objectif',true); renderObjectifs(); };
+    tr.querySelector('[data-goto-obj]').onclick=(e)=>{ e.stopPropagation(); gotoConsultantObjectives(c.id); };
     consTBody.appendChild(tr);
   });
 }
 function setConsultantFilter(cid){ state.filters.consultant_id=cid; renderActivities(); }
-document.getElementById('btn-reset-filters-left').onclick=()=>{ state.filters.consultant_id=''; renderConsultants(); renderActivities(); };
+function gotoConsultantObjectives(cid){
+  state.objectifs_consultant_id=cid;
+  document.getElementById('filter-objectif-consultant').value=cid;
+  openTab('objectif',true); renderObjectifs();
+}
 
 /* ACTIVITIES */
 const actTBody=document.querySelector('#activities-table tbody');
@@ -408,10 +448,13 @@ const selectType=document.getElementById('filter-type');
 const inputBefore=document.getElementById('filter-before');
 const selectObjectif=document.getElementById('filter-objectif');
 const badgeCount=document.getElementById('activities-count');
+const chips=document.getElementById('filters-chips');
 selectType.addEventListener('change',e=>{state.filters.type=e.target.value; renderActivities();});
 inputBefore.addEventListener('change',e=>{state.filters.before=e.target.value; renderActivities();});
 selectObjectif.addEventListener('change',e=>{state.filters.objectif_id=e.target.value; renderActivities();});
 document.getElementById('btn-reset-filters').onclick=()=>{ state.filters={consultant_id:'',type:'',before:'',objectif_id:''}; selectType.value=''; inputBefore.value=''; selectObjectif.value=''; renderActivities(); };
+document.getElementById('btn-reset-filters-left').onclick=()=>{ state.filters.consultant_id=''; renderConsultants(); renderActivities(); };
+
 const TYPE_META={
   ACTION_ST_BERNARD:{emoji:'🐕‍🦺', pill:'stb', label:'Action STB'},
   NOTE:{emoji:'📝', pill:'note', label:'Note'},
@@ -419,6 +462,24 @@ const TYPE_META={
   AVIS:{emoji:'🗣️', pill:'avis', label:'Avis'},
   ALERTE:{emoji:'🚨', pill:'alerte', label:'Alerte'}
 };
+
+function renderFiltersChips(){
+  if(!chips) return;
+  chips.innerHTML='';
+  const items=[];
+  if(state.filters.type) items.push(`${TYPE_META[state.filters.type]?.emoji||'🗂️'} ${TYPE_META[state.filters.type]?.label||state.filters.type}`);
+  if(state.filters.objectif_id){
+    const o=store.objectifs.find(x=>x.id===state.filters.objectif_id);
+    if(o) items.push(`🎯 ${o.titre}`);
+  }
+  if(state.filters.before) items.push(`📅 ≤ ${state.filters.before}`);
+  if(state.filters.consultant_id){
+    const c=store.consultants.find(x=>x.id===state.filters.consultant_id);
+    if(c) items.push(`👤 ${c.nom}`);
+  }
+  chips.innerHTML = items.map(t=>`<span class="chip">${esc(t)}</span>`).join('') || '';
+}
+
 function renderActivities(){
   const {consultant_id,type,before,objectif_id}=state.filters;
   const beforeDate = before ? parseDate(before) : null;
@@ -428,29 +489,55 @@ function renderActivities(){
     .filter(a=>!objectif_id || (a.objectif_id||'')===objectif_id)
     .filter(a=>!beforeDate || (parseDate(a.date_publication) && parseDate(a.date_publication) <= beforeDate))
     .sort((a,b)=>b.date_publication.localeCompare(a.date_publication));
+
   badgeCount.textContent=list.length;
   actTBody.innerHTML='';
+  const mobile = isMobile();
   list.forEach(a=>{
     const c=store.consultants.find(x=>x.id===a.consultant_id);
     const o=a.objectif_id ? store.objectifs.find(x=>x.id===a.objectif_id):null;
     const meta=TYPE_META[a.type]||{emoji:'❓',pill:'',label:a.type};
     const heuresTxt = a.type==='ACTION_ST_BERNARD' ? `<b>${a.heures??0}h</b>`:'';
+
     const tr=document.createElement('tr'); tr.classList.add('clickable');
-    tr.innerHTML=`
-<td><span class="pill ${meta.pill} type-pill">${meta.emoji} ${meta.label}</span></td>
-<td><b>${esc(c?.nom||'—')}</b><div class="sub">${esc(c?.titre_mission||'—')}</div></td>
-<td>${esc(a.date_publication||'')}</td>
-<td class="main">
+    tr.innerHTML = mobile
+    ? `
+<td class="mobile-only">
+  <div class="row" style="gap:8px">
+    <span class="pill ${meta.pill}">${meta.emoji} ${meta.label}</span>
+    <span class="linklike" data-cpop="${c?.id||''}"><b>${esc(c?.nom||'—')}</b></span>
+    <span class="sub">· ${esc(a.date_publication||'')}</span>
+    <div style="margin-left:auto">${heuresTxt}</div>
+  </div>
+  <div class="clamp-2" style="margin-top:2px">${o?`🎯 <b>${esc(o.titre)}</b> — `:''}${esc(a.description||'')}</div>
+</td>`
+    : `
+<td class="desktop-only">
+  <div><span class="pill ${meta.pill} type-pill">${meta.emoji} ${meta.label}</span></div>
+  <div class="sub">${esc(a.date_publication||'')}</div>
+</td>
+<td class="desktop-only">
+  <span class="linklike" data-cpop="${c?.id||''}"><b>${esc(c?.nom||'—')}</b></span>
+  <div class="sub">${esc(c?.titre_mission||'—')}</div>
+</td>
+<td class="main desktop-only">
   <div class="row space"><div class="clamp-1" title="${o?esc(o.titre):''}">${o?`🎯 <b>${esc(o.titre)}</b>`:'—'}</div><div>${heuresTxt}</div></div>
   <div class="clamp-3" title="${esc(a.description||'')}">${esc(a.description||'')}</div>
 </td>
-<td class="nowrap"><button class="btn small" data-edit="${a.id}" title="Éditer">✏️</button><button class="btn small danger" data-del="${a.id}" title="Supprimer">🗑️</button></td>`;
-    tr.addEventListener('click',(e)=>{ if(e.target.closest('button')) return; openActivityModal(a.id); });
-    tr.querySelector('[data-edit]').onclick=(e)=>{ e.stopPropagation(); openActivityModal(a.id); };
-    tr.querySelector('[data-del]').onclick=(e)=>{ e.stopPropagation(); if(confirm('Supprimer cette activité ?')){ store.activities=store.activities.filter(x=>x.id!==a.id); save(); } };
+<td class="desktop-only nowrap"><button class="btn small" data-edit="${a.id}" title="Éditer">✏️</button><button class="btn small danger" data-del="${a.id}" title="Supprimer">🗑️</button></td>`;
+
+    tr.addEventListener('click',(e)=>{ if(e.target.closest('button,[data-cpop]')) return; openActivityModal(a.id); });
+    tr.querySelectorAll('[data-cpop]')?.forEach(el=>el.addEventListener('click',(e)=>{ e.stopPropagation(); const cid=e.currentTarget.dataset.cpop; if(cid) openConsultantModal(cid); }));
+    if(!mobile){
+      tr.querySelector('[data-edit]')?.addEventListener('click',(e)=>{ e.stopPropagation(); openActivityModal(a.id); });
+      tr.querySelector('[data-del]')?.addEventListener('click',(e)=>{ e.stopPropagation(); if(confirm('Supprimer cette activité ?')){ store.activities=store.activities.filter(x=>x.id!==a.id); save(); } });
+    }
     actTBody.appendChild(tr);
   });
+
+  renderFiltersChips();
 }
+window.addEventListener('resize',()=>renderActivities());
 
 /* OBJECTIFS GRID */
 const selectObjConsult=document.getElementById('filter-objectif-consultant');
@@ -572,8 +659,12 @@ const faHeures=document.getElementById('fa-heures');
 const faConsult=document.getElementById('fa-consultant');
 const faObj=document.getElementById('fa-objectif');
 const faDesc=document.getElementById('fa-desc');
+const btnFaGoto=document.getElementById('fa-goto-consultant');
+
 faType.onchange=()=>{const isSTB=faType.value==='ACTION_ST_BERNARD'; faHeuresWrap.classList.toggle('hidden',!isSTB); if(isSTB && !faHeures.value) faHeures.value=1; updateFaObjOptions();};
 faConsult.onchange=updateFaObjOptions;
+btnFaGoto.onclick=()=>{ const cid=faConsult.value; if(cid){ dlgA.close(); openConsultantModal(cid); } };
+
 function updateFaObjOptions(){
   const selected=faObj.value;
   faObj.innerHTML='<option value="">(aucun)</option>'+store.objectifs.map(o=>`<option value="${o.id}">${esc(o.titre)}</option>`).join('');
@@ -664,8 +755,11 @@ document.getElementById('form-objectif').onsubmit=(e)=>{
 document.querySelector('#dlg-objectif .actions [value="del"]').onclick=(e)=>{ e.preventDefault(); if(!currentObjectifId){ dlgO.close(); return; } if(confirm('Supprimer cet objectif ?')){ store.objectifs=store.objectifs.filter(o=>o.id!==currentObjectifId); dlgO.close('del'); save(); } };
 
 /* MODALS (CONSULTANT) */
-const dlgC=document.getElementById('dlg-consultant'); let currentConsultantId=null;
+const dlgC=document.getElementById('dlg-consultant');
+let currentConsultantId=null;
 const fcDesc=document.getElementById('fc-desc');
+const btnFcGoto=document.getElementById('fc-goto-objectifs');
+
 function openConsultantModal(id=null){
   currentConsultantId=id;
   const c=id? store.consultants.find(x=>x.id===id) : {nom:'',titre_mission:'',date_fin:'',url:'',description:''};
@@ -674,6 +768,7 @@ function openConsultantModal(id=null){
   fcDesc.addEventListener('input',()=>autoSizeKeepMax(fcDesc, CONS_DESC_MAX),{once:false});
   dlgC.showModal();
 }
+btnFcGoto.onclick=()=>{ if(currentConsultantId){ dlgC.close(); gotoConsultantObjectives(currentConsultantId); } };
 document.getElementById('btn-new-consultant').onclick=()=>openConsultantModal();
 document.getElementById('form-consultant').onsubmit=(e)=>{
   e.preventDefault();
@@ -686,8 +781,8 @@ document.getElementById('form-consultant').onsubmit=(e)=>{
 };
 document.querySelector('#dlg-consultant .actions [value="del"]').onclick=(e)=>{ e.preventDefault(); if(!currentConsultantId){ dlgC.close(); return; } if(confirm('Supprimer ce consultant (et garder ses activités) ?')){ store.consultants=store.consultants.filter(c=>c.id!==currentConsultantId); dlgC.close('del'); save(); } };
 
-/* SYNC (méthode commune pour Reset & boot auto) */
-function updateSyncPreview(){ document.getElementById('json-preview').textContent=JSON.stringify(store,null,2); }
+/* SYNC */
+function updateSyncPreview(){ const el=document.getElementById('json-preview'); if(el) el.textContent=JSON.stringify(store,null,2); }
 document.getElementById('btn-copy-json').onclick=async()=>{ await navigator.clipboard.writeText(JSON.stringify(store,null,2)); alert('JSON copié ✅'); };
 const fileInput=document.getElementById('file-import');
 document.getElementById('btn-reset-storage').onclick=resetFromDataJson;
@@ -716,7 +811,7 @@ function applyIncomingStore(incoming, sourceLabel){
   const required=['consultants','activities','objectifs','params'];
   for(const k of required){ if(!(k in incoming)) throw new Error('Champ manquant: '+k); }
   incoming.params = Object.assign({...DEFAULT_PARAMS}, incoming.params||{});
-  incoming.meta = Object.assign({version:store?.meta?.version??4.98}, incoming.meta||{});
+  incoming.meta = Object.assign({version:store?.meta?.version??5.01}, incoming.meta||{});
   incoming.meta.updated_at = nowISO();
   localStorage.setItem(LS_KEY, JSON.stringify(incoming)); store = incoming; refreshAll();
   alert(`LocalStorage réinitialisé depuis « ${sourceLabel} » ✅`);
@@ -730,13 +825,13 @@ function renderActivityFiltersOptions(){
 }
 function refreshAll(){ renderConsultants(); renderActivityFiltersOptions(); renderActivities(); renderObjectifs(); renderParams(); dashboard(); updateSyncPreview(); }
 
-/* 👇 Auto-bootstrap: si aucune donnée locale, on déclenche la même méthode que le bouton Réinitialiser */
+/* Auto-bootstrap si vide */
 (function autoBootstrapIfEmpty(){
   const hadData = (()=>{ try{ const obj=JSON.parse(localStorage.getItem(LS_KEY)||'null'); return obj && (obj.consultants||[]).length + (obj.activities||[]).length + (obj.objectifs||[]).length > 0; }catch{return false;} })();
   if(!hadData){ resetFromDataJson(); }
 })();
 
-/* Premier rendu (affichera une UI vide tant que l’import n’est pas fait) */
+/* Premier rendu */
 refreshAll();
 </script>
 </body></html>
